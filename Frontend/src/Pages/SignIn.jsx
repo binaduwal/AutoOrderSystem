@@ -56,7 +56,7 @@ const SignIn = () => {
               placeholder="Enter your username"
               className="w-full border border-gray-300 px-4 py-3 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
               value={username}
-              onChange={(e) => setUsername(e.target.value)} // Handle change for username
+              onChange={(e) => setUsername(e.target.value)} 
             />
           </div>
 
@@ -74,7 +74,7 @@ const SignIn = () => {
               placeholder="Enter your password"
               className="w-full border border-gray-300 px-4 py-3 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Handle change for password
+              onChange={(e) => setPassword(e.target.value)} 
             />
             <a
               href="#"
@@ -84,7 +84,7 @@ const SignIn = () => {
             </a>
           </div>
 
-          {error && <p className="text-red-500 text-center">{error}</p>} {/* Show error if any */}
+          {error && <p className="text-red-500 text-center">{error}</p>}
 
           <button
             type="submit"

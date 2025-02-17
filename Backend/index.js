@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 const cors = require("cors");
 const connection=require('./database/db')
 const Login=require('./routes/loginTest')
-const authRoute=require('./routes/signUp')
+const authRoute=require('./routes/authRoutes')
+
 
 dotenv.config();
 const app=express()
