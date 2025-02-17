@@ -1,28 +1,15 @@
-const orderSchema = new mongoose.Schema({
-    orderNumber: {
-      type: String,
-      unique: true, 
-      required: true,
-    },
-    orderId: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId, // 
-      unique: true, 
-    },
-    productName: String,
-    quantity: Number,
-    price: Number,
-    customerName: String,
-    salespersonId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'cancelled'],
-      default: 'pending',
-    },
-  }, { timestamps: true });
-  
-  const Order = mongoose.model('Order', orderSchema);
-  
+import mongoose from 'mongoose';
+
+const OrderSchema = new mongoose.Schema({
+  orderNo: { type: String, required: true, unique: true }, 
+  orderDate: { type: Date, required: true }, 
+  estimatedDeliveryDate: { type: Date, required: true }, 
+  partyID: { type: mongoose.Schema.Types.ObjectId, ref: 'Party', required: true }, 
+  remarks: { type: String, default: '' },
+  salesmanID: { type: mongoose.Schema.Types.ObjectId, ref: 'Salesman', required: true },
+  paymentModeID: { type: mongoose.Schema.Types.ObjectId, ref: 'PaymentMode', required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
+}, { timestamps: true });
+
+const Order = mongoose.model('Order', OrderSchema);
+export default Order;
