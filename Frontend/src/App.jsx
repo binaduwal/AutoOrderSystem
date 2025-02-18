@@ -1,26 +1,12 @@
-// import React,{ useState } from 'react'
-// import './App.css'
-// import SignUp from './Pages/SignUp'
-// import SignIn from './Pages/Signin'
-
-// function App() {
-
-//   return(
-//     <>
-//    <SignUp/>
-//    {/* <SignIn/> */}
-//     </>
-//   )
-// }
-
-// export default App
-
 import React from 'react';
 import './App.css';
 import SignUp from './Pages/SignUp';
 import SignIn from './Pages/Signin';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
+import CreatePermission from './permissions/CreatePermission';
+import EditPermission from './permissions/EditPermission';
+import PermissionList from './permissions/PermissionList';
 
 function App() {
   return (
@@ -29,6 +15,10 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/permission' element={<CreatePermission/>}/>
+        <Route path='/permission/edit' element={<EditPermission/>}/>
+        <Route path='/permission/list' element={<PermissionList/>}/>
+
       </Routes>
     </BrowserRouter>
   );

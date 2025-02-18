@@ -1,20 +1,15 @@
-const Order = require('../models/orderModel');
+const Order = require('../models/orderItemModel');
 
 exports.createOrder = async (req, res) => {
-  const { productName, quantity, price, customerName } = req.body;
-  const salespersonId = req.user.id;
+  const {price,quantity,rate  } = req.body;
   
-  if (!productName || !quantity || !price || !customerName) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
   try {
     const newOrder = new Order({
-      productName,
-      quantity,
+      qty,
       price,
-      customerName,
-      salespersonId,
+      rate,
+      discount,
+      vatAmount
     });
 
     await newOrder.save();
