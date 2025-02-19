@@ -20,11 +20,15 @@ const Dashboard = () => {
                     className={`flex items-center p-3 rounded-lg transition duration-300 ${
                       item === 'Dashboard' ? 'bg-blue-600 text-white' : 'hover:bg-blue-500 text-gray-300'
                     }`} 
-                    to={item === 'Register' ? '/signup' : '#'} 
+                    to={item === 'Register' ? '/signup' : item==='Permissions'?'/permissions': '#'} 
                   >
                     <span className="ml-2">{item}</span>
                   </Link>
-                </li>            ))}
+
+                
+                </li> 
+              
+              ))}
             <li>
               <a
                 className="flex items-center p-3 rounded-lg transition duration-300 hover:bg-blue-500 text-gray-300"

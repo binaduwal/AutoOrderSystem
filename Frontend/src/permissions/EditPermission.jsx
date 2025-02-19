@@ -1,6 +1,17 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 const EditPermission = () => {
+    const [name,setName]=useState('')
+    const [displayName,setDisplayName]=useState('')
+
+  const handleDisplayNameChange=(e)=>
+  {
+    const updatedDisplayName=e.target.value
+    setDisplayName(updatedDisplayName)
+
+    const updatedName=updatedDisplayName.replace(/\s+/g,'-')
+    setName(updatedName)
+  }
   return (
     <div className="max-w-lg mx-auto p-6 bg-gradient-to-r from-indigo-50 to-white shadow-xl rounded-xl">
       <h1 className="text-3xl font-semibold text-center text-indigo-600 mb-6">Permission Management</h1>
@@ -12,6 +23,8 @@ const EditPermission = () => {
           <input
             type="text"
             name="name"
+            value={name}
+            readOnly
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
@@ -21,6 +34,8 @@ const EditPermission = () => {
           <input
             type="text"
             name="display_name"
+            value={displayName}
+            onChange={handleDisplayNameChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>

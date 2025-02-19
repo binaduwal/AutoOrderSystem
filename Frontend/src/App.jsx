@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import SignUp from './Pages/SignUp';
-import SignIn from './Pages/Signin';
+import SignIn from './Pages/SignIn';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
 import CreatePermission from './permissions/CreatePermission';
@@ -15,9 +15,8 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/permission' element={<CreatePermission/>}/>
         <Route path='/permission/edit' element={<EditPermission/>}/>
-        <Route path='/permission/list' element={<PermissionList/>}/>
+        <Route path='/permissions' element={<PermissionList/>}/>
 
       </Routes>
     </BrowserRouter>
