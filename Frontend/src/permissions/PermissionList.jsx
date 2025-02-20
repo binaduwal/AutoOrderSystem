@@ -1,8 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreatePermission from './CreatePermission';
 
 const PermissionList = () => {
-  const [showCreatePermission, setShowCreatePermission] = useState(false);
+  const [showCreatePermission, setShowCreatePermission] = useState(false)
+  const [permissions, setPermissions]=useState([])
+
+  useEffect(() => {
+    fetchPermissions();
+  }, []);
+
+  const fetchPermissions = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/permission/all");
+      if (response.ok) {
+        const data = await response.json();
+        setPermissions(data);
+      } else {
+        console.error("Failed to fetch permissions");
+      }
+    } catch (error) {
+      console.error("Error fetching permissions:", error);
+    }
+  };
+
+const handlePermissionCreated=(newPermission)=>
+{
+  setPermissions([...permissions,newPermission])
+  setShowCreatePermission(false)
+}
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-6 bg-gradient-to-r from-indigo-50 to-white">
@@ -35,19 +60,23 @@ const PermissionList = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="text-center border border-gray-300">
-                <td className="border border-gray-300 p-3">1</td>
-                <td className="border border-gray-300 p-3">Bina</td>
-                <td className="border border-gray-300 p-3">Bina</td>
-                <td className="border border-gray-300 p-3">om</td>
-              </tr>
-              <tr className="text-center border border-gray-300">
-                <td className="border border-gray-300 p-3">2</td>
-                <td className="border border-gray-300 p-3">Binu</td>
-                <td className="border border-gray-300 p-3">Binu</td>
-                <td className="border border-gray-300 p-3">om</td>
-              </tr>
-            </tbody>
+              {permissions.length > 0 ? (
+                permissions.map((perm, index) => (
+                  <tr key={perm.id} className="text-center border border-gray-300">
+                    <td className="border border-gray-300 p-3">{index + 1}</td>
+                    <td className="border border-gray-300 p-3">{perm.name}</td>
+                    <td className="border border-gray-300 p-3">{perm.display_name}</td>
+                    <td className="border border-gray-300 p-3">{perm.description}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center p-4 text-gray-500">
+                    No permission available.
+                  </td>
+                </tr>
+              )}
+            </tbody>            
           </table>
         </div>
       </div>
@@ -61,7 +90,7 @@ const PermissionList = () => {
             >
               ✖
             </button>
-            <CreatePermission />
+            <CreatePermission onClose={() => setShowCreatePermission(false)} onPermissionCreated={handlePermissionCreated} />
           </div>
         </div>
       )}

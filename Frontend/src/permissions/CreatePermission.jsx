@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-const CreatePermission = ({ onClose }) => {
+const CreatePermission = ({ onClose, onPermissionCreated  }) => {
   const [name, setName] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [description,setDescription]=useState('')
 
   const handleDisplayNameChange = (e) => {
     const updatedDisplayName = e.target.value;
@@ -10,9 +11,40 @@ const CreatePermission = ({ onClose }) => {
     setName(updatedDisplayName.replace(/\s+/g, '-'));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  };
+
+  const permissionData={
+    name,
+    display_name:displayName,
+    description
+  }
+  try{
+    const response=await fetch('http://localhost:5000/permission/create',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(permissionData)
+      
+    }
+  )
+
+  if(response.ok){
+    const newPermission=await response.json()
+    console.log('Permission created:',newPermission)
+    onPermissionCreated(newPermission);   }
+  else{
+    console.log('Failed to create permission')
+  }
+
+  }
+  catch(error)
+  {
+console.error('Error while creating permission',error)
+  }
+};
+
 
   return (
     <div className="w-[600px] mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -47,6 +79,8 @@ const CreatePermission = ({ onClose }) => {
           <textarea
             name="description"
             placeholder="Enter description"
+            value={description}
+            onChange={(e)=>setDescription(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500"
           ></textarea>
         </div>
