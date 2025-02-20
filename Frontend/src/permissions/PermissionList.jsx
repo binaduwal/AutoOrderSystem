@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CreatePermission from './CreatePermission';
+import EditPermission from './EditPermission';
+import { createPortal } from "react-dom"; //
 
 const PermissionList = () => {
   const [showCreatePermission, setShowCreatePermission] = useState(false)
   const [permissions, setPermissions]=useState([])
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [showEditPermission, setShowEditPermission] = useState(false);
+  const [editPermissionData, setEditPermissionData] = useState(null);
 
   useEffect(() => {
     fetchPermissions();
@@ -25,9 +30,45 @@ const PermissionList = () => {
 
 const handlePermissionCreated=(newPermission)=>
 {
-  setPermissions([...permissions,newPermission])
+  setPermissions((prevPermissions) => [...prevPermissions, newPermission]);
   setShowCreatePermission(false)
+  setOpenDropdown(null); 
 }
+
+const handleEdit = (perm) => {
+  setEditPermissionData(perm); 
+  setShowEditPermission(true); 
+};
+const handleDelete=async(perm)=>{
+  try{
+const response=await fetch(`http://localhost:5000/permission/delete/${perm._id}`,
+  {method:'DELETE'}
+)
+if (response.ok) {
+  setPermissions(permissions.filter((p) => p._id !== perm._id));
+  console.log('Permission deleted successfully');
+} else {
+  console.error('Failed to delete permission');
+}
+  }
+catch (error) {
+console.error('Error deleting permission:', error);
+}
+
+setOpenDropdown(null);
+};
+
+const toggleDropdown = (id) => {
+  setOpenDropdown(openDropdown === id ? null : id);
+};
+
+const handlePermissionUpdated = (updatedPermission) => {
+  setPermissions(permissions.map((perm) => (perm._id === updatedPermission._id ? updatedPermission : perm)));
+  setShowEditPermission(false);
+  setOpenDropdown(null);
+};
+
+
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-6 bg-gradient-to-r from-indigo-50 to-white">
@@ -62,12 +103,43 @@ const handlePermissionCreated=(newPermission)=>
             <tbody>
               {permissions.length > 0 ? (
                 permissions.map((perm, index) => (
-                  <tr key={perm.id} className="text-center border border-gray-300">
+                  <tr key={perm._id} className="text-center border border-gray-300">
                     <td className="border border-gray-300 p-3">{index + 1}</td>
                     <td className="border border-gray-300 p-3">{perm.name}</td>
                     <td className="border border-gray-300 p-3">{perm.display_name}</td>
                     <td className="border border-gray-300 p-3">{perm.description}</td>
-                  </tr>
+                    <td className="border border-gray-300 p-3 relative">
+    <button
+      onClick={() => toggleDropdown(perm._id)}
+      className="text-xl focus:outline-none"
+    >
+      ⋮
+    </button>
+    {openDropdown === perm._id && (
+      <div  className="absolute right-0 w-20 bg-white border border-gray-200 shadow-lg rounded-md z-50"
+      >
+        <button
+          onClick={() => {
+            handleEdit(perm);
+            setOpenDropdown(null);
+          }}
+          className="block w-full text-left px-4 py-1 text-sm text-gray-700 hover:bg-gray-100"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => {
+            handleDelete(perm);
+            setOpenDropdown(null);
+          }}
+          className="block w-full text-left px-4 py-1 text-sm text-gray-700 hover:bg-gray-100"
+        >
+          Delete
+        </button>
+      </div>
+    )}
+  </td>   
+                 </tr>
                 ))
               ) : (
                 <tr>
@@ -88,9 +160,23 @@ const handlePermissionCreated=(newPermission)=>
               className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
               onClick={() => setShowCreatePermission(false)}
             >
-              ✖
+              close
             </button>
             <CreatePermission onClose={() => setShowCreatePermission(false)} onPermissionCreated={handlePermissionCreated} />
+          </div>
+        </div>
+      )}
+
+{showEditPermission && (
+        <div className="fixed inset-0 bg-white flex justify-center items-center">
+          <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[600px] border border-gray-200">
+            <button
+              className="absolute top-7 right-4 text-gray-600 hover:text-gray-800"
+              onClick={() => setShowEditPermission(false)}
+            >
+           close
+            </button>
+            <EditPermission permission={editPermissionData} onClose={() => setShowEditPermission(false)} onPermissionUpdated={handlePermissionUpdated} />
           </div>
         </div>
       )}

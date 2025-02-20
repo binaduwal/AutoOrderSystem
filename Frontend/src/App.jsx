@@ -14,8 +14,8 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/permissions/edit' element={<EditPermission/>}/>
-        <Route path='/permissions' element={<PermissionList/>}/>
+        <Route path='/permission/edit' element={<EditPermission/>}/>
+        <Route path='/permission' element={<PermissionList/>}/>
 
       </Routes>
     </BrowserRouter>
