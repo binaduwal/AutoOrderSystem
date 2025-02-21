@@ -5,19 +5,21 @@ import Dashboard from "./pages/Dashboard";
  import PermissionList from './permissions/PermissionList';
 import SignUp from './Pages/SignUp';
 import CreatePermission from './permissions/CreatePermission';
+import CreateUser from './users/CreateUser';
+import SignIn from './Pages/SignIn'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route index path="/" element={<SignIn/>} />
         <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
          <Route path="/signup" element={<SignUp />} />
          <Route path='/dashboard' element={<Dashboard/>}/>
          <Route path='/permission/edit' element={<EditPermission/>}/>
          <Route path='/permission' element={<PermissionList/>}/>
          <Route path="permission/create" element={<CreatePermission />} />
-
+         <Route path="/user" element={<CreateUser/>} />
         </Route>
       </Routes>
     </BrowserRouter>

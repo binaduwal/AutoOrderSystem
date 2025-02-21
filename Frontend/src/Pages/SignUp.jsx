@@ -15,7 +15,7 @@ const SignUp = () => {
     role: 'salesperson',   
   });
 
-  const { firstName,lastName, email, password, confirmPassword, contactNumber, role,username } = formData;
+  const { firstName,lastName, email, password, confirmPassword, contactNumber } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

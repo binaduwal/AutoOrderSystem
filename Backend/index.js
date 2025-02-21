@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connection = require('./database/db');
 const permission = require('./routes/permissionRoutes'); 
-const authRoute=require('./routes/loginTest')
+const authRoute=require('./routes/authRoutes')
 const Login=require('./routes/loginTest')
 
 dotenv.config();
