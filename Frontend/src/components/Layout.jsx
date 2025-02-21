@@ -27,8 +27,9 @@ const Layout = () => {
                     <Link
                       to={item === "Register" ? "/signup" : item === "Permissions" ? "/permission" : `/${item.toLowerCase()}`}
                       onClick={() => setShowMobileSidebar(false)}
+                      className="block p-3 rounded-lg transition duration-300 hover:bg-blue-500 text-gray-300"
                     >
-                      <span className="ml-2">{item}</span>
+                      <span>{item}</span>
                     </Link>
                   </li>
                 ))}
@@ -44,7 +45,7 @@ const Layout = () => {
       )}
 
       {/* Sidebar for Desktop */}
-      <aside className="w-64 bg-gray-900 text-white p-6 shadow-lg hidden md:block fixed h-full">
+      <aside className="w-64 bg-gray-900 text-white p-6 shadow-lg hidden md:block h-full fixed">
         <div className="text-2xl font-bold mb-7 text-blue-400">Admin</div>
         <nav>
           <ul className="space-y-2">
@@ -67,11 +68,9 @@ const Layout = () => {
         </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 p-6 bg-gray-100">
+      <main className="flex-1 ml-64 p-6 bg-gray-100 relative">
         {/* Header */}
         <header className="flex justify-between items-center bg-white p-4 shadow rounded-md">
-          {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setShowMobileSidebar(true)}
@@ -80,22 +79,14 @@ const Layout = () => {
               <HiOutlineMenuAlt3 />
             </button>
           </div>
-          {/* Search Bar */}
           <div className="relative w-full md:w-1/3">
-            <input
-              type="search"
-              placeholder="Search"
-              className="p-2 pl-10 border rounded-2xl w-full focus:outline-none focus:ring-1 focus:ring-gray-300"
-            />
-            <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
+            <input type="search" placeholder="Search" className="p-2 pl-10 border rounded-2xl w-full focus:outline-none focus:ring-1 focus:ring-gray-300"/>
+            <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl"/>
           </div>
-          {/* Notification & User Profile */}
           <div className="flex items-center space-x-4">
-            <span className="text-2xl text-gray-600">
-              <IoMdNotificationsOutline />
-            </span>
+            <IoMdNotificationsOutline className="text-2xl text-gray-600"/>
             <div className="w-10 h-10 rounded-full border flex items-center justify-center bg-gray-200">
-              <FaUser className="text-gray-500 text-lg" />
+              <FaUser className="text-gray-500 text-lg"/>
             </div>
           </div>
         </header>
