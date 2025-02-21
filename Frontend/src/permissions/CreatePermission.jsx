@@ -20,7 +20,7 @@ const CreatePermission = ({ onClose, onPermissionCreated  }) => {
     description
   }
   try{
-    const response=await fetch('http://localhost:5000/permission/create',{
+    const response=await fetch('http://localhost:3000/permission/create',{
       method:'POST',
       headers:{
         'Content-Type':'application/json'

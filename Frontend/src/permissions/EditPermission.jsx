@@ -24,7 +24,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
         description,
       };
     try {
-      const response = await fetch(`http://localhost:5000/permission/edit/${permission._id}`, {
+      const response = await fetch(`http://localhost:3000/permission/edit/${permission._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
