@@ -47,7 +47,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
   }
   
   return (
-    <div className="w-[500px] mx-auto p-6 bg-gradient-to-r from-indigo-50 to-white shadow-xl rounded-xl">
+    <div className="w-[400px] mx-auto p-6 bg-gradient-to-r from-indigo-50 to-white shadow-xl rounded-xl">
       <h1 className="text-2xl font-semibold text-center text-indigo-600 mb-6">Permission Management</h1>
       <p className="text-center text-lg text-gray-600 mb-6">Edit the form with the required information to update the permission.</p>
       <h2 className="text-xl font-medium text-left mb-6 text-indigo-700">Edit Permission</h2>

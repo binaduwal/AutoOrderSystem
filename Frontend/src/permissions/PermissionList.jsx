@@ -90,7 +90,6 @@ const PermissionList = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-white">
-      {!showCreatePermission && !showEditPermission && (
         <div className="w-[900px] p-8 bg-white shadow-lg rounded-lg">
           <h1 className="text-2xl font-semibold text-center text-indigo-600 mb-6">
             Permission Management
@@ -185,10 +184,9 @@ const PermissionList = () => {
             </div>
           )}
         </div>
-      )}
 
       {showCreatePermission && (
-        <div className="absolute inset-0 flex justify-center items-center bg-white-500 bg-opacity-50">
+        <div className="absolute inset-0 flex justify-center items-center  z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4" }} >
           <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[600px] border border-gray-200">
             <button
               className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
@@ -205,8 +203,8 @@ const PermissionList = () => {
       )}
 
       {showEditPermission && (
-        <div className="absolute inset-0 flex justify-center items-center bg-white-500 bg-opacity-50">
-          <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[600px] border border-gray-200">
+        <div className="absolute inset-0 flex justify-center items-center  z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4" }} >
+          <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
             <button
               className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
               onClick={() => setShowEditPermission(false)}
