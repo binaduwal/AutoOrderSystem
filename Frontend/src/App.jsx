@@ -7,6 +7,7 @@ import SignUp from './Pages/SignUp';
 import CreatePermission from './permissions/CreatePermission';
 import CreateUser from './users/CreateUser';
 import SignIn from './Pages/SignIn'
+import UserDashboard from './Pages/UserDashboard';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
          <Route path="permission/create" element={<CreatePermission />} />
          <Route path="/user" element={<CreateUser/>} />
         </Route>
+        <Route index path='/userdashboard' element={<UserDashboard/>}/>
+
       </Routes>
     </BrowserRouter>
   );

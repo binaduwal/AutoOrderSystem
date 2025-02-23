@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link,useNavigate} from "react-router-dom";
 import axios from "axios";
 
+
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,9 +21,13 @@ const SignIn = () => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         alert("Login successful!");
-        navigate("Dashboard")
+
+      if (username=== "superadmin") {
+        navigate("/dashboard");
+
       } else {
-        setError("Invalid response from server");
+        navigate("/userdashboard")
+      }
       }
     } catch (error) {
       setError(error.response ? error.response.data.message : "An error occurred");

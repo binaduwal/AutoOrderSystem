@@ -20,8 +20,9 @@ const seedSuperAdmin = async () => {
       email: "superadmin@example.com",
       password: hashedPassword,
       contactNo: "1234567890",
-      username: "superadmin"
-    });
+      username: "superadmin",
+      role: "superadmin"
+        });
 
     await superAdmin.save();
     console.log("Super Admin created successfully!");
