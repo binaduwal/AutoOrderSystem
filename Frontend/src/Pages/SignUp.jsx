@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { FcGoogle } from "react-icons/fc"; 
-import { Link } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react'
+import { FcGoogle } from "react-icons/fc" 
+import { Link } from "react-router-dom"
+import axios from "axios"
 
 
 const SignUp = () => {
@@ -13,30 +13,30 @@ const SignUp = () => {
     confirmPassword: '',
     contactNumber: '',
     role: 'salesperson',   
-  });
+  })
 
-  const { firstName,lastName, email, password, confirmPassword, contactNumber } = formData;
+  const { firstName,lastName, email, password, confirmPassword, contactNumber } = formData
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
-  };
+  }
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
-      return;
+      alert('Passwords do not match.')
+      return
     }
-    const formDataWithUsername = { ...formData, username: firstName };
+    const formDataWithUsername = { ...formData, username: firstName }
   
     try {
-      const response = await axios.post('http://localhost:5000/auth/signup', formDataWithUsername);
-      alert(response.data.message);
+      const response = await axios.post('http://localhost:5000/auth/signup', formDataWithUsername)
+      alert(response.data.message)
     } catch (error) {
-      alert(error.response?.data?.message || 'Something went wrong. Please try again.');
+      alert(error.response?.data?.message || 'Something went wrong. Please try again.')
     }
-  };
+  }
     
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8 px-4">
@@ -173,7 +173,7 @@ const SignUp = () => {
 </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

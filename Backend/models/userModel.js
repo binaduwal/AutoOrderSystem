@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true, enum: ['superadmin', 'salesperson'] },
   permissions: [{ type: String }],
   username: { type: String, required: true, unique: true },
-});
+})
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema)
 module.exports = User

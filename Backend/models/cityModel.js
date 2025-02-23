@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const citySchema = new Schema({
   cityName: {
@@ -11,8 +11,8 @@ const citySchema = new Schema({
     ref: 'District', 
     required: true,
   },
-}, { timestamps: true });
+}, { timestamps: true })
 
-const City = mongoose.model('City', citySchema);
+const City = mongoose.model('City', citySchema)
 
-module.exports = City;
+module.exports = City

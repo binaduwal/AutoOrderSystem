@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const orderReturnReasonSchema = new Schema({
   status: {
@@ -7,8 +7,8 @@ const orderReturnReasonSchema = new Schema({
     enum: ['active', 'inactive'],
     required: true
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const OrderReturnReason = mongoose.model('OrderReturnReason', orderReturnReasonSchema);
+const OrderReturnReason = mongoose.model('OrderReturnReason', orderReturnReasonSchema)
 
-module.exports = OrderReturnReason;
+module.exports = OrderReturnReason

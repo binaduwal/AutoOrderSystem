@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const orderStatusSchema = new Schema({
   statusName: {
@@ -25,8 +25,8 @@ const orderStatusSchema = new Schema({
     ],
     required: true
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const OrderStatus = mongoose.model('OrderStatus', orderStatusSchema);
+const OrderStatus = mongoose.model('OrderStatus', orderStatusSchema)
 
-module.exports = OrderStatus;
+module.exports = OrderStatus

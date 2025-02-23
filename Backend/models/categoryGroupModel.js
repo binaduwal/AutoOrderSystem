@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const categoryGroupSchema = new Schema({
   groupName: {
@@ -11,8 +11,8 @@ const categoryGroupSchema = new Schema({
     enum: ['active', 'inactive' ], 
     required: true, 
   }
-}, { timestamps: true }); 
+}, { timestamps: true }) 
 
-const Category = mongoose.model('PartyGroup', categoryGroupSchema);
+const Category = mongoose.model('PartyGroup', categoryGroupSchema)
 
-module.exports = Category;
+module.exports = Category

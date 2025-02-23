@@ -1,38 +1,38 @@
-import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { Link,useNavigate} from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react"
+import { FcGoogle } from "react-icons/fc"
+import { Link,useNavigate} from "react-router-dom"
+import axios from "axios"
 
 
 const SignIn = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const response = await axios.post("http://localhost:5000/login", {
         username,
         password,
-      });
+      })
   
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        alert("Login successful!");
+        localStorage.setItem("token", response.data.token)
+        alert("Login successful!")
 
       if (username=== "superadmin") {
-        navigate("/dashboard");
+        navigate("/dashboard")
 
       } else {
         navigate("/userdashboard")
       }
       }
     } catch (error) {
-      setError(error.response ? error.response.data.message : "An error occurred");
+      setError(error.response ? error.response.data.message : "An error occurred")
     }
-  };
+  }
     return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-xl transform transition-all duration-00 hover:scale-105">
@@ -127,7 +127,7 @@ const SignIn = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

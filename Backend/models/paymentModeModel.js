@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const paymentModeSchema = new Schema({
   name: {
@@ -11,8 +11,8 @@ const paymentModeSchema = new Schema({
     enum: ['active', 'inactive'], 
     required: true, 
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const PaymentMode = mongoose.model('PaymentMode', paymentModeSchema);
+const PaymentMode = mongoose.model('PaymentMode', paymentModeSchema)
 
-module.exports = PaymentMode;
+module.exports = PaymentMode

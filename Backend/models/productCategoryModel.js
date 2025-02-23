@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const categorySchema = new Schema({
   categoryName: {
@@ -20,8 +20,8 @@ const categorySchema = new Schema({
     enum: ['active', 'inactive'],
     required: true
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const Category = mongoose.model('Category', categorySchema);
+const Category = mongoose.model('Category', categorySchema)
 
-module.exports = Category;
+module.exports = Category

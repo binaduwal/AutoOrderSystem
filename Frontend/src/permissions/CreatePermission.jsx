@@ -1,25 +1,26 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
 const CreatePermission = ({ onClose, onPermissionCreated }) => {
-  const [name, setName] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState("")
+  const [displayName, setDisplayName] = useState("")
+  const [description, setDescription] = useState("")
 
   const handleDisplayNameChange = (e) => {
-    const updatedDisplayName = e.target.value;
-    setDisplayName(updatedDisplayName);
-    setName(updatedDisplayName.replace(/\s+/g, "-"));
-  };
+    const updatedDisplayName = e.target.value
+    setDisplayName(updatedDisplayName)
+    setName(updatedDisplayName.replace(/\s+/g, "-").toLowerCase())
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const permissionData = {
       name,
       display_name: displayName,
       description,
-    };
+    }
 
+    console.log("Permission data to be sent:", permissionData)
     try {
       const response = await fetch("http://localhost:5000/permission/create", {
         method: "POST",
@@ -27,26 +28,31 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(permissionData),
-      });
+      })
 
       if (response.ok) {
-        const newPermission = await response.json();
-        console.log("Permission created:", newPermission);
-        onPermissionCreated(newPermission);
+        const newPermission = await response.json()
+        console.log("Permission created:", newPermission)
+        // Update parent's permission list
+        onPermissionCreated(newPermission)
       } else {
-        console.log("Failed to create permission");
+        console.log("Failed to create permission")
       }
     } catch (error) {
-      console.error("Error while creating permission", error);
+      console.error("Error while creating permission", error)
     }
-  };
+  }
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg w-full">
-      <h1 className="text-xl font-semibold text-left text-indigo-600 mb-4">Create New Permission</h1>
+      <h1 className="text-xl font-semibold text-left text-indigo-600 mb-4">
+        Create New Permission
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700 font-medium text-left">Name</label>
+          <label className="block text-gray-700 font-medium text-left">
+            Name
+          </label>
           <input
             type="text"
             name="name"
@@ -57,7 +63,9 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium text-left">Display Name</label>
+          <label className="block text-gray-700 font-medium text-left">
+            Display Name
+          </label>
           <input
             type="text"
             name="display_name"
@@ -70,7 +78,9 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium text-left">Description</label>
+          <label className="block text-gray-700 font-medium text-left">
+            Description
+          </label>
           <textarea
             name="description"
             placeholder="Enter description"
@@ -81,13 +91,15 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
         </div>
 
         <div className="flex justify-end space-x-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-200"
-          >
-            Cancel
-          </button>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-200"
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
@@ -97,7 +109,7 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreatePermission;
+export default CreatePermission

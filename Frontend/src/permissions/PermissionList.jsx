@@ -1,92 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import CreatePermission from './CreatePermission';
-import EditPermission from './EditPermission';
-import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import React, { useEffect, useState } from 'react'
+import CreatePermission from './CreatePermission'
+import EditPermission from './EditPermission'
+import { FaEdit } from "react-icons/fa"
+import { RiDeleteBin6Line } from "react-icons/ri"
 
 const PermissionList = () => {
-  const [showCreatePermission, setShowCreatePermission] = useState(false);
-  const [showEditPermission, setShowEditPermission] = useState(false);
-  const [permissions, setPermissions] = useState([]);
-  const [editPermissionData, setEditPermissionData] = useState(null);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [permissionToDelete, setPermissionToDelete] = useState(null);
+  const [showCreatePermission, setShowCreatePermission] = useState(false)
+  const [showEditPermission, setShowEditPermission] = useState(false)
+  const [permissions, setPermissions] = useState([])
+  const [editPermissionData, setEditPermissionData] = useState(null)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [permissionToDelete, setPermissionToDelete] = useState(null)
 
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10 
 
   useEffect(() => {
-    fetchPermissions();
-  }, []);
+    fetchPermissions()
+  }, [])
 
   const fetchPermissions = async () => {
     try {
-      const response = await fetch("http://localhost:5000/permission/all");
+      const response = await fetch("http://localhost:5000/permission/all")
       if (response.ok) {
-        const data = await response.json();
-        setPermissions(data);
+        const data = await response.json()
+        setPermissions(data)
       } else {
-        console.error("Failed to fetch permissions");
+        console.error("Failed to fetch permissions")
       }
     } catch (error) {
-      console.error("Error fetching permissions:", error);
+      console.error("Error fetching permissions:", error)
     }
-  };
+  }
 
   const handlePermissionCreated = (newPermission) => {
-    setPermissions((prevPermissions) => [...prevPermissions, newPermission]);
-    setShowCreatePermission(false);
-  };
+    setPermissions((prevPermissions) => [...prevPermissions, newPermission])
+    setShowCreatePermission(false)
+  }
 
   const handleEdit = (perm) => {
-    setEditPermissionData(perm);
-    setShowEditPermission(true);
-  };
+    setEditPermissionData(perm)
+    setShowEditPermission(true)
+  }
 
   const handleDelete = async () => {
     if (permissionToDelete) {
       try {
         const response = await fetch(`http://localhost:5000/permission/delete/${permissionToDelete._id}`, {
           method: 'DELETE',
-        });
+        })
         if (response.ok) {
           // Remove the deleted permission from the state
-          setPermissions(permissions.filter((p) => p._id !== permissionToDelete._id));
+          setPermissions(permissions.filter((p) => p._id !== permissionToDelete._id))
           // Adjust current page if deleting leaves the current page empty
           if ((currentPage - 1) * itemsPerPage >= permissions.length - 1) {
-            setCurrentPage((prev) => Math.max(prev - 1, 1));
+            setCurrentPage((prev) => Math.max(prev - 1, 1))
           }
-          console.log('Permission deleted successfully');
+          console.log('Permission deleted successfully')
         } else {
-          console.error('Failed to delete permission');
+          console.error('Failed to delete permission')
         }
       } catch (error) {
-        console.error('Error deleting permission:', error);
+        console.error('Error deleting permission:', error)
       }
-      setShowDeleteConfirmation(false);
+      setShowDeleteConfirmation(false)
     }
-  };
+  }
 
   const confirmDelete = (perm) => {
-    setPermissionToDelete(perm);
-    setShowDeleteConfirmation(true);
-  };
+    setPermissionToDelete(perm)
+    setShowDeleteConfirmation(true)
+  }
 
   const handlePermissionUpdated = (updatedPermission) => {
-    setPermissions(permissions.map((perm) => (perm._id === updatedPermission._id ? updatedPermission : perm)));
-    setShowEditPermission(false);
-  };
+    setPermissions(permissions.map((perm) => (perm._id === updatedPermission._id ? updatedPermission : perm)))
+    setShowEditPermission(false)
+  }
 
   // Calculate indexes for the current page items
-  const indexOfLastPermission = currentPage * itemsPerPage;
-  const indexOfFirstPermission = indexOfLastPermission - itemsPerPage;
-  const currentPermissions = permissions.slice(indexOfFirstPermission, indexOfLastPermission);
-  const totalPages = Math.ceil(permissions.length / itemsPerPage);
+  const indexOfLastPermission = currentPage * itemsPerPage
+  const indexOfFirstPermission = indexOfLastPermission - itemsPerPage
+  const currentPermissions = permissions.slice(indexOfFirstPermission, indexOfLastPermission)
+  const totalPages = Math.ceil(permissions.length / itemsPerPage)
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   return (
     <div className="relative w-full min-h-screen bg-white">
@@ -244,7 +244,7 @@ const PermissionList = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PermissionList;
+export default PermissionList

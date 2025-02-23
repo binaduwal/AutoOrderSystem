@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const OrderSchema = new mongoose.Schema({
   orderNo: { type: String, required: true, unique: true }, 
@@ -9,7 +9,7 @@ const OrderSchema = new mongoose.Schema({
   salesmanID: { type: mongoose.Schema.Types.ObjectId, ref: 'Salesman', required: true },
   paymentModeID: { type: mongoose.Schema.Types.ObjectId, ref: 'PaymentMode', required: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
-}, { timestamps: true });
+}, { timestamps: true })
 
-const Order = mongoose.model('Order', OrderSchema);
-export default Order;
+const Order = mongoose.model('Order', OrderSchema)
+export default Order

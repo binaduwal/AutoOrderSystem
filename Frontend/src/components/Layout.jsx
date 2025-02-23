@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { IoSearchOutline } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
-import { PiSignOut } from "react-icons/pi";
-import { HiOutlineMenuAlt3 } from "react-icons/hi"; 
+import React, { useState } from "react"
+import { Link, Outlet } from "react-router-dom"
+import { IoMdNotificationsOutline } from "react-icons/io"
+import { IoSearchOutline } from "react-icons/io5"
+import { FaUser } from "react-icons/fa"
+import { PiSignOut } from "react-icons/pi"
+import { HiOutlineMenuAlt3 } from "react-icons/hi" 
 
 const Layout = () => {
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false)
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -97,7 +97,7 @@ const Layout = () => {
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

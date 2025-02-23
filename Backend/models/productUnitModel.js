@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const productUnitSchema = new Schema({
   unitName: {
@@ -12,8 +12,8 @@ const productUnitSchema = new Schema({
     enum: ['active', 'inactive'],
     required: true
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const ProductUnit = mongoose.model('ProductUnit', productUnitSchema);
+const ProductUnit = mongoose.model('ProductUnit', productUnitSchema)
 
-module.exports = ProductUnit;
+module.exports = ProductUnit

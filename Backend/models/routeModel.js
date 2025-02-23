@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const routeSchema = new Schema({
   routename: {
@@ -11,8 +11,8 @@ const routeSchema = new Schema({
     enum: ['active', 'inactive' ], 
     required: true, 
   }
-}, { timestamps: true }); 
+}, { timestamps: true }) 
 
-const Route = mongoose.model('Route', routeSchema);
+const Route = mongoose.model('Route', routeSchema)
 
-module.exports = Route;
+module.exports = Route

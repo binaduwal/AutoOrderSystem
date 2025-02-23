@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const orderReturnSchema = new Schema({
   returnInvoice: {
@@ -29,8 +29,8 @@ const orderReturnSchema = new Schema({
   remarks: {
     type: String
   }
-}, { timestamps: true });
+}, { timestamps: true })
 
-const OrderReturn = mongoose.model('OrderReturn', orderReturnSchema);
+const OrderReturn = mongoose.model('OrderReturn', orderReturnSchema)
 
-module.exports = OrderReturn;
+module.exports = OrderReturn

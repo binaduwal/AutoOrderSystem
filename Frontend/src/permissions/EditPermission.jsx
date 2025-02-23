@@ -1,28 +1,28 @@
-import React,{useState} from 'react';
+import React,{useState} from 'react'
 
 const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
     const [name,setName]=useState('')
     const [displayName,setDisplayName]=useState('')
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState('')
 
   const handleDisplayNameChange=(e)=>
   {
     const updatedDisplayName=e.target.value
     setDisplayName(updatedDisplayName)
 
-    const updatedName=updatedDisplayName.replace(/\s+/g,'-')
+    const updatedName=updatedDisplayName.replace(/\s+/g,'-').toLowerCase()
     setName(updatedName)
   }
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
+      e.preventDefault()
   
       const updatedPermission = {
         ...permission,
         name,
         display_name: displayName,
         description,
-      };
+      }
     try {
       const response = await fetch(`http://localhost:5000/permission/edit/${permission._id}`, {
         method: 'PUT',
@@ -30,20 +30,20 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedPermission),
-      });
+      })
 
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        onPermissionUpdated(data);
+        const data = await response.json()
+        console.log(data)
+        onPermissionUpdated(data)
       } else {
-        console.error('Failed to update permission');
+        console.error('Failed to update permission')
       }
     } catch (error) {
-      console.error('Error updating permission:', error);
+      console.error('Error updating permission:', error)
     }
 
-    onClose();
+    onClose()
   }
   
   return (
@@ -92,7 +92,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
         </button>
       </form>
     </div>
-  );
+  )
 }
 
-export default EditPermission;
+export default EditPermission

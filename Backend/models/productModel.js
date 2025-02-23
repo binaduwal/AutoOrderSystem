@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const productSchema = new Schema({
   name: {
@@ -41,8 +41,8 @@ const productSchema = new Schema({
     enum: ['active', 'inactive'], 
     required: true,
   }
-}, { timestamps: true }); 
+}, { timestamps: true }) 
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema)
 
-module.exports = Product;
+module.exports = Product

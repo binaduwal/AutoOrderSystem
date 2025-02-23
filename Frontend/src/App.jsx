@@ -1,13 +1,14 @@
- import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from "./components/Layout";
-import Dashboard from "./pages/Dashboard";
- import EditPermission from './permissions/EditPermission';
- import PermissionList from './permissions/PermissionList';
-import SignUp from './Pages/SignUp';
-import CreatePermission from './permissions/CreatePermission';
-import CreateUser from './users/CreateUser';
+ import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Layout from "./components/Layout"
+import Dashboard from "./pages/Dashboard"
+ import EditPermission from './permissions/EditPermission'
+ import PermissionList from './permissions/PermissionList'
+import SignUp from './Pages/SignUp'
+import CreatePermission from './permissions/CreatePermission'
+import CreateUser from './users/CreateUser'
 import SignIn from './Pages/SignIn'
-import UserDashboard from './Pages/UserDashboard';
+import UserDashboard from './Pages/UserDashboard'
+import CreateRole from './roles/CreateRole'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
          <Route path='/dashboard' element={<Dashboard/>}/>
          <Route path='/permission/edit' element={<EditPermission/>}/>
          <Route path='/permission' element={<PermissionList/>}/>
+         <Route path='/role' element={<CreateRole/>}/>
          <Route path="permission/create" element={<CreatePermission />} />
          <Route path="/user" element={<CreateUser/>} />
         </Route>
@@ -26,8 +28,8 @@ function App() {
 
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
 

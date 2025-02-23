@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const partySchema = new Schema({
   partyName: {
@@ -65,8 +65,8 @@ const partySchema = new Schema({
     ref: 'PartyGroup', 
     required: true,
   },
-}, { timestamps: true });
+}, { timestamps: true })
 
-const Party = mongoose.model('Party', partySchema);
+const Party = mongoose.model('Party', partySchema)
 
-module.exports = Party;
+module.exports = Party
