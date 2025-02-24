@@ -47,8 +47,8 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
   }
   
   return (
-    <div className="w-[400px] mx-auto p-6 bg-gradient-to-r from-indigo-50 to-white shadow-xl rounded-xl">
-      <h1 className="text-2xl font-semibold text-center text-indigo-600 mb-6">Permission Management</h1>
+    <div className="w-[400px] mx-auto bg-gradient-to-r from-indigo-50 to-white shadow-xl rounded-xl">
+      <h1 className="text-xl font-semibold text-center text-indigo-600 mb-6">Permission Management</h1>
       <p className="text-center text-lg text-gray-600 mb-6">Edit the form with the required information to update the permission.</p>
       <h2 className="text-xl font-medium text-left mb-6 text-indigo-700">Edit Permission</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -59,7 +59,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
             name="name"
             value={name}
             readOnly
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
 
@@ -70,7 +70,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
             name="display_name"
             value={displayName}
             onChange={handleDisplayNameChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
 
@@ -80,7 +80,7 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
             name="description"
             value={description}
             onChange={(e)=>setDescription(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           ></textarea>
         </div>
 

@@ -1,14 +1,14 @@
 #root {
-  max-width: 1280px
-  margin: 0 auto
-  padding: 2rem
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center
 }
 
 .logo {
-  height: 6em
-  padding: 1.5em
-  will-change: filter
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
   transition: filter 300ms
 }
 .logo:hover {
@@ -44,4 +44,12 @@
 .sidebar {
   z-index: 50
 }
+
+html, body {
+  background-color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
 
