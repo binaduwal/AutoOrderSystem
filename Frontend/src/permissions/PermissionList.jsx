@@ -30,7 +30,8 @@ const PermissionList = () => {
       } else {
         console.error("Failed to fetch permissions")
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error fetching permissions:", error)
     }
   }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-const CreateRole = () => {
+const CreateRole = ({onRoleCreated }) => {
   const [name, setName] = useState("")
   const [displayName, setDisplayName] = useState("")
   const [description, setDescription] = useState("")
@@ -54,7 +54,12 @@ const CreateRole = () => {
       })
 
       if (response.ok) {
-        console.log("Role created successfully")
+        const newRole=await response.json()
+        console.log("Roles Created",newRole)
+        onRoleCreated(newRole)
+      }
+      else{
+        console.log("Failed to create role")
       }
     } catch (error) {
       console.error("Error creating role:", error)
@@ -62,7 +67,7 @@ const CreateRole = () => {
   }
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
+    <div className="p-4 bg-white shadow-lg rounded-lg">
       <h1 className="text-xl font-semibold text-indigo-600 mb-4">
         Create New Role
       </h1>
@@ -75,8 +80,9 @@ const CreateRole = () => {
             type="text"
             name="name"
             value={name}
+            readOnly
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500"
+            className="w-full p-1 border border-gray-300 rounded-md focus:ring-indigo-500"
           />
         </div>
 
@@ -87,7 +93,7 @@ const CreateRole = () => {
             value={displayName}
             onChange={handleDisplayNameChange}
             required
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-1 border border-gray-300 rounded-md"
           />
         </div>
 
@@ -102,7 +108,7 @@ const CreateRole = () => {
 
         <div>
           <label className="block text-gray-700 font-medium">Permissions</label>
-          <div className="grid grid-cols-2 gap-4 mt-2">
+          <div className="grid grid-cols-4 gap-4 mt-2">
             {permissions.map((permission) => (
               <label key={permission._id} className="inline-flex items-center">
                 <input
@@ -111,17 +117,18 @@ const CreateRole = () => {
                   onChange={() => handleCheckboxChange(permission._id)}
                   className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500"
                 />
-                <span className="ml-2 text-gray-700">
-                  {permission.display_name}
-                </span>
-              </label>
+ <span className="ml-2">{permission.display_name}</span>
+                       </label>
             ))}
           </div>
         </div>
 
-        <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md">
-          Create Role
-        </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            Create Role
+          </button>
       </form>
     </div>
   )

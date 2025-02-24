@@ -5,7 +5,7 @@ const connection = require('./database/db')
 const permission = require('./routes/permissionRoutes') 
 const authRoute=require('./routes/authRoutes')
 const Login=require('./routes/loginTest')
-const role = require('./routes/roles')
+const role = require('./routes/rolesRoute')
 
 dotenv.config()
 const app = express()

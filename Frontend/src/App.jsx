@@ -8,7 +8,8 @@ import CreatePermission from './permissions/CreatePermission'
 import CreateUser from './users/CreateUser'
 import SignIn from './Pages/SignIn'
 import UserDashboard from './Pages/UserDashboard'
-import CreateRole from './roles/CreateRole'
+// import CreateRole from './roles/CreateRole'
+import RolesList from './roles/RolesList'
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
          <Route path='/dashboard' element={<Dashboard/>}/>
          <Route path='/permission/edit' element={<EditPermission/>}/>
          <Route path='/permission' element={<PermissionList/>}/>
-         <Route path='/role' element={<CreateRole/>}/>
+         <Route path='/role' element={<RolesList/>}/>
          <Route path="permission/create" element={<CreatePermission />} />
          <Route path="/user" element={<CreateUser/>} />
         </Route>

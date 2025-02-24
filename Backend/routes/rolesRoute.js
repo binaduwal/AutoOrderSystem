@@ -40,6 +40,48 @@ router.get('/all', async (req, res) => {
       res.status(500).json({ message: 'Error fetching roles', error });
     }
   });
+
+
+  router.put('/edit/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, display_name, description, permissions } = req.body;
   
+      const editedRole = await Role.findByIdAndUpdate(
+        id,
+        { name, display_name, description, permissions },
+        { new: true }
+      );
+  
+      if (!editedRole) {
+        return res.status(404).json({ error: 'Role not found' });
+      }
+  
+      res.status(200).json({
+        message: 'Edited Successfully',
+        updatedRole: editedRole 
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server Error', message: error.message });
+    }
+  });
+    
+
+router.delete('/delete/:id',async(req,res)=>{
+  try{
+    const {id}=req.params
+    const deletedroles=await Role.findByIdAndDelete(id)
+    if (!deletedroles) {
+      return res.status(404).json({ error: 'Role not found'   })
+  }
+    res.json({ 'message':"Deleted Successfully"})
+  }
+  catch(error)
+  {
+    console.error(error)
+    res.json({'error':'Server Error'})
+  }
+})
 
 module.exports = router; 
