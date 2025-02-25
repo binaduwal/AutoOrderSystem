@@ -1,61 +1,10 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
 
-
-const CreateUser = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [status, setStatus] = useState(true) 
-  const [role, setRole] = useState('salesperson') 
-  const navigate = useNavigate();
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-  
-    const userData = {
-      username,
-      email,
-      password,
-      confirmPassword,
-      status: status ? 'active' : 'inactive',
-      role
-    };
-  
-    try {
-      const response = await fetch('http://localhost:5000/admin/create', {
-        method: 'POST', 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData), 
-      });
-  
-      if (response.ok) {
-        alert('User created successfully!');
-        navigate('/manage')
-        console.log(await response.json()); 
-      } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Error creating user!'}`);
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Error creating user!');
-    }
-  };
-  
+const EditUser = () => {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Create New User</h2>
-      <form onSubmit={handleSubmit}>
+      <form >
         <div className="mb-4">
           <label htmlFor="username" className="block text-gray-700 font-medium mb-2">
             User Name
@@ -64,8 +13,6 @@ const CreateUser = () => {
             type="text"
             id="username"
             name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
             placeholder="User Name"
             className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-black-100"
           />
@@ -79,12 +26,37 @@ const CreateUser = () => {
             type="email"
             id="email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="contactNo" className="block text-gray-700 font-medium mb-2">
+            contact Number
+          </label>
+          <input
+            type="text"
+            id="contactNo"
+            name="contactNo"
+            placeholder="9841456238"
+            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="address" className="block text-gray-700 font-medium mb-2">
+            Address
+          </label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            placeholder="address"
+            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+
 
         <div className="mb-4">
           <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
@@ -94,8 +66,6 @@ const CreateUser = () => {
             type="password"
             id="password"
             name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
           />
@@ -109,8 +79,6 @@ const CreateUser = () => {
             type="password"
             id="confirm_password"
             name="confirm_password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm Password"
             className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
           />
@@ -121,8 +89,6 @@ const CreateUser = () => {
             type="checkbox"
             id="active_user"
             name="active_user"
-            checked={status}
-            onChange={() => setStatus(!status)}
             className="mr-2"
           />
           <label htmlFor="active_user" className="text-gray-700 font-medium">
@@ -137,8 +103,6 @@ const CreateUser = () => {
             id="super_admin"
             name="role"
             value="superadmin"
-            checked={role === 'superadmin'}
-            onChange={(e) => setRole(e.target.value)}
             className="mr-2"
           />
           <label htmlFor="super_admin" className="text-black-700">
@@ -151,8 +115,6 @@ const CreateUser = () => {
             id="sales_person"
             name="role"
             value="salesperson"
-            checked={role === 'salesperson'}
-            onChange={(e) => setRole(e.target.value)}
             className="mr-2"
           />
           <label htmlFor="sales_person" className="text-black-700">
@@ -171,4 +133,4 @@ const CreateUser = () => {
   )
 }
 
-export default CreateUser
+export default EditUser

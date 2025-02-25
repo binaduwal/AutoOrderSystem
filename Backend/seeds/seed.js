@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const User = require('../models/userModel')
+const Admin = require('../models/AdminModel')
 const connectDB=require('../database/db')
 
 const seedSuperAdmin = async () => {
@@ -8,20 +8,21 @@ const seedSuperAdmin = async () => {
     await connectDB()
     const hashedPassword = await bcrypt.hash("admin@123", 10)
 
-    const existingAdmin = await User.findOne({ username: "superadmin" })
+    const existingAdmin = await Admin.findOne({ username: "superadmin" })
 
     if (existingAdmin) {
       console.log("Super Admin already exists.")
       return mongoose.connection.close()
     }
 
-    const superAdmin = new User({
+    const superAdmin = new Admin({
       name: "Super Admin",
       email: "superadmin@example.com",
       password: hashedPassword,
       contactNo: "1234567890",
       username: "superadmin",
-      role: "superadmin"
+      role: "superadmin",
+      status: "active"
         })
 
     await superAdmin.save()

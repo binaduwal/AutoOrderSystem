@@ -93,7 +93,7 @@ const PermissionList = () => {
   return (
     <div className="relative w-full min-h-screen bg-white ">
         <div className="w-full p-8 bg-white shadow-lg rounded-lg">
-          <h1 className="text-2xl font-semibold text-center text-indigo-600 mb-6">
+          <h1 className="text-xl font-semibold text-left text-black-600 mb-6">
             Permission Management
           </h1>
 
@@ -112,25 +112,25 @@ const PermissionList = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead className="bg-gray-200">
+            <table className="w-full border-collapse border border-gray-500">
+              <thead className="bg-white-200">
                 <tr>
-                  <th className="border border-gray-300 p-3">SN</th>
-                  <th className="border border-gray-300 p-3">Name</th>
-                  <th className="border border-gray-300 p-3">Display Name</th>
-                  <th className="border border-gray-300 p-3">Description</th>
-                  <th className="border border-gray-300 p-3">Actions</th>
+                  <th className="border border-gray-200 p-2">SN</th>
+                  <th className="border border-gray-200 p-2">Name</th>
+                  <th className="border border-gray-200 p-2">Display Name</th>
+                  <th className="border border-gray-200 p-2">Description</th>
+                  <th className="border border-gray-200 p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentPermissions.length > 0 ? (
                   currentPermissions.map((perm, index) => (
-                    <tr key={perm._id} className="text-center border border-gray-300">
-                      <td className="border border-gray-300 p-3">{index + 1 + indexOfFirstPermission}</td>
-                      <td className="border border-gray-300 p-3">{perm.name}</td>
-                      <td className="border border-gray-300 p-3">{perm.display_name}</td>
-                      <td className="border border-gray-300 p-3">{perm.description}</td>
-                      <td className="border border-gray-300 p-3">
+                    <tr key={perm._id} className="text-center border border-gray-200 odd:bg-gray-300">
+                      <td className="border border-gray-300 p-2">{index + 1 + indexOfFirstPermission}</td>
+                      <td className="border border-gray-300 p-2">{perm.name}</td>
+                      <td className="border border-gray-300 p-2">{perm.display_name}</td>
+                      <td className="border border-gray-300 p-2">{perm.description}</td>
+                      <td className="border border-gray-300 p-2">
                         <button
                           onClick={() => handleEdit(perm)}
                           className="text-black-600 hover:text-indigo-800 mr-4"
