@@ -121,18 +121,20 @@ const ManageUser = () => {
               <td className="px-4 py-4">{user.email}</td>
               <td className="px-4 py-4">{user.role}</td>
               <td className="px-4 py-4">
-                <button
-                  onClick={() => toggleStatus(user._id, user.status)}
-                  className="flex items-center gap-2"
-                >
-                  <span
-                    className={`w-4 h-4 rounded-full ${
-                      user.status === 'active' ? 'bg-green-400' : 'bg-red-500'
-                    }`}
-                  ></span>
-                  {user.status}
-                </button>
-              </td>
+  <label className="inline-flex items-center cursor-pointer">
+    <input
+      type="checkbox"
+      value=""
+      className="sr-only peer"
+      checked={user.status === 'active'}
+      onChange={() => toggleStatus(user._id, user.status)} 
+    />
+    <div className="relative w-10 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+    <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+      {user.status === 'active' ? 'Active' : 'Inactive'}
+    </span>
+  </label>
+</td>
               <td className="px-6 py-4 text-center">
                 <button
                   className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded mr-2"
