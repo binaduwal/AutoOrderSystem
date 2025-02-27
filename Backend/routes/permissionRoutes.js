@@ -5,7 +5,6 @@ const Permission = require('../models/permissionModel')
 router.get('/all', async (req, res) => {
     try {
         const permissions = await Permission.find()
-        console.log('Permissions fetched:', permissions)  
         res.json(permissions)    
     }
      catch (error) {

@@ -20,7 +20,6 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
       description,
     }
 
-    console.log("Permission data to be sent:", permissionData)
     try {
       const response = await fetch("http://localhost:5000/permission/create", {
         method: "POST",
