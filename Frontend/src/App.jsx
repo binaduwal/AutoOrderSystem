@@ -11,6 +11,7 @@ import UserDashboard from './Pages/UserDashboard'
 import RolesList from './roles/RolesList'
 import ManageUser from './users/ManagerUser'
 import EditUser from './users/EditUser'
+import PasswordForm from './users/PasswordForm'
 
 function App() {
   return (
