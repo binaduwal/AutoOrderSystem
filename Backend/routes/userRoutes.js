@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const User = require('../models/userModel');
 const connectDB = require('../database/db');
 
@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/create-user', async (req, res) => {
   try {
-    await connectDB();
 
     const { fullName, email, contactNo, username, password, role, status, address } = req.body;
 

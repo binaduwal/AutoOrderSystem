@@ -3,10 +3,11 @@ const dotenv = require('dotenv')
 const cors = require('cors')
 const connection = require('./database/db')
 const permission = require('./routes/permissionRoutes') 
-const authRoute=require('./routes/authRoutes')
+// const authRoute=require('./routes/authRoutes')
 const Login=require('./routes/loginTest')
 const role = require('./routes/rolesRoute')
 const adminCreateUser=require('./routes/adminCreateUser')
+const company=require('./routes/company')
 
 dotenv.config()
 const app = express()
@@ -19,11 +20,12 @@ app.use(cors({
 }))
 
 app.use('/', Login)
-app.use('/auth',authRoute)
+// app.use('/auth',authRoute)
 
 app.use('/permission', permission) 
 app.use('/role',role)
 app.use('/admin',adminCreateUser)
+app.use('/company',company)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
