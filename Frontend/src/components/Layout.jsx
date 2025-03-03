@@ -12,6 +12,7 @@ const Layout = () => {
   const navItems = [
     "Dashboard",
     "Category",
+    "Company",
     "Product",
     "Order",
     "User",

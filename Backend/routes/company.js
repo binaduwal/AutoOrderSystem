@@ -24,11 +24,6 @@ router.post("/create", async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        if (!companyName || !email || !contactNumber || !contactPerson || !taxNumber ||
-            !taxType || !city || !state || !province || !address || !password) {
-            return res.status(400).json({ error: "All required fields must be provided." });
-        }
-
         const existingCompany = await CompanyModel.findOne({ $or: [{ email }, { taxNumber }] });
         if (existingCompany) {
             return res.status(400).json({ error: "Company with the provided email or tax number already exists." });

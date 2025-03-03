@@ -12,6 +12,8 @@ import RolesList from './roles/RolesList'
 import ManageUser from './users/ManagerUser'
 import EditUser from './users/EditUser'
 import PasswordForm from './users/PasswordForm'
+import CompanyList from './company/CompanyList'
+import CreateCompany from './company/CreateCompany'
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
          <Route path="/user" element={<CreateUser/>} />
          <Route path="/manage" element={<ManageUser/>} />
          <Route path="/edit-user" element={<EditUser/>} />
+         <Route path="/company" element={<CompanyList/>} />
+         <Route path="/create-company" element={<CreateCompany/>} />
 
 
         </Route>
