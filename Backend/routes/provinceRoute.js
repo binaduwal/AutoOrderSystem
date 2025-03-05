@@ -1,0 +1,61 @@
+const express = require('express');
+const router = express.Router();
+const Province = require('../models/ProvinceModel');
+
+router.post('/create', async (req, res) => {
+  try {
+    const province = new Province({ name: req.body.name });
+    await province.save();
+    res.status(201).json(province);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/all', async (req, res) => {
+  try {
+    const provinces = await Province.find();
+    res.json(provinces);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const province = await Province.findById(req.params.id);
+    if (!province) 
+        return res.status(404).json({ message: 'Province not found' });
+    res.json(province);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.put('/edit/:id', async (req, res) => {
+  try {
+    const updatedProvince = await Province.findByIdAndUpdate(
+      req.params.id,
+      { name: req.body.name },
+      { new: true }
+    );
+    if (!updatedProvince) 
+        return res.status(404).json({ message: 'Province not found' });
+    res.json(updatedProvince);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const deletedProvince = await Province.findByIdAndDelete(req.params.id);
+    if (!deletedProvince) 
+        return res.status(404).json({ message: 'Province not found' });
+    res.json({ message: 'Province deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;
