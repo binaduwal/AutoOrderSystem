@@ -21,16 +21,16 @@ router.get('/all', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  try {
-    const province = await Province.findById(req.params.id);
-    if (!province) 
-        return res.status(404).json({ message: 'Province not found' });
-    res.json(province);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// router.get('/:id', async (req, res) => {
+//   try {
+//     const province = await Province.findById(req.params.id);
+//     if (!province) 
+//         return res.status(404).json({ message: 'Province not found' });
+//     res.json(province);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 router.put('/edit/:id', async (req, res) => {
   try {
@@ -58,4 +58,13 @@ router.delete('/delete/:id', async (req, res) => {
   }
 });
 
+router.get('/:name', async (req, res) => {
+  try {
+    const provinceName = req.params.name.trim().toLowerCase(); 
+    const province = await Province.findOne({ name: { $regex: new RegExp(`^${provinceName}$`, 'i') } });  
+    res.json({ exists: !!province }); 
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
