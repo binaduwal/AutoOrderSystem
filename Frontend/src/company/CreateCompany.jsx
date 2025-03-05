@@ -58,7 +58,6 @@ const navigate = useNavigate();
           taxNumber: "",
           taxType: "VAT", 
           city: "",
-          state: "",
           province: "",
           address: "",
           password: "",
@@ -194,17 +193,6 @@ const navigate = useNavigate();
               />
             </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium">State</label>
-              <input
-                type="text"
-                name="state"
-                placeholder="Enter state"
-                value={formData.state}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
-            </div>
           </div>
         </div>
 

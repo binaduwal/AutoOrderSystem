@@ -15,7 +15,6 @@ router.post("/create", async (req, res) => {
             taxNumber,
             taxType,      
             city,
-            state,
             province,
             address,
             password,
@@ -38,7 +37,6 @@ router.post("/create", async (req, res) => {
             taxNumber,
             taxType,
             city,
-            state,
             province,
             address,
             password: hashedPassword,
@@ -68,7 +66,6 @@ router.put("/edit/:id", async (req, res) => {
             taxNumber,
             taxType,
             city,
-            state,
             province,
             address,
             password,
@@ -83,8 +80,7 @@ router.put("/edit/:id", async (req, res) => {
             status, 
             taxNumber, 
             taxType, 
-            city, 
-            state, 
+            city,  
             province, 
             address, 
             description 
@@ -124,7 +120,7 @@ router.delete("/delete/:id", async (req, res) => {
     }
 });
 
-router.get("/get/:id", async (req, res) => {
+router.get("/edit/:id", async (req, res) => {
     try {
         const id  = req.params.id;
         const company = await CompanyModel.findById(id);

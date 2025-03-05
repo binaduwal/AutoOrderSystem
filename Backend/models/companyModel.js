@@ -9,7 +9,6 @@ const companySchema = new mongoose.Schema({
     taxNumber: { type: String, required: true, unique: true },
     taxType: { type: String, enum: ["PAN", "VAT"], required: true },
     city: { type: String, required: true },
-    state: { type: String, required: true },
     province: { type: String, required: true },
     address: { type: String, required: true },
     password: { type: String, required: true },

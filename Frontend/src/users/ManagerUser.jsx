@@ -6,6 +6,7 @@ import { IoMdCloseCircleOutline } from 'react-icons/io';
 import EditUser from './EditUser';
 import PasswordForm from './PasswordForm';
 import Pagination from '../components/Pagination';
+
 const ManageUser = () => {
   const [users, setUsers] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);

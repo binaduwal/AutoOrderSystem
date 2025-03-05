@@ -11,9 +11,10 @@ import UserDashboard from './Pages/UserDashboard'
 import RolesList from './roles/RolesList'
 import ManageUser from './users/ManagerUser'
 import EditUser from './users/EditUser'
-import PasswordForm from './users/PasswordForm'
 import CompanyList from './company/CompanyList'
 import CreateCompany from './company/CreateCompany'
+import LocationTable from './settings/locationTable'
+import SettingPage from './settings/SettingPage'
 
 function App() {
   return (
@@ -32,6 +33,11 @@ function App() {
          <Route path="/edit-user" element={<EditUser/>} />
          <Route path="/company" element={<CompanyList/>} />
          <Route path="/create-company" element={<CreateCompany/>} />
+         <Route path="/settings" element={<SettingPage/>} />
+         <Route path="/location" element={<LocationTable/>} />
+
+
+
 
 
         </Route>

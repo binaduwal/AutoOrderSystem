@@ -7,7 +7,9 @@ const permission = require('./routes/permissionRoutes')
 const Login=require('./routes/loginTest')
 const role = require('./routes/rolesRoute')
 const adminCreateUser=require('./routes/adminCreateUser')
-const company=require('./routes/company')
+const company=require('./routes/companyRoute')
+const location=require('./routes/locationRoute')
+const province=require('./routes/provinceRoute')
 
 dotenv.config()
 const app = express()
@@ -26,6 +28,8 @@ app.use('/permission', permission)
 app.use('/role',role)
 app.use('/admin',adminCreateUser)
 app.use('/company',company)
+app.use('/location',location)
+app.use('/province',province)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
