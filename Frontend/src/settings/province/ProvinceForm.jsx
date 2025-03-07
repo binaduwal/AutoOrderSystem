@@ -3,7 +3,6 @@ import { useState } from "react";
 export default function ProvinceForm({ onClose, onCreated }) {
   const [province, setProvince] = useState("");
 
-  // Function to capitalize the first letter and lowercase the rest
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
@@ -11,7 +10,6 @@ export default function ProvinceForm({ onClose, onCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Normalize the province name by trimming spaces and capitalizing the first letter
     const provinceName = capitalizeFirstLetter(province.trim());
 
     if (!provinceName) {
@@ -20,19 +18,16 @@ export default function ProvinceForm({ onClose, onCreated }) {
     }
 
     try {
-      // Check if the province already exists in the database (GET request)
       const checkResponse = await fetch(`http://localhost:5000/province/${provinceName}`);
       
       if (checkResponse.ok) {
         const data = await checkResponse.json();
         if (data.exists) {
-          // If the province exists, show an alert
           alert("Province already exists!");
           return;
         }
       }
 
-      // Proceed to create the province if it doesn't exist
       const response = await fetch("http://localhost:5000/province/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
