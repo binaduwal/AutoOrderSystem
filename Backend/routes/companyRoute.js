@@ -169,7 +169,7 @@ router.post("/login", async (req, res) => {
         }
 
         if (company.status !== "Active") {
-            return res.status(400).json({ error: "Your company is not active. Please contact support." });
+            return res.status(400).json({ error: "Your company is not active. Please contact support." })
         }
 
         const isMatch = await bcrypt.compare(password, company.password)
@@ -188,6 +188,33 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
+
+router.put('/update-password/:id', async (req, res) => {
+    const { password, confirmPassword } = req.body
+  
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' })
+    }
+  
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(
+        req.params.id,
+        { password: hashedPassword },
+        { new: true }
+      )
+  
+      if (!updatedCompany) {
+        return res.status(404).json({ message: 'Company not found' })
+      }
+  
+      res.status(200).json({ message: 'Password updated successfully' })
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ message: 'Server error' })
+    }
+  })
+  
 
 
 
