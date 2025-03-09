@@ -72,6 +72,8 @@ router.put('/edit/:id', async (req, res) => {
     if (name) {
       city.name = name
     }
+
+    await city.save()
     const updatedCity = await City.findById(req.params.id).populate('province')
     res.status(200).json(updatedCity)
     }
@@ -101,6 +103,18 @@ router.get('/:name', async (req, res) => {
   }
    catch (error) {
     res.status(500).json({ error: error.message })
+  }
+})
+
+router.get('/province/:id', async (req, res) => {
+  try {
+    console.log('Fetching cities for province ID:', req.params.id) 
+    const cities = await City.find({ province: req.params.id }) 
+    console.log('Cities found:', cities)
+    res.json(cities)
+  } catch (error) {
+    console.error('Error fetching city data:', error)
+    res.status(500).json({ message: 'Server error' })
   }
 })
 

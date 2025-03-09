@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const CreateCompany = () => {
@@ -10,7 +10,6 @@ const CreateCompany = () => {
     taxNumber: "",
     taxType: "vat",
     city: "",
-    state: "",
     province: "",
     address: "",
     password: "",
@@ -18,15 +17,58 @@ const CreateCompany = () => {
     status: false,
   });
 
-const navigate = useNavigate();
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([]); 
   const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/province/all');
+        const data = await response.json();
+        setProvinces(data);
+      } catch (error) {
+        console.error('Error fetching provinces:', error);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (formData.province) { 
+        try {
+          const response = await fetch(`http://localhost:5000/city/province/${formData.province}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log('Fetched Cities:', data); 
+          
+          if (Array.isArray(data)) {
+            setCities(data); 
+          } else {
+            console.error('Invalid data format:', data);
+            setCities([]); 
+          }
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+          setMessage("Failed to load cities. Please try again.");
+        }
+      }
+    };
+  
+    fetchCities(); 
+  }, [formData.province]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value, 
     });
   };
 
@@ -35,10 +77,10 @@ const navigate = useNavigate();
     try {
       const updatedFormData = {
         ...formData,
-        status: formData.status ? "Active" : "Inactive",  
-        taxType: formData.taxType.toUpperCase(), 
+        status: formData.status ? "Active" : "Inactive",
+        taxType: formData.taxType.toUpperCase(),
       };
-  
+
       const response = await fetch("http://localhost:5000/company/create", {
         method: "POST",
         headers: {
@@ -49,20 +91,20 @@ const navigate = useNavigate();
       const result = await response.json();
       if (response.ok) {
         setMessage("Company created successfully!");
-        navigate('/company')
+        navigate('/company');
         setFormData({
           companyName: "",
           email: "",
           contactNumber: "",
           contactPerson: "",
           taxNumber: "",
-          taxType: "VAT", 
+          taxType: "VAT",
           city: "",
           province: "",
           address: "",
           password: "",
           description: "",
-          status: true,  
+          status: true,
         });
       } else {
         console.error("Error Response:", result);
@@ -72,7 +114,7 @@ const navigate = useNavigate();
       setMessage("Error: " + error.message);
     }
   };
-  
+
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-left mb-6">Create Company</h2>
@@ -171,28 +213,42 @@ const navigate = useNavigate();
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-medium">Province</label>
-              <input
-                type="text"
+              <select
                 name="province"
-                placeholder="Enter province"
                 value={formData.province}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
+              >
+                <option value="">Select Province</option>
+                {provinces.map((province) => (
+                  <option key={province._id} value={province._id}>
+                    {province.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-gray-700 font-medium">City</label>
-              <input
-                type="text"
+              <select
                 name="city"
-                placeholder="Enter city"
                 value={formData.city}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
+                disabled={!formData.province}  
+              >
+                <option value="">Select City</option>
+                {Array.isArray(cities) && cities.length > 0 ? ( 
+                  cities.map((city) => (
+                    <option key={city._id} value={city._id}>
+                      {city.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No cities available</option>
+                )}
+              </select>
             </div>
-
           </div>
         </div>
 

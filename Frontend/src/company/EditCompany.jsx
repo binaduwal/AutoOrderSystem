@@ -17,36 +17,93 @@ const EditCompany = ({ companyId, onClose, onCompanyUpdated }) => {
         status: false,
       });
 
-        useEffect(() => {
-          if (!companyId) return;
-          const fetchDetails = async () => {
-            try {
-              const response = await fetch(`http://localhost:5000/company/edit/${companyId}`);
-              if (response.ok) {
-                const data = await response.json();
-                setFormData({
-                  companyName: data.companyName || "",
-                  email: data.email || "",
-                  contactNumber: data.contactNumber || "",
-                  contactPerson: data.contactPerson || "",
-                  taxNumber: data.taxNumber || "",
-                  taxType: data.taxType || "PAN", 
-                  city: data.city || "",
-                  province: data.province || "",
-                  address: data.address || "",
-                  password: data.password || "",
-                  description: data.description || "",
-                  status: data.status === "Active", 
-                });
-                              } else {
-                alert('Failed to fetch company details.');
-              }
-            } catch (error) {
-              console.error('Error fetching:', error);
-            }
-          };
-          fetchDetails();
-        }, [companyId]);
+const [provinces, setProvinces] = useState([]);
+const [cities, setCities] = useState([]);
+
+
+useEffect(() => {
+  if (!companyId) return;
+  const fetchDetails = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/company/edit/${companyId}`);
+      if (response.ok) {
+        const data = await response.json();
+
+        setFormData(prev => ({
+          ...prev,
+          province: data.province || "",
+        }));
+
+        if (data.province) {
+          const cityResponse = await fetch(
+            `http://localhost:5000/city/province/${data.province}`
+          );
+          if (cityResponse.ok) {
+            const citiesData = await cityResponse.json();
+            setCities(citiesData);
+          }
+        }
+
+        setFormData({
+          companyName: data.companyName || "",
+          email: data.email || "",
+          contactNumber: data.contactNumber || "",
+          contactPerson: data.contactPerson || "",
+          taxNumber: data.taxNumber || "",
+          taxType: data.taxType || "PAN", 
+          city: data.city || "",
+          province: data.province || "",
+          address: data.address || "",
+          password: data.password || "",
+          description: data.description || "",
+          status: data.status === "Active", 
+        });
+                      } else {
+        alert('Failed to fetch company details.');
+      }
+    } catch (error) {
+      console.error('Error fetching:', error);
+    }
+  };
+  fetchDetails();
+}, [companyId]);
+
+useEffect(() => {
+  const fetchProvinces = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/province/all');
+      if (response.ok) {
+        const data = await response.json();
+        setProvinces(data);
+      }
+    } catch (error) {
+      console.error('Error fetching provinces:', error);
+    }
+  };
+  fetchProvinces();
+}, []);
+
+useEffect(() => {
+  const fetchCities = async () => {
+    if (formData.province) {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/city/province/${formData.province}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCities(data);
+        }
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    }
+  };
+  fetchCities();
+}, [formData.province]);
+
+
+
 
         const handleChange = (e) => {
             const { name, value, type, checked } = e.target;
@@ -192,49 +249,59 @@ const EditCompany = ({ companyId, onClose, onCompanyUpdated }) => {
               </div>
             </div>
     <></>
-            <div className="space-y-2">
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-gray-700 font-medium">Province</label>
-                  <input
-                    type="text"
-                    name="province"
-                    placeholder="Enter province"
-                    value={formData.province}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  />
-                </div>
-    
-                <div>
-                  <label className="block text-gray-700 font-medium">City</label>
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="Enter city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  />
-                </div>
-    
-                <div className="space-y-2">
-              <div>
-                <label className="block text-gray-700 font-medium">Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  placeholder="Enter address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                />
-              </div>
-    
-            </div>
+    <div className="space-y-2">
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label className="block text-gray-700 font-medium">Province</label>
+          <select
+            name="province"
+            value={formData.province}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="">Select Province</option>
+            {provinces.map((province) => (
+              <option key={province._id} value={province._id}>
+                {province.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-              </div>
-            </div>
+        <div>
+          <label className="block text-gray-700 font-medium">City</label>
+          <select
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            disabled={!formData.province}
+          >
+            <option value="">Select City</option>
+            {cities.map((city) => (
+              <option key={city._id} value={city._id}>
+                {city.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Address field remains the same */}
+        <div className="space-y-2">
+          <div>
+            <label className="block text-gray-700 font-medium">Address</label>
+            <input
+              type="text"
+              name="address"
+              placeholder="Enter address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     
             <div className="space-y-2">
                 <label className="block text-gray-700 font-medium">Password</label>
