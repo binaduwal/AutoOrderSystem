@@ -1,66 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import Pagination from '../components/Pagination';
-import { useNavigate } from 'react-router-dom';
-import EditCompany from './EditCompany';
-import { IoMdCloseCircleOutline } from 'react-icons/io';
-import { FaEdit } from 'react-icons/fa';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import DeleteConfirmationModal from "../components/DeleteConfirmationModal"; 
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import EditCompany from './EditCompany'
+import { IoMdCloseCircleOutline } from 'react-icons/io'
+import { FaEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import DeleteConfirmationModal from "../components/DeleteConfirmationModal"
+import PasswordForm from '../users/PasswordForm';
+
 
 const CompanyList = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [companies, setCompanies] = useState([]);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [companyToDelete, setCompanyToDelete] = useState(null);
-  const [showEditCompany, setShowEditCompany] = useState(null);
-  const itemsPerPage = 2;
+  const [companies, setCompanies] = useState([])
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [companyToDelete, setCompanyToDelete] = useState(null)
+  const [showEditCompany, setShowEditCompany] = useState(null)
+  const [showChangePasswordForm, setShowChangePasswordForm] = useState(false)
+    const [userForPasswordChange, setUserForPasswordChange] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   const fetchCompanies = async () => {
     try {
-      const response = await fetch('http://localhost:5000/company/all');
-      if (!response.ok) throw new Error('Failed to fetch data');
-      const data = await response.json();
-      console.log("Fetched Companies:", data);
-      setCompanies(Array.isArray(data) ? data.filter(company => company && company._id) : []);
+      const response = await fetch('http://localhost:5000/company/all')
+      if (!response.ok) throw new Error('Failed to fetch data')
+      const data = await response.json()
+      console.log("Fetched Companies:", data)
+      setCompanies(Array.isArray(data) ? data.filter(company => company && company._id) : [])
     } catch (error) {
-      console.error('Error fetching company:', error);
+      console.error('Error fetching company:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchCompanies();
-  }, []);
+    fetchCompanies()
+  }, [])
+
+  const handleChangePassword=(company)=>{
+    setUserForPasswordChange(company)
+    setShowChangePasswordForm(true)
+  }
+
+  const closePasswordForm = () => {
+    setShowChangePasswordForm(false)
+    setUserForPasswordChange(null)
+  }
+
 
   const confirmDelete = (company) => {
-    setCompanyToDelete(company);
-    setShowDeleteConfirmation(true);
-  };
+    setCompanyToDelete(company)
+    setShowDeleteConfirmation(true)
+  }
 
   const handleDelete = async () => {
     if (companyToDelete) {
       try {
         const response = await fetch(`http://localhost:5000/company/delete/${companyToDelete._id}`, {
           method: 'DELETE',
-        });
+        })
         if (response.ok) {
-          setCompanies(companies.filter((company) => company._id !== companyToDelete._id));
+          setCompanies(companies.filter((company) => company._id !== companyToDelete._id))
         }
       } catch (error) {
-        console.error('Error deleting Company:', error);
+        console.error('Error deleting Company:', error)
       }
-      setShowDeleteConfirmation(false);
+      setShowDeleteConfirmation(false)
     }
-  };
+  }
 
   const handleCompanyUpdated = (updatedCompany) => {
     setCompanies((prevCompanies) =>
       prevCompanies.map((company) =>
         company._id === updatedCompany._id ? updatedCompany : company
       )
-    );
-    setShowEditCompany(null);
-  };
+    )
+    setShowEditCompany(null)
+  }
+
+  const indexOfLastCompany = currentPage * itemsPerPage
+  const indexOfFirstCompany = indexOfLastCompany - itemsPerPage
+  const currentCompanies = companies.slice(indexOfFirstCompany, indexOfLastCompany)
+  const totalPages = Math.ceil(companies.length / itemsPerPage)
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -75,54 +99,80 @@ const CompanyList = () => {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">SN</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Company Name</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Email</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Contact Person</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Contact Number</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Tax Type</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase">Status</th>
-            <th className="px-4 py-3 text-center text-xs font-medium text-black-500 uppercase">Actions</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">SN</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Company Name</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Email</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Contact Person</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Contact Number</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Tax Type</th>
+            <th className="px-3 py-3 text-left text-xs font-medium text-black-500 uppercase">Status</th>
+            <th className="px-3 py-3 text-center text-xs font-medium text-black-500 uppercase">Actions</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          <Pagination 
-            data={companies} 
-            itemsPerPage={itemsPerPage} 
-            render={(currentCompanies, currentPage) => (
-              currentCompanies.map((company, index) => {
-                if (!company || !company._id) return null;
-                const serialNumber = (currentPage - 1) * itemsPerPage + index + 1;
-                return (
-                  <tr key={company._id}>
-                    <td className="px-4 py-3 text-sm text-black-500">{serialNumber}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.companyName}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.email}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.contactPerson}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.contactNumber}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.taxType}</td>
-                    <td className="px-4 py-3 text-sm text-black-500">{company.status}</td>
-                    <td className="px-4 py-3 text-sm text-center text-black-500">
-                      <button
-                        className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded mr-2 text-xl"
-                        onClick={() => setShowEditCompany(company._id)}
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded mr-2 text-xl"
-                        onClick={() => confirmDelete(company)}
-                      >
-                        <RiDeleteBin6Line />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          />
+          {currentCompanies.map((company, index) => {
+            const serialNumber = (currentPage - 1) * itemsPerPage + index + 1
+            return (
+              <tr key={company._id}>
+                <td className="px-4 py-3 text-sm text-black-500">{serialNumber}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.companyName}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.email}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.contactPerson}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.contactNumber}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.taxType}</td>
+                <td className="px-4 py-3 text-sm text-black-500">{company.status}</td>
+                <td className="px-4 py-3 text-sm text-center text-black-500">
+                  <button
+                    className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded mr-2 text-xl"
+                    onClick={() => setShowEditCompany(company._id)}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded mr-2 text-xl"
+                    onClick={() => confirmDelete(company)}
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                  <button
+                  onClick={() => handleChangePassword(company)}
+                  className="text-black-400 border hover:text-indigo-700 py-0 px-1 rounded"
+                >
+                  Change Password
+                </button>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
+
+      <div className="flex justify-center mt-6">
+        {/* Pagination Controls */}
+        <button
+          className="px-4 py-2 text-white bg-indigo-600 rounded-l-lg hover:bg-indigo-700"
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Prev
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            className={`px-4 py-2 text-white ${currentPage === index + 1 ? 'bg-indigo-600' : 'bg-indigo-400'} hover:bg-indigo-500`}
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className="px-4 py-2 text-white bg-indigo-600 rounded-r-lg hover:bg-indigo-700"
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
 
       {showEditCompany && (
         <div
@@ -150,8 +200,17 @@ const CompanyList = () => {
         onClose={() => setShowDeleteConfirmation(false)}
         onConfirm={handleDelete}
       />
-    </div>
-  );
-};
 
-export default CompanyList;
+{showChangePasswordForm && (
+        <PasswordForm
+          adminId={userForPasswordChange._id}
+          endpoint="http://localhost:5000/company/update-password"
+          onClose={closePasswordForm}
+        />
+      )}
+
+    </div>
+  )
+}
+
+export default CompanyList

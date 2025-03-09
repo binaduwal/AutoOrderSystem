@@ -214,8 +214,9 @@ const ManageUser = () => {
 
       {showChangePasswordForm && (
         <PasswordForm
-          user={userForPasswordChange}
-          onClose={closePasswordForm}
+        adminId={userForPasswordChange._id}
+        endpoint="http://localhost:5000/admin/update-password"
+        onClose={closePasswordForm}
         />
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 
-const PasswordForm = ({ adminId, onClose }) => {
+const PasswordForm = ({ adminId,endpoint, onClose }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,7 +16,7 @@ const PasswordForm = ({ adminId, onClose }) => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`http://localhost:5000/admin/update-password/${adminId}`, {
+      const response = await fetch(`${endpoint}/${adminId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
