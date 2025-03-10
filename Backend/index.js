@@ -10,6 +10,9 @@ const adminCreateUser=require('./routes/adminCreateUser')
 const company=require('./routes/companyRoute')
 const location=require('./routes/locationRoute')
 const province=require('./routes/provinceRoute')
+const city=require('./routes/cityRoutes')
+const category=require('./routes/categoryRoute')
+
 
 dotenv.config()
 const app = express()
@@ -30,6 +33,8 @@ app.use('/admin',adminCreateUser)
 app.use('/company',company)
 app.use('/location',location)
 app.use('/province',province)
+app.use('/city',city)
+app.use('/category',category)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
