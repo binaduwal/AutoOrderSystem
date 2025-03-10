@@ -15,6 +15,11 @@ import CompanyList from './company/CompanyList'
 import CreateCompany from './company/CreateCompany'
 import LocationTable from './settings/locationTable'
 import SettingPage from './settings/SettingPage'
+import ProvinceTable from './settings/province/ProvinceTable'
+import CityForm from './settings/city/CityForm'
+import CityTable from './settings/city/CityTable'
+import LoginForm from './company/LoginForm'
+import CompanyDashboard from './company/CompanyDashboard'
 
 function App() {
   return (
@@ -35,13 +40,14 @@ function App() {
          <Route path="/create-company" element={<CreateCompany/>} />
          <Route path="/settings" element={<SettingPage/>} />
          <Route path="/location" element={<LocationTable/>} />
-
-
-
-
-
+         <Route path="/province" element={<ProvinceTable/>} />
+         <Route path="/city" element={<CityTable/>} />
         </Route>
+        
         <Route index path='/userdashboard' element={<UserDashboard/>}/>
+        <Route path="/login" element={<LoginForm/>} />
+        <Route path="/company-dashboard" element={<CompanyDashboard/>} />
+
 
       </Routes>
     </BrowserRouter>
