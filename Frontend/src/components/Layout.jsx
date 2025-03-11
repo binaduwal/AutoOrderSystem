@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { FaUser } from "react-icons/fa";
-import { PiSignOut } from "react-icons/pi";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import React, { useState } from "react"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { IoMdNotificationsOutline } from "react-icons/io"
+import { FaUser } from "react-icons/fa"
+import { PiSignOut } from "react-icons/pi"
+import { HiOutlineMenuAlt3 } from "react-icons/hi"
+import Swal from 'sweetalert2'
+
 
 const Layout = () => {
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false)
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
+  const navigate = useNavigate() 
   const navItems = [
     "Dashboard",
     "Category",
@@ -20,15 +22,33 @@ const Layout = () => {
     "Permissions",
     "Register",
     "Settings",
-  ];
+  ]
 
+  const handleSignOut = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be signed out of your account!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, sign out!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token") 
+        sessionStorage.removeItem("user") 
+        Swal.fire('Signed Out!', 'You have been signed out.', 'success')
+        navigate("/") 
+      }
+    })
+  }
+  
   const renderNavItem = (item, index, isMobile = false) => {
     if (item === "User") {
       return (
         <li key={index} className="relative">
           <div
             onClick={() => setShowUserDropdown((prev) => !prev)}
-            className="flex items-center p-3 rounded-lg transition duration-300 text-gray-700 hover:text-indigo-500 cursor-pointer justify-between"
+            className="flex items-center p-2 rounded-lg transition duration-300 text-gray-700 hover:text-indigo-500 cursor-pointer justify-between"
           >
             <span>{item}</span>
             <svg
@@ -44,7 +64,6 @@ const Layout = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </div>
-          {/* Dropdown Menu */}
           {showUserDropdown && (
             <ul className="ml-4 mt-1 space-y-1">
               <li>
@@ -68,7 +87,7 @@ const Layout = () => {
             </ul>
           )}
         </li>
-      );
+      )
     } else {
       return (
         <li key={index}>
@@ -90,14 +109,13 @@ const Layout = () => {
             {item}
           </NavLink>
         </li>
-      );
+      )
     }
-  };
+  }
 
   return (
     <>
       <div className="flex h-screen bg-white">
-        {/* Mobile Sidebar */}
         {showMobileSidebar && (
           <aside className="fixed inset-0 z-40 flex">
             <div
@@ -105,17 +123,17 @@ const Layout = () => {
               onClick={() => setShowMobileSidebar(false)}
             ></div>
             <div className="relative flex flex-col w-64 bg-white text-black p-6 shadow-lg">
-              <div className="text-xl font-bold mb-5 text-gray-700">Admin</div>
+              <div className="text-xl font-bold mb-2 text-gray-700">Admin</div>
               <nav>
                 <ul className="space-y-1">
                   {navItems.map((item, index) => renderNavItem(item, index, true))}
                   <li>
-                    <a
-                      className="flex items-center p-3 rounded-lg transition duration-300 hover:text-indigo-500 text-gray-700"
-                      href="#"
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center p-2 rounded-lg transition duration-300 hover:text-indigo-500 text-gray-700"
                     >
                       <PiSignOut className="mr-3 text-xl" /> Signout
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </nav>
@@ -123,19 +141,18 @@ const Layout = () => {
           </aside>
         )}
 
-        {/* Sidebar for Desktop */}
         <aside className="w-64 bg-white text-black p-4 shadow-lg hidden md:block h-full fixed">
-          <div className="text-xl font-bold mb-3 text-gray-700">Admin</div>
+          <div className="text-xl font-bold mb-2 text-gray-700">Admin</div>
           <nav>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               {navItems.map((item, index) => renderNavItem(item, index))}
               <li>
-                <a
-                  className="flex items-center p-3 rounded-lg transition duration-300 text-gray-700 hover:text-indigo-500"
-                  href="#"
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center p-2 rounded-lg transition duration-300 text-gray-700 hover:text-indigo-500"
                 >
                   <PiSignOut className="mr-3 text-xl" /> Signout
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
@@ -159,14 +176,13 @@ const Layout = () => {
             </div>
           </header>
 
-          {/* Page Content */}
           <div className="mt-0">
             <Outlet />
           </div>
         </main>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
