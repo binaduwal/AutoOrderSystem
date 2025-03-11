@@ -3,7 +3,8 @@ import CreatePermission from './CreatePermission'
 import EditPermission from './EditPermission'
 import { FaEdit } from "react-icons/fa"
 import { RiDeleteBin6Line } from "react-icons/ri"
-import { IoMdCloseCircleOutline } from "react-icons/io";
+import { IoMdCloseCircleOutline } from "react-icons/io"
+
 
 const PermissionList = () => {
   const [showCreatePermission, setShowCreatePermission] = useState(false)
@@ -12,6 +13,8 @@ const PermissionList = () => {
   const [editPermissionData, setEditPermissionData] = useState(null)
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [permissionToDelete, setPermissionToDelete] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
@@ -53,9 +56,7 @@ const PermissionList = () => {
           method: 'DELETE',
         })
         if (response.ok) {
-          // Remove the deleted permission from the state
           setPermissions(permissions.filter((p) => p._id !== permissionToDelete._id))
-          // Adjust current page if deleting leaves the current page empty
           if ((currentPage - 1) * itemsPerPage >= permissions.length - 1) {
             setCurrentPage((prev) => Math.max(prev - 1, 1))
           }
@@ -80,12 +81,21 @@ const PermissionList = () => {
     setShowEditPermission(false)
   }
 
-  // Calculate indexes for the current page items
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
+  const normalizeString = (str) => 
+    str.toLowerCase().replace(/[-\s]/g, '')
+  const filteredPermissions = permissions.filter((perm) =>
+    normalizeString(perm.name).includes(normalizeString(searchTerm))
+)
+
   const indexOfLastPermission = currentPage * itemsPerPage
   const indexOfFirstPermission = indexOfLastPermission - itemsPerPage
-  const currentPermissions = permissions.slice(indexOfFirstPermission, indexOfLastPermission)
-  const totalPages = Math.ceil(permissions.length / itemsPerPage)
-
+  const currentPermissions = filteredPermissions.slice(indexOfFirstPermission, indexOfLastPermission)
+  const totalPages = Math.ceil(filteredPermissions.length / itemsPerPage)
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
@@ -98,11 +108,20 @@ const PermissionList = () => {
           </h1>
 
           <div className="flex justify-between items-center mb-6">
-            <input
-              type="text"
-              placeholder="Search Category"
-              className="p-3 border rounded-lg w-2/3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+          {/* <SearchBar
+            placeholder="Search Permission"
+            value={searchTerm}
+            onChange={handleSearch}
+          /> */}
+
+<input
+      type="text"
+      placeholder="Search Permission"
+      value={searchTerm}
+      onChange={handleSearch}
+            className="p-3 border rounded-lg w-2/3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+
             <button
               className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300"
               onClick={() => setShowCreatePermission(true)}
@@ -125,7 +144,7 @@ const PermissionList = () => {
               <tbody>
                 {currentPermissions.length > 0 ? (
                   currentPermissions.map((perm, index) => (
-                    <tr key={perm._id} className="text-center border border-gray-200 odd:bg-gray-300">
+                    <tr key={perm._id} className="text-center border border-gray-200 odd:bg-gray-100">
                       <td className="border border-gray-300 p-2">{index + 1 + indexOfFirstPermission}</td>
                       <td className="border border-gray-300 p-2">{perm.name}</td>
                       <td className="border border-gray-300 p-2">{perm.display_name}</td>
