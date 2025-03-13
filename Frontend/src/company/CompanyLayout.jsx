@@ -1,9 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import React from 'react'
+import { useNavigate ,Outlet} from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 const CompanyLayout = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate() 
 
     const handleSignOut = () => {
         Swal.fire({
@@ -15,23 +15,24 @@ const CompanyLayout = () => {
             cancelButtonText: 'Cancel',
         }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.removeItem("token"); 
-                sessionStorage.removeItem("user"); 
+                sessionStorage.removeItem("token")
+                sessionStorage.removeItem("userRole") 
+                localStorage.removeItem("companyId")
                 Swal.fire('Signed Out!', 'You have been signed out.', 'success')
                 .then(() => {
-                    navigate("/login"); 
-                });
+                    navigate("/login") 
+                })
             }
-        });
-    };
+        })
+    }
 
     const navItems = [
-        { name: "Dashboard", path: "/company/dashboard" },
-        { name: "Category", path: "/company/dashboard/category" },
-        { name: "Product", path: "/company/dashboard/product" },
-        { name: "Settings", path: "/company/dashboard/settings" },
+        { name: "Dashboard", path: "/company" },
+        { name: "Category", path: "/company/category" },
+        { name: "Product", path: "/company/product" },
+        { name: "Settings", path: "/company/settings" },
         { name: "Sign Out", action: handleSignOut }
-    ];
+    ]
 
 
     return (
@@ -59,12 +60,17 @@ const CompanyLayout = () => {
                             )}
                         </li>
                     ))}
-                </ul>                </div>
-
+                </ul>
             </div>
-
         </div>
-    );
-};
 
-export default CompanyLayout;
+        <div className="flex-1 p-4">
+        <Outlet />
+      </div>
+
+    </div>
+    
+    )
+}
+
+export default CompanyLayout

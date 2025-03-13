@@ -28,14 +28,13 @@ const Layout = () => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You will be signed out of your account!",
-      icon: 'warning',
+      // icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, sign out!',
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("token") 
-        sessionStorage.removeItem("user") 
+        sessionStorage.removeItem("token") 
         Swal.fire('Signed Out!', 'You have been signed out.', 'success')
         navigate("/") 
       }

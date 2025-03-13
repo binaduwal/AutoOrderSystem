@@ -1,28 +1,32 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: "", password: "" })
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const response = await axios.post("http://localhost:5000/company/login", formData);
-      localStorage.setItem("token", response.data.token);
-      navigate("/company-dashboard"); 
+      const response = await axios.post("http://localhost:5000/company/login", formData)
+      sessionStorage.setItem("token", response.data.token)
+      sessionStorage.setItem("userRole", "company")
+      localStorage.setItem("companyId", response.data.companyId)
+
+      console.log("Stored companyId:", localStorage.getItem("companyId"));
+      navigate("/company") 
     } 
     catch (error) {
         if (error.response?.data?.error === "Your company is not active. Please contact support.") {
-          setError("Your company is not active. Please contact support.");
+          setError("Your company is not active. Please contact support.")
         } else {
-          setError(error.response?.data?.error || "Login failed");
+          setError(error.response?.data?.error || "Login failed")
         }
   }
 }
@@ -64,7 +68,7 @@ const LoginForm = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

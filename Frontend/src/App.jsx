@@ -5,7 +5,7 @@ import Dashboard from './Pages/Dashboard'
 import SignUp from './Pages/SignUp'
 import CreateUser from './users/CreateUser'
 import SignIn from './Pages/SignIn'
-import UserDashboard from './Pages/UserDashboard'
+// import UserDashboard from './Pages/UserDashboard'
 import RolesList from './roles/RolesList'
 import ManageUser from './users/ManagerUser'
 import CompanyList from './company/CompanyList'
@@ -28,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SignIn/>} />
          <Route path="/signup" element={<SignUp />} />
+         <Route path="/login" element={<LoginForm />} />
 
 
       <Route element={<PrivateRoute />}>
@@ -46,15 +47,14 @@ function App() {
         </Route>
         </Route> 
 
-      <Route  path="/userdashboard" element={<UserDashboard />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/company/dashboard" element={<CompanyLayout />} />
-        <Route path="/company/category" element={<CategoryTable />} />
-        <Route path="/category-create" element={<CategoryForm />} />
-        <Route path="/category-edit/:id" element={<EditCategory />} />
-        <Route path="/company-dashboard" element={<CompanyDashboard />} />        
-
-
+        <Route element={<PrivateRoute requiredRole="company"/>}>
+          <Route path="/company" element={<CompanyLayout />}>
+            <Route index element={<CompanyDashboard />} />
+            <Route path="category" element={<CategoryTable />} />
+            <Route path="category-create" element={<CategoryForm />} />
+            <Route path="category-edit/:id" element={<EditCategory />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   )
