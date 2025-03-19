@@ -34,6 +34,21 @@ router.get("/all",async(req,res)=>{
 
 })
 
+router.get("/:id",async(req,res)=>{
+    const { id } = req.params
+
+    try{
+     const product=await ProductUnit.findById(id)
+     res.json(product)
+    }
+    catch(error){
+        console.error("Error fetching product:",error)
+        res.status(500).json({error:'Server error'})
+    }
+
+})
+
+
 
 router.delete("/delete/:id", async (req, res) => {
     const { id } = req.params
@@ -52,7 +67,9 @@ router.delete("/delete/:id", async (req, res) => {
 router.put("/edit/:id",async(req,res)=>{
     const {id}=req.params
     try{
-        const updatedProduct=await ProductUnit.findByIdAndUpdate(id)
+        const updatedProduct=await ProductUnit.findByIdAndUpdate(id,
+        req.body, 
+        { new: true })
     if(!updatedProduct)
     {
         return res.status(404).json({
