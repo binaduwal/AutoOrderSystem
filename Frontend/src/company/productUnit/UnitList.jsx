@@ -5,6 +5,7 @@ import Pagination from '../../components/Pagination';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import CreateUnit from "../productUnit/CreateUnit"
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
+import EditUnit from './EditUnit';
 
 const UnitList = () => {
 const [units,setUnits]=useState([])
@@ -12,8 +13,8 @@ const [showDeleteConfirmation,setShowDeleteConfirmation]=useState(false)
 const [DeleteData, setDeleteData] = useState(null);
 const [showCreate, setShowCreate] = useState(false)
 const [currentPage, setCurrentPage] = useState(1)
-// const [showEdit, setShowEdit] = useState(false)
-// const [editData, setEditData] = useState(null)
+const [showEdit, setShowEdit] = useState(false)
+const [editData, setEditData] = useState(null)
 
 const itemsPerPage = 5
 
@@ -82,6 +83,16 @@ const handleDelete=async()=>{
           setShowDeleteConfirmation(false);
                 }
         }
+
+const handleEdit=(unit)=>{
+  setEditData(unit)
+  setShowEdit(true)
+}
+
+const handleUpdated=async()=>{
+  await fetchDetails()
+  setShowEdit(false)
+}
 
   return (
     <div>
@@ -160,7 +171,7 @@ const handleDelete=async()=>{
             <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowCreate(false)}
+                onClick={() => setShowEdit(false)}
               >
                 <IoMdCloseCircleOutline className="text-2xl" />
               </button>
@@ -169,19 +180,19 @@ const handleDelete=async()=>{
           </div>
         )}
 
-        {/* {showEditRole && (
+        {showEdit && (
           <div className="fixed inset-0 flex justify-center items-center z-50">
             <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowEditRole(false)}
+                onClick={() => setShowEdit(false)}
               >
                 <IoMdCloseCircleOutline className="text-2xl" />
               </button>
-              <EditRole roleData={editRoleData} onRoleUpdated={handleRoleUpdated} />
+              <EditUnit unitData={editData} onUpdated={handleUpdated} />
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
     </div>
