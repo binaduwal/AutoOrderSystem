@@ -17,11 +17,14 @@ const [DeleteData, setDeleteData] = useState(null)
 const [showEdit, setShowEdit] = useState(false)
 const [editData, setEditData] = useState(null)
 const [units, setUnits] = useState([])
+const [categories, setCategories] = useState([])
 const itemsPerPage = 5
+
 
 useEffect(()=>{
     fetchDetails()
     fetchUnits()
+    fetchCategories()
 },[])
 
 const fetchDetails=async()=>{
@@ -33,12 +36,12 @@ const fetchDetails=async()=>{
             setProducts(data)
         }
         else{
-            console.error("Failed to fetch permissions")
+            console.error("Failed to fetch products")
         }
         
 }
 catch (error) {
-    console.error("Error fetching permissions:", error)
+    console.error("Error fetching products:", error)
 }
 }
 
@@ -56,6 +59,22 @@ const fetchUnits = async () => {
     console.error("Error fetching units:", error)
   }
 }
+
+const fetchCategories = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/category/all')
+    const data = await response.json()
+    if (Array.isArray(data)) {
+      setCategories(data)
+    } else {
+      console.error("Unexpected response format:", data)
+      setCategories([])
+    }
+  } catch (error) {
+    console.error("Error fetching units:", error)
+  }
+}
+
 
 const indexOfLast = currentPage * itemsPerPage
 const indexOfFirst = indexOfLast - itemsPerPage
@@ -152,10 +171,14 @@ const handleUpdated=async()=>{
                         <td className="border border-gray-200 p-2">{index + 1 + indexOfFirst}</td>
                         <td className="border border-gray-200 p-2">{product.name}</td>
                         <td className="border border-gray-200 p-2">{product.productCode}</td>
-                        <td className="border border-gray-200 p-2">{product.categoryId}</td>
                         <td className="border border-gray-200 p-2">
-  {units.find(unit => unit._id === product.productUnitId)?.unitName || "N/A"}
-</td>                        <td className="border border-gray-200 p-2">{product.vatable ? "True" : "False"}</td>
+                          {categories.find(category=>category._id===product.categoryId)?.category_name||"N/A"}
+                        </td>
+
+                        <td className="border border-gray-200 p-2">
+                          {units.find(unit => unit._id === product.productUnitId)?.unitName || "N/A"}
+                        </td>  
+                        <td className="border border-gray-200 p-2">{product.vatable ? "True" : "False"}</td>
                         <td className="border border-gray-200 p-2">{product.maxSellingPrice}</td>
                         <td className="border border-gray-200 p-2">{product.maxDiscount}</td>
                         <td className="border border-gray-200 p-2">{product.status}</td>
