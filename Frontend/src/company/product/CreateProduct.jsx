@@ -1,8 +1,20 @@
 import React, { useEffect, useState} from "react"
 
-const CreateProduct = () => {
+const CreateProduct = ({onCreated,onClose}) => {
 const [units,setUnits]=useState([])
 const [selectedUnit, setSelectedUnit] = useState("") 
+
+
+  const [formData, setFormData] = useState({
+    name: "",
+    productCode: "",
+    vatable:true,
+    productImage: "",
+    maxSellingPrice: 0,
+    maxDiscount:0,
+    status: false
+  });
+
 
 const fetchUnits=async()=>{
   try{
@@ -25,20 +37,74 @@ useEffect(()=>{
   fetchUnits()
 },[])
 
+const handleSubmit=async(e)=>{
+e.preventDefault()
+const updatedData = {
+  ...formData,
+  productUnitId: selectedUnit,
+  status: formData.status === "Active" ? "active" : "inactive"
+}
+
+try{
+  const response=await fetch("http://localhost:5000/product/create",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updatedData)
+  })
+  if(response.ok)
+  {
+    const newData = await response.json()
+    console.log("Created")
+    onCreated(newData)
+    onClose()
+  }
+  const result=await response.json()
+  if (response.ok) {
+  setFormData({
+    name: "",
+    productCode: "",
+    vatable: true,
+    productImage: "",
+    maxSellingPrice: "",
+    maxDiscount: "",
+    status: false,
+  })
+}
+else {
+  console.error("Error Response:", result);
+}
+}
+catch (error) {
+}
+}
+
+
+const handleChange=(e)=>{
+  const {name,value}=e.target
+  setFormData({
+    ...formData,
+    [name]: name === "vatable" ? value === "true" : value  })
+}
+
 const handleUnitChange = (e) => {
   setSelectedUnit(e.target.value)
 }
 return (
     <div className="max-h-auto w-full mx-auto bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
-      <form className="grid grid-cols-2 gap-4">
+      <div className="overflow-y-auto max-h-[500px]">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
         <div>
           <label className="block mb-1 font-medium" htmlFor="name">
             Product Name
           </label>
           <input
             type="text"
-            id="name"
+            name="name"
+            onChange={handleChange}
+            value={formData.name}
             placeholder="Enter Product Name"
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           />
@@ -50,7 +116,9 @@ return (
           </label>
           <input
             type="text"
-            id="productCode"
+            name="productCode"
+            onChange={handleChange}
+            value={formData.productCode}
             placeholder="Enter Product Code"
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           />
@@ -62,7 +130,9 @@ return (
           </label>
           <input
             type="number"
-            id="maxSellingPrice"
+            onChange={handleChange}
+            name="maxSellingPrice"
+            value={formData.maxSellingPrice}
             placeholder="Enter Selling Price"
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           />
@@ -74,7 +144,9 @@ return (
           </label>
           <input
             type="number"
-            id="maxDiscount"
+            name="maxDiscount"
+            onChange={handleChange}
+            value={formData.maxDiscount}
             placeholder="Enter Discount (Max 10%)"
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           />
@@ -86,13 +158,15 @@ return (
           </label>
           <div className="flex items-center">
           </div>
-          <select  
-            id="vatable"
+          <select 
+          name="vatable" 
+            value={formData.vatable}
+            onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           >
             <option value="">Select</option>
-            <option value="True">True</option>
-            <option value="False">False</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
             
           </select>
         </div>
@@ -109,7 +183,7 @@ return (
           >
             <option value="">Select Unit</option>
             {units
-            .filter((unit)=>unit.status=="active")
+            .filter((unit)=>unit.status==="active")
             .map((unit)=>(
               <option key={unit._id} value={unit._id}>
                   {unit.unitName}
@@ -123,7 +197,9 @@ return (
             Category
           </label>
           <select
-            id="categoryId"
+          name="categoryId"
+          value={formData.categoryId || ""}
+            onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           >
           </select>
@@ -134,7 +210,9 @@ return (
             Status
           </label>
           <select
-            id="status"
+          name="status"
+            onChange={handleChange}
+            value={formData.status}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           >
             <option value="Active">Active</option>
@@ -167,9 +245,10 @@ return (
           type="submit"
           className="px-2 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
-          Submit
+          Create
         </button>
       </form>
+    </div>
     </div>
   )
 }
