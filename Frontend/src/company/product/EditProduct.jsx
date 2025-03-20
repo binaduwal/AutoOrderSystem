@@ -13,7 +13,9 @@ const EditProduct = ({ productData, onUpdated }) => {
   })
 
   const [units, setUnits] = useState([])
+  const [categories, setCategories] = useState([])
   const [selectedUnit, setSelectedUnit] = useState(productData?.productUnitId || '')
+
 
   const fetchUnits = async () => {
     try {
@@ -30,9 +32,47 @@ const EditProduct = ({ productData, onUpdated }) => {
     }
   }
 
+const fetchCategories=async()=>{
+    try{
+const response=await fetch('http://localhost:5000/category/all')
+const data=await response.json()
+const tree=buildTree(data)
+setCategories(tree)
+    }
+    catch(error)
+    {
+        console.error("Error while fetching catergoreis",error)
+    }
+}
+
+const buildTree=(categories,parentId=null)=>{
+    return categories
+    .filter(category=>category.parentId===parentId)
+    .map(category=>({
+        ...category,
+        children:buildTree(categories,category._id)
+    }))
+}
+
+
   useEffect(() => {
     fetchUnits()
+    fetchCategories()
   }, [])
+
+
+  const renderOptions=(categories,depth=0)=>{
+    return categories.map(category=>(
+        <React.Fragment key={category._id}>
+            <option value={category._id}
+            style={{paddingLeft:`${20*depth}px`}}
+            >
+                {category.category_name}
+            </option>
+            {renderOptions(category.children,depth+1)}
+        </React.Fragment>
+    ))
+  }
 
   useEffect(() => {
     if (productData?._id) {
@@ -215,6 +255,8 @@ const EditProduct = ({ productData, onUpdated }) => {
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           >
+            <option value="">Select Category</option>
+            {renderOptions(categories)}
           </select>
         </div>
 
