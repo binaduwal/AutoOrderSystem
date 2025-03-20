@@ -225,7 +225,7 @@ const handleUpdated=async()=>{
                   >
                     <IoMdCloseCircleOutline className="text-2xl" />
                   </button>
-                  <EditProduct productData={editData} onUpdated={handleUpdated} />
+                  <EditProduct productData={editData} onUpdated={handleUpdated}/>
                 </div>
               </div>
             )}
