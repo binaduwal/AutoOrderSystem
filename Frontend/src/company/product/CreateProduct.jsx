@@ -3,7 +3,22 @@ import React, { useEffect, useState} from "react"
 const CreateProduct = ({onCreated,onClose}) => {
 const [units,setUnits]=useState([])
 const [selectedUnit, setSelectedUnit] = useState("") 
+const [categories, setCategories] = useState([])
+const [selectedFile,setSelectedFile]=useState(null)
 
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/category/all')
+      const data = await response.json()
+      const tree = buildTree(data)
+      setCategories(tree)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+    }
+  }
+  fetchCategories()
+}, [])
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +30,14 @@ const [selectedUnit, setSelectedUnit] = useState("")
     status: false
   });
 
+const buildTree = (categories, parentId = null) => {
+  return categories
+    .filter(category => category.parentId === parentId)
+    .map(category => ({
+      ...category,
+      children: buildTree(categories, category._id)
+    }))
+}
 
 const fetchUnits=async()=>{
   try{
@@ -37,12 +60,39 @@ useEffect(()=>{
   fetchUnits()
 },[])
 
+const renderOptions = (categories, depth = 0) => {
+  return categories.map(category => (
+    <React.Fragment key={category._id}>
+      <option 
+        value={category._id}
+        style={{ paddingLeft: `${20 * depth}px` }}
+      >
+        {category.category_name}
+      </option>
+      {renderOptions(category.children, depth + 1)}
+    </React.Fragment>
+  ))
+}
+
 const handleSubmit=async(e)=>{
 e.preventDefault()
+let fileUrl=""
+if(selectedFile)
+{
+  try{
+    fileUrl=await handleFileUpload(selectedFile)
+  }
+  catch(error)
+  {
+    console.error("File upload failed",error)
+  }
+}
+
 const updatedData = {
   ...formData,
   productUnitId: selectedUnit,
-  status: formData.status === "Active" ? "active" : "inactive"
+  status: formData.status === "Active" ? "active" : "inactive",
+  productImage:fileUrl
 }
 
 try{
@@ -91,6 +141,29 @@ const handleChange=(e)=>{
 const handleUnitChange = (e) => {
   setSelectedUnit(e.target.value)
 }
+
+const handleFileUpload=async(file)=>{
+const formData=new FormData()
+formData.append("file-upload",file)
+const res=await fetch('http://localhost:5000/product/upload',{
+  method:'POST',
+  body:formData
+  })
+
+  if(res.ok){
+    const data=await res.json()
+    return data.filename
+  }
+  else{
+    throw new Error("File upload failed")
+  }
+}
+
+const handleFileChange=(e)=>{
+  setSelectedFile(e.target.files[0])
+}
+
+
 return (
     <div className="max-h-auto w-full mx-auto bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
@@ -202,6 +275,8 @@ return (
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
           >
+            <option value="">Select Category</option>
+            {renderOptions(categories)}
           </select>
         </div>
 
@@ -231,7 +306,12 @@ return (
           <div className="mt-4 flex text-sm/6 text-gray-600">
             <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
               <span>Upload a file</span>
-              <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
+              <input id="file-upload"
+            name="file-upload"
+            type="file"
+            className="sr-only"
+            onChange={handleFileChange}
+             />
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>

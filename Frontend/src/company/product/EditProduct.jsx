@@ -15,6 +15,7 @@ const EditProduct = ({ productData, onUpdated }) => {
   const [units, setUnits] = useState([])
   const [categories, setCategories] = useState([])
   const [selectedUnit, setSelectedUnit] = useState(productData?.productUnitId || '')
+  const [selectedFile,setSelectedFile]=useState(null)
 
 
   const fetchUnits = async () => {
@@ -118,11 +119,23 @@ const buildTree=(categories,parentId=null)=>{
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    let fileUrl=""
+    if(selectedFile)
+    {
+      try{
+        fileUrl=await handleFileUpload(selectedFile)
+      }
+      catch(error)
+      {
+        console.error("File upload failed",error)
+      }
+    }
+    
     const payload = {
       ...formData,
       status: formData.status === 'Active' ? 'active' : 'inactive',
       productUnitId: selectedUnit,
+      productImage:fileUrl
     }
     if (!payload.categoryId) {
         delete payload.categoryId;
@@ -146,6 +159,28 @@ const buildTree=(categories,parentId=null)=>{
       console.error('Error updating product:', error)
     }
   }
+
+  const handleFileUpload=async(file)=>{
+    const formData=new FormData()
+    formData.append("file-upload",file)
+    const res=await fetch('http://localhost:5000/product/upload',{
+      method:'POST',
+      body:formData
+      })
+    
+      if(res.ok){
+        const data=await res.json()
+        return data.filename
+      }
+      else{
+        throw new Error("File upload failed")
+      }
+    }
+    
+    const handleFileChange=(e)=>{
+      setSelectedFile(e.target.files[0])
+    }
+    
 
   return (
     <div className="max-h-auto w-full mx-auto bg-white p-6 rounded shadow-md">
@@ -285,7 +320,13 @@ const buildTree=(categories,parentId=null)=>{
           <div className="mt-4 flex text-sm/6 text-gray-600">
             <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
               <span>Upload a file</span>
-              <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
+              <input 
+              id="file-upload" 
+              name="file-upload" 
+              type="file" 
+              onChange={handleFileChange}
+              className="sr-only"/>
+
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>
