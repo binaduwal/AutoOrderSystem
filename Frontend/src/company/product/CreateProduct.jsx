@@ -6,6 +6,22 @@ const [selectedUnit, setSelectedUnit] = useState("")
 const [categories, setCategories] = useState([])
 const [selectedFile,setSelectedFile]=useState(null)
 
+const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [selectedCategoryName, setSelectedCategoryName] = useState("");
+
+  const findCategoryName = (categories, id) => {
+    for (const category of categories) {
+      if (category._id === id) {
+        return category.category_name;
+      }
+      if (category.children) {
+        const found = findCategoryName(category.children, id);
+        if (found) return found;
+      }
+    }
+    return "";
+  };
+
 useEffect(() => {
   const fetchCategories = async () => {
     try {
@@ -29,6 +45,12 @@ useEffect(() => {
     maxDiscount:0,
     status: false
   });
+
+  useEffect(() => {
+    console.log('Categories structure:', categories);
+  }, [categories]);
+
+
 
 const buildTree = (categories, parentId = null) => {
   return categories
@@ -60,19 +82,125 @@ useEffect(()=>{
   fetchUnits()
 },[])
 
-const renderOptions = (categories, depth = 0) => {
-  return categories.map(category => (
-    <React.Fragment key={category._id}>
-      <option 
-        value={category._id}
-        style={{ paddingLeft: `${20 * depth}px` }}
+// const renderOptions = (categories, depth = 0) => {
+//   return categories.map(category => (
+//     <React.Fragment key={category._id}>
+//       <option 
+//         value={category._id}
+//         style={{ paddingLeft: `${20 * depth}px` }}
+//       >
+//         {category.category_name}
+//       </option>
+//       {renderOptions(category.children, depth + 1)}
+//     </React.Fragment>
+//   ))
+// }
+
+
+
+
+// const renderCategories = (categories, depth = 0) => {
+//   return categories.map((category) => (
+//     <div key={category._id} className="relative group">
+//       {/* Parent category */}
+//       <div
+//         className={`${getPaddingClass(depth)} pr-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center`}
+//         onClick={() => {
+//           setFormData(prev => ({ ...prev, categoryId: category._id }));
+//           setSelectedCategoryName(category.category_name);
+//           setIsCategoryOpen(false);
+//         }}
+//       >
+//         <span>{category.category_name}</span>
+//         {category.children?.length > 0 && (
+//           <svg
+//             className="w-4 h-4 ml-2 transform transition-transform group-hover:rotate-90"
+//             fill="none"
+//             stroke="currentColor"
+//             viewBox="0 0 24 24"
+//           >
+//             <path
+//               strokeLinecap="round"
+//               strokeLinejoin="round"
+//               strokeWidth={2}
+//               d="M9 5l7 7-7 7"
+//             />
+//           </svg>
+//         )}
+//       </div>
+
+//       {/* Child categories */}
+//       {category.children?.length > 0 && (
+//         <div className="pl-4">
+//           {renderCategories(category.children, depth + 1)}
+//         </div>
+//       )}
+//     </div>
+//   ));
+// };
+
+
+const renderCategories = (categories, depth = 0) => {
+  return categories.map((category) => (
+    <div key={category._id} className="relative group">
+      {/* Parent category */}
+      <div
+        className={`${getPaddingClass(depth)} pr-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center`}
+        onClick={() => {
+          setFormData(prev => ({ ...prev, categoryId: category._id }));
+          setSelectedCategoryName(category.category_name);
+          setIsCategoryOpen(false);
+        }}
       >
-        {category.category_name}
-      </option>
-      {renderOptions(category.children, depth + 1)}
-    </React.Fragment>
-  ))
-}
+        <span>{category.category_name}</span>
+        {category.children?.length > 0 && (
+          <svg
+            className="w-4 h-8 ml-2 transform transition-transform group-hover:rotate-90"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        )}
+      </div>
+
+      {/* Child categories */}
+      {category.children?.length > 0 && (
+  <div className="absolute right-0 ml-1 hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 min-w-[200px]">
+    {renderCategories(category.children, depth + 1)}
+  </div>
+)}
+    </div>
+  ));
+};
+const getPaddingClass = (depth) => {
+  switch (depth) {
+    case 0: return 'pl-2';
+    case 1: return 'pl-6';
+    case 2: return 'pl-10';
+    case 3: return 'pl-14';
+    default: return 'pl-18';
+  }
+};
+
+const getFullCategoryPath = (categories, id, path = []) => {
+  for (const category of categories) {
+    if (category._id === id) {
+      return [...path, category.category_name].join(' > ');
+    }
+    if (category.children?.length > 0) {
+      const found = getFullCategoryPath(category.children, id, [...path, category.category_name]);
+      if (found) return found;
+    }
+  }
+  return '';
+};
 
 const handleSubmit=async(e)=>{
 e.preventDefault()
@@ -265,20 +393,37 @@ return (
           </select>
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium" htmlFor="categoryId">
-            Category
-          </label>
-          <select
-          name="categoryId"
-          value={formData.categoryId || ""}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
-          >
-            <option value="">Select Category</option>
-            {renderOptions(categories)}
-          </select>
-        </div>
+        {/* <div className="relative">
+  <label className="block mb-1 font-medium">Category</label>
+  <div
+    className="w-full px-3 py-2 border border-gray-300 rounded cursor-pointer focus:outline-none focus:border-indigo-500"
+    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+  >
+    {selectedCategoryName || "Select Category"}
+  </div>
+  {isCategoryOpen && (
+    <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-y-auto">
+      {renderCategories(categories)}
+    </div>
+  )}
+</div> */}
+
+<div className="relative">
+  <label className="block mb-1 font-medium">Category</label>
+  <div
+    className="w-full px-3 py-2 border border-gray-300 rounded cursor-pointer focus:outline-none focus:border-indigo-500"
+    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+  >
+    {selectedCategoryName || "Select Category"}
+  </div>
+  {isCategoryOpen && (
+  <div
+    className="absolute z-50 w-full bottom-full mb-2 right-0 bg-white border border-gray-200 rounded shadow-lg h-auto max-h-[300px] overflow-y-auto transition-all duration-200"
+  >
+    {renderCategories(categories)}
+  </div>
+)}
+</div>
 
         <div>
           <label className="block mb-1 font-medium" htmlFor="status">
