@@ -134,14 +134,14 @@ const actions = (category) => (
     <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
     <input
       type="text"
-      placeholder="Search Role by Name"
+      placeholder="Search"
       value={searchTerm}
       onChange={handleSearch}
-      className="pl-10 p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      className="pl-10 p-2 border border-gray-300 rounded-2xl w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
     />
   </div>
   <button
-    className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition duration-300 mb-6"
+    className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
     onClick={() => setShowCreateForm(true)}
   >
     + Create Category
