@@ -11,7 +11,8 @@ const routeSchema = new Schema({
     enum: ['active', 'inactive' ], 
     required: true, 
   }
-}, { timestamps: true }) 
+}
+) 
 
 const Route = mongoose.model('Route', routeSchema)
 
