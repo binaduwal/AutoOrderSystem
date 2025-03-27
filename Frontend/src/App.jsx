@@ -21,7 +21,13 @@ import CategoryTable from './category/CategoryTable'
 import EditCategory from './category/EditCategory'
 import CompanyLayout from './company/companyLayout'
 import PrivateRoute from './components/PrivateRoute'
-
+import UnitList from './company/productUnit/UnitList'
+import CreateUnit from './company/productUnit/CreateUnit'
+import ProductTable from './company/product/ProductTable'
+import CreateOrder from './company/order/CreateOrder'
+import PaymentTable from './company/payment/paymentTable'
+import RouteTable from './company/route/RouteTable'
+import PartyGroup from './company/partyGroup/PartyGroupTable'
 function App() {
   return (
     <BrowserRouter>
@@ -33,17 +39,17 @@ function App() {
 
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Layout />}>
-         <Route path='/dashboard' element={<Dashboard/>}/>
-         <Route path='/permission' element={<PermissionList/>}/>
-         <Route path='/role' element={<RolesList/>}/>
-         <Route path="/user" element={<CreateUser/>} />
-         <Route path="/manage" element={<ManageUser/>} />
-         <Route path="/company" element={<CompanyList/>} />
-         <Route path="/create-company" element={<CreateCompany/>} />
-         <Route path="/settings" element={<SettingPage/>} />
-         <Route path="/location" element={<LocationTable/>} />
-         <Route path="/province" element={<ProvinceTable/>} />
-         <Route path="/city" element={<CityTable/>} />
+         <Route path='/admin/dashboard' element={<Dashboard/>}/>
+         <Route path='/admin/permission' element={<PermissionList/>}/>
+         <Route path='/admin/role' element={<RolesList/>}/>
+         <Route path="/admin/user" element={<CreateUser/>} />
+         <Route path="/admin/manage" element={<ManageUser/>} />
+         <Route path="/admin/company" element={<CompanyList/>} />
+         <Route path="/admin/create-company" element={<CreateCompany/>} />
+         <Route path="/admin/settings" element={<SettingPage/>} />
+         <Route path="/admin/location" element={<LocationTable/>} />
+         <Route path="/admin/province" element={<ProvinceTable/>} />
+         <Route path="/admin/city" element={<CityTable/>} />
         </Route>
         </Route> 
 
@@ -53,6 +59,14 @@ function App() {
             <Route path="category" element={<CategoryTable />} />
             <Route path="category-create" element={<CategoryForm />} />
             <Route path="category-edit/:id" element={<EditCategory />} />
+            <Route path="product" element={<ProductTable />} />
+            <Route path="unit" element={<CreateUnit/>} />
+            <Route path="unit-list" element={<UnitList/>} />
+            <Route path="order" element={<CreateOrder/>} />
+            <Route path="payment" element={<PaymentTable/>} />
+            <Route path="route" element={<RouteTable/>} />
+            <Route path="partygroup" element={<PartyGroup/>} />
+
           </Route>
         </Route>
       </Routes>

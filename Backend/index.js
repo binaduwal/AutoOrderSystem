@@ -12,7 +12,12 @@ const location=require('./routes/locationRoute')
 const province=require('./routes/provinceRoute')
 const city=require('./routes/cityRoutes')
 const category=require('./routes/categoryRoute')
-
+const ProductCategory=require('./routes/productCategory')
+const ProductUnit = require('./routes/productUnit')
+const path = require('path')
+const paymentMode=require('./routes/paymentRoutes')
+const route=require('./routes/routeRoutes')
+const PartyGroup = require('./routes/partyGroupModelRoutes')
 
 dotenv.config()
 const app = express()
@@ -35,6 +40,12 @@ app.use('/location',location)
 app.use('/province',province)
 app.use('/city',city)
 app.use('/category',category)
+app.use('/product',ProductCategory)
+app.use('/unit',ProductUnit)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/paymentmode',paymentMode)
+app.use('/route',route)
+app.use('/partygroup',PartyGroup)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
