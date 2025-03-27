@@ -61,7 +61,26 @@ const CompanyLayout = () => {
         {
             name: "Sign Out", 
             action: handleSignOut 
-        }
+        },
+
+        {
+            name:"Payment",
+            path:"/company/payment"
+        },
+        {
+            name:"Route",
+            path:"/company/route"
+        },
+        {
+            name:"Party Group",
+            path:"/company/partygroup"
+        },
+        {
+            name:"Salesperson",
+            path:"/company/salesperson"
+        },
+
+
     ]
 
     return (
@@ -71,7 +90,7 @@ const CompanyLayout = () => {
                     <h2 className="text-xl font-bold mb-4">Company</h2>
                     <ul>
                         {navItems.map((item, index) => (
-                            <li key={index} className="mb-1 p-2 rounded">
+                            <li key={index} className="mb-1 p-1 rounded">
                                 {item.hasDropdown ? (
                                     <>
                                         <button
