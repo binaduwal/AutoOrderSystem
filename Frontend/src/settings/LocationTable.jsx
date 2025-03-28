@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
-import CreateAddress from "./CreateAddress";
-import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
-import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import React, { useState, useEffect } from "react"
+import CreateAddress from "./CreateAddress"
+import DeleteConfirmationModal from "../components/DeleteConfirmationModal"
+import { FaEdit } from "react-icons/fa"
+import { RiDeleteBin6Line } from "react-icons/ri"
+import EditEntityModal from '../components/EditEntityModal'
+import EditAddress from "./EditAddress"
+
 
 const LocationTable = () => {
-  const [locations, setLocations] = useState([]);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [locationToDelete, setLocationToDelete] = useState(null);
+  const [locations, setLocations] = useState([])
+  const [showCreateForm, setShowCreateForm] = useState(false)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [locationToDelete, setLocationToDelete] = useState(null)
+const [showEdit, setShowEdit] = useState(false)
+const [editData, setEditData] = useState(null)
 
-  // Confirm delete
   const confirmDelete = (location) => {
-    setLocationToDelete(location);
-    setShowDeleteConfirmation(true);
-  };
+    setLocationToDelete(location)
+    setShowDeleteConfirmation(true)
+  }
 
-  // Handle delete
   const handleDelete = async () => {
     if (locationToDelete) {
       try {
@@ -25,41 +28,54 @@ const LocationTable = () => {
           {
             method: "DELETE",
           }
-        );
+        )
         if (response.ok) {
           setLocations((prev) =>
             prev.filter((loc) => loc._id !== locationToDelete._id)
-          );
+          )
         }
       } catch (error) {
-        console.error("Error deleting location:", error);
+        console.error("Error deleting location:", error)
       }
-      setShowDeleteConfirmation(false);
+      setShowDeleteConfirmation(false)
     }
-  };
+  }
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("http://localhost:5000/location/all");
+        const response = await fetch("http://localhost:5000/location/all")
         if (response.ok) {
-          const data = await response.json();
-          setLocations(data);
+          const data = await response.json()
+          console.log("Fetched locations:", data);
+          setLocations(data)
         } else {
-          console.log("Failed to fetch locations");
+          console.log("Failed to fetch locations")
         }
       } catch (error) {
-        console.error("Error fetching locations", error);
+        console.error("Error fetching locations", error)
       }
-    };
+    }
 
-    fetchLocations();
-  }, []);
+    fetchLocations()
+  }, [])
 
   const handleLocationCreated = (newLocation) => {
-    setLocations((prev) => [...prev, newLocation]);
-    setShowCreateForm(false);
-  };
+    setLocations((prev) => [...prev, newLocation])
+    setShowCreateForm(false)
+  }
+
+  const handleEdit = (newData) => {
+    setEditData(newData)
+    setShowEdit(true)
+  }
+
+  const handleUpdated = async () => {
+    await fetchDetails()
+    setShowEdit(false)
+  }
+
+
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -90,16 +106,23 @@ const LocationTable = () => {
         </thead>
 
         <tbody className="bg-white divide-y divide-gray-200">
-          {locations.map((addr) => (
-            <tr key={addr._id}>
-              <td className="px-4 py-3 text-sm text-gray-900">{addr.province}</td>
-              <td className="px-4 py-3 text-sm text-gray-900">{addr.city}</td>
-              <td className="px-4 py-3 text-sm text-gray-900">{addr.address}</td>
+        {locations.filter(Boolean).map((addr) => (
+            <tr key={addr._id}> 
+<td className="px-4 py-3 text-sm text-gray-900">
+        {addr?.province?.name || "N/A"}
+      </td>
+      <td className="px-4 py-3 text-sm text-gray-900">
+        {addr?.city?.name || "N/A"}
+      </td>              <td className="px-4 py-3 text-sm text-gray-900">{addr?.address|| 'N/A'}</td>
               <td className="px-4 py-3 text-sm text-gray-900 flex space-x-2">
                 <button
                   className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded text-xl"
+                  onClick={() => handleEdit(addr)}
+
                 >
-                  <FaEdit />
+                  <FaEdit 
+                  
+                  />
                 </button>
                 <button
                   className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded text-xl"
@@ -135,8 +158,16 @@ const LocationTable = () => {
         onClose={() => setShowDeleteConfirmation(false)}
         onConfirm={handleDelete}
       />
-    </div>
-  );
-};
 
-export default LocationTable;
+<EditEntityModal
+  isOpen={showEdit}
+  onClose={() => setShowEdit(false)}
+  entityData={editData}
+  onUpdated={handleUpdated}
+  Component={EditAddress}  
+/>
+    </div>
+  )
+}
+
+export default LocationTable
