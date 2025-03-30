@@ -5,7 +5,6 @@ import Dashboard from './Pages/Dashboard'
 import SignUp from './Pages/SignUp'
 import CreateUser from './users/CreateUser'
 import SignIn from './Pages/SignIn'
-// import UserDashboard from './Pages/UserDashboard'
 import RolesList from './roles/RolesList'
 import ManageUser from './users/ManagerUser'
 import CompanyList from './company/CompanyList'
@@ -28,6 +27,11 @@ import CreateOrder from './company/order/CreateOrder'
 import PaymentTable from './company/payment/paymentTable'
 import RouteTable from './company/route/RouteTable'
 import PartyGroup from './company/partyGroup/PartyGroupTable'
+import Salesperson from './company/salesperson/SalespersonTable'
+import Order from './company/order/OrderTable'
+import Party from './company/party/PartyTable'
+import EditOrder from './company/order/EditOrder'
+
 function App() {
   return (
     <BrowserRouter>
@@ -62,11 +66,14 @@ function App() {
             <Route path="product" element={<ProductTable />} />
             <Route path="unit" element={<CreateUnit/>} />
             <Route path="unit-list" element={<UnitList/>} />
-            <Route path="order" element={<CreateOrder/>} />
+            <Route path="create-order" element={<CreateOrder/>} />
             <Route path="payment" element={<PaymentTable/>} />
             <Route path="route" element={<RouteTable/>} />
             <Route path="partygroup" element={<PartyGroup/>} />
-
+            <Route path="salesperson" element={<Salesperson/>} />
+            <Route path="order" element={<Order/>} />
+            <Route path="party" element={<Party/>} />
+            <Route path="edit-order/:orderId" element={<EditOrder />} />
           </Route>
         </Route>
       </Routes>
