@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { FaEdit } from "react-icons/fa"
-import { RiDeleteBin6Line } from "react-icons/ri"
 import Pagination from '../../components/Pagination';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import CreateUnit from "../productUnit/CreateUnit"
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import EditUnit from './EditUnit';
+import TableComponent from '../../components/TableComponent'
+import ActionButtons from '../../components/ActionButtons'
+import SearchBar from '../../components/SearchBar'
+
 
 const UnitList = () => {
 const [units,setUnits]=useState([])
@@ -15,6 +17,8 @@ const [showCreate, setShowCreate] = useState(false)
 const [currentPage, setCurrentPage] = useState(1)
 const [showEdit, setShowEdit] = useState(false)
 const [editData, setEditData] = useState(null)
+const [searchTerm, setSearchTerm] = useState('')
+
 
 const itemsPerPage = 5
 
@@ -39,11 +43,6 @@ catch (error) {
     console.error("Error fetching permissions:", error)
 }
 }
-
-const indexOfLast = currentPage * itemsPerPage;
-const indexOfFirst = indexOfLast - itemsPerPage;
-const currentData = units.slice(indexOfFirst, indexOfLast);
-const totalPages = Math.ceil(units.length / itemsPerPage);
 
 const handlePageChange = (pageNumber) => {
   setCurrentPage(pageNumber);
@@ -94,6 +93,27 @@ const handleUpdated=async()=>{
   setShowEdit(false)
 }
 
+const columns = [
+  { label: 'SN', key: 'serialNumber' },
+  { label: 'Name', key: 'unitName' },
+  { label: 'Status', key: 'status' },
+]
+
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value)
+  setCurrentPage(1)
+}
+
+const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
+const filtered = units.filter((unit) =>
+  normalizeString(unit.unitName || '').includes(normalizeString(searchTerm))
+)
+const indexOfLast = currentPage * itemsPerPage
+const indexOfFirst = indexOfLast - itemsPerPage
+const currentData = filtered.slice(indexOfFirst, indexOfLast)
+const totalPages = Math.ceil(filtered.length / itemsPerPage)
+
+
   return (
     <div>
     <div className="relative w-full min-h-screen bg-white">
@@ -101,55 +121,34 @@ const handleUpdated=async()=>{
         <h1 className="text-xl font-semibold text-left text-black-600 mb-4">
           Unit Management
         </h1>
+        <div className="flex justify-between items-center mb-2">
+
+        <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
+
         <button
             className="bg-indigo-700 text-white p-2 mb-3 rounded-lg hover:bg-indigo-500 transition duration-400"
             onClick={() => setShowCreate(true)}
           >
             + CREATE UNIT
           </button>
+          </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-50">
-            <thead className="bg-white-200">
-              <tr>
-                <th className="border border-gray-200 p-2">SN</th>
-                <th className="border border-gray-200 p-2">Name</th>
-                <th className="border border-gray-200 p-2">Status</th>
-                <th className="border border-gray-200 p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentData.length > 0 ? (
-                currentData.map((unit, index) => (
-                  <tr key={unit._id} className="text-center border border-gray-200 odd:bg-gray-100">
-                    <td className="border border-gray-200 p-2">{index + 1 + indexOfFirst}</td>
-                    <td className="border border-gray-200 p-2">{unit.unitName}</td>
-                    <td className="border border-gray-200 p-2">{unit.status}</td>
-                    <td className="border border-gray-200 p-2">
-                      <button
-                        className="text-black-600 hover:text-indigo-800 mr-4"
-                        onClick={() => handleEdit(unit)}
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => confirmDelete(unit)}
-                        className="text-black-600 hover:text-red-800"
-                      >
-                        <RiDeleteBin6Line />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center p-4 text-gray-500">
-                    No Units available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      <TableComponent
+        columns={columns}
+        data={currentData.map((units, index) => ({
+          ...units,
+          serialNumber: (currentPage - 1) * itemsPerPage + index + 1,
+        }))}
+        actions={(units) => (
+          <ActionButtons 
+            item={units}
+            onEdit={handleEdit} 
+            onDelete={confirmDelete}
+          />
+        )}
+      />
+
 
               <Pagination 
                 currentPage={currentPage}
@@ -171,7 +170,7 @@ const handleUpdated=async()=>{
             <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowEdit(false)}
+                onClick={() => setShowCreate(false)}
               >
                 <IoMdCloseCircleOutline className="text-2xl" />
               </button>
