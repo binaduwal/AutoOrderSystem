@@ -75,7 +75,7 @@ router.get('/admins', async (req, res) => {
 
 
   router.put('/edit/:id', async (req, res) => {
-    const {email, contactNo, address, status, role, password, confirmPassword } = req.body;
+    const {email, contactNo, address, status, role} = req.body;
     
     try {
       const currentAdmin = await Admin.findById(req.params.id);

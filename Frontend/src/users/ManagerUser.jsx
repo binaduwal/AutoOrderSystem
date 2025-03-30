@@ -4,7 +4,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import EditUser from './EditUser';
-import PasswordForm from './PasswordForm';
+import PasswordForm from '../components/PasswordForm';
 import Pagination from '../components/Pagination';
 
 const ManageUser = () => {

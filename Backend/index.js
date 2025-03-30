@@ -18,6 +18,9 @@ const path = require('path')
 const paymentMode=require('./routes/paymentRoutes')
 const route=require('./routes/routeRoutes')
 const PartyGroup = require('./routes/partyGroupModelRoutes')
+const Salesperson = require('./routes/salesPersonRoutes')
+const Party=require('./routes/partyRoutes')
+const Order=require('./routes/orderRoutes')
 
 dotenv.config()
 const app = express()
@@ -46,6 +49,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use('/paymentmode',paymentMode)
 app.use('/route',route)
 app.use('/partygroup',PartyGroup)
+app.use('/salesperson',Salesperson)
+app.use('/party',Party)
+app.use('/order',Order)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {

@@ -2,11 +2,38 @@ import React, { useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6";
 
 
-const CreatePayment = () => {
+const CreatePayment = ({OnCreated}) => {
     const [name,setName]=useState("")
-    const [status,setStatus]=useState(false)
-    const handleSubmit=()=>{
-        
+    const [status,setStatus]=useState(true)
+    const handleSubmit= async (e)=>{
+        e.preventDefault()
+            const paymentData={
+                name,
+                status:status?"active":"inactive"
+            }
+      
+        try {
+            const response=await fetch("http://localhost:5000/paymentmode/create",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                },
+                body:JSON.stringify(paymentData)
+            })
+
+            if(response.ok){
+                const newData=await response.json()
+                console.log("Payment created:",newData)
+                OnCreated(newData.paymentmode)
+            }
+
+            else{
+                const errorData=await response.json()
+                console.log("Failed to create data",errorData)
+            }
+        } catch (error) {
+            console.error("Error while creating unit", error)
+        }
     }
   return (
 <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg'>
@@ -20,7 +47,7 @@ Payment Mode <FaAngleRight/>Create Payment</h2>
         type='text'
         name='name'
         value={name}
-        onChange={()=>{setName(e.target.value)}}
+        onChange={(e)=>{setName(e.target.value)}}
         className='border border-gray-300 rounded-md text-left w-full p-1 mb-3'
         />
     </div>
@@ -30,7 +57,7 @@ Payment Mode <FaAngleRight/>Create Payment</h2>
         type='checkbox'
         name='active_payment'
         id='active_payment'
-        onChange={()=>setStatus(!status)}
+        onChange={(e)=>setStatus(!status)}
         />
         <label htmlFor='active_payment' className='text-gray-700 font-medium pl-2'>Status</label>
     </div>

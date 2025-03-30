@@ -4,7 +4,7 @@ const AdminSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   contactNo: { type: String },
-  address:{type:String,required:true},
+  address:{type:String},
   name:{ type: String},
   status: { 
     type: String, 
@@ -12,7 +12,7 @@ const AdminSchema = new mongoose.Schema({
     enum: ['active', 'inactive'], 
     default: 'active' 
   },
-  role: { type: String, required: true, enum: ['superadmin', 'salesperson'] },
+  role: { type: String, required: true, enum: ['superadmin', 'admin','salesperson'] },
   username: { type: String, required: true, unique: true },
 })
 

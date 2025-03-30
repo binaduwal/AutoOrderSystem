@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const categorySchema = new Schema({
+const productCategorySchema = new Schema({
   categoryName: {
     type: String,
     required: true,
@@ -19,9 +19,17 @@ const categorySchema = new Schema({
     type: String,
     enum: ['active', 'inactive'],
     required: true
+  },
+
+  companyId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CompanyModel', 
+    required: true
+ 
   }
+
 }, { timestamps: true })
 
-const Category = mongoose.model('Category', categorySchema)
+const productCategory = mongoose.model('productCategory', productCategorySchema)
 
-module.exports = Category
+module.exports = productCategory

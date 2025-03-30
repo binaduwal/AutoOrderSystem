@@ -10,7 +10,7 @@ import CreateSalesperson from './CreateSalesperson'
 import EditSalesperson from './EditSalesperson'
 
 
-const PartyGroupTable = () => {
+const SalespersonTable = () => {
   const [salesperson, setSalesperson] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -102,8 +102,9 @@ const [searchTerm, setSearchTerm] = useState('')
 
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Manage Salesperson</h2>
+<div className='bg-white min-h-screen w-full relative'>
+    <div className='w-full p-2 bg-white rounded-lg'>
+      <h2 className="text-xl font-semibold text-left text-black-600 mb-4 mt-10">Manage Salesperson</h2>
       <div className="flex justify-between items-center mb-2">
       <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 
@@ -158,7 +159,9 @@ const [searchTerm, setSearchTerm] = useState('')
         onConfirm={handleDelete}
       />
     </div>
+
+    </div>
   )
 }
 
-export default PartyGroupTable
+export default SalespersonTable

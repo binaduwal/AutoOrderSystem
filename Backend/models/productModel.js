@@ -14,14 +14,14 @@ const productSchema = new Schema({
   productUnitId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ProductUnit', 
-    required: true,
+    // required: true,
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category', 
-    required: true,
+    // required: true,
   },
-  variable: {
+  vatable: {
     type: Boolean, 
     required: true,
   },

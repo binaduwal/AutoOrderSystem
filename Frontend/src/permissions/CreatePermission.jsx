@@ -32,7 +32,6 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
       if (response.ok) {
         const newPermission = await response.json()
         console.log("Permission created:", newPermission)
-        // Update parent's permission list
         onPermissionCreated(newPermission)
       } else {
         console.log("Failed to create permission")

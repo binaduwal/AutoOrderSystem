@@ -36,10 +36,12 @@ const EditPermission = ( {permission, onClose, onPermissionUpdated}) => {
         const data = await response.json()
         console.log(data)
         onPermissionUpdated(data)
-      } else {
+      }
+       else {
         console.error('Failed to update permission')
       }
-    } catch (error) {
+    }
+     catch (error) {
       console.error('Error updating permission:', error)
     }
 

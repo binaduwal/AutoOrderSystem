@@ -66,7 +66,7 @@ useEffect(() => {
     }
   };
   fetchDetails();
-}, [companyId]);
+}, []);
 
 useEffect(() => {
   const fetchProvinces = async () => {
@@ -303,19 +303,6 @@ useEffect(() => {
       </div>
     </div>
     
-            <div className="space-y-2">
-                <label className="block text-gray-700 font-medium">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Enter password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  required
-                />
-              </div>
-
     
             <div className="space-y-2">
               <div>

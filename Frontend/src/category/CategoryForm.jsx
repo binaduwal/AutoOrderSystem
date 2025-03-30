@@ -90,7 +90,7 @@ const CategoryForm = ({ onClose,onCategoryCreated }) => {
             className="mr-2"
           />
           <label htmlFor="active_user" className="text-gray-700 font-medium">
-            Active User
+            Active 
           </label>
         </div>
 
@@ -98,7 +98,7 @@ const CategoryForm = ({ onClose,onCategoryCreated }) => {
           type="submit"
           className="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 transition duration-200"
         >
-          Create User
+          Create
         </button>
       </form>
     </div>

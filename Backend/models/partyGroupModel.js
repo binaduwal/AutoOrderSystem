@@ -11,7 +11,7 @@ const partyGroupSchema = new Schema({
     enum: ['active', 'inactive' ], 
     required: true, 
   }
-}, { timestamps: true }) 
+}) 
 
 const PartyGroup = mongoose.model('PartyGroup', partyGroupSchema)
 

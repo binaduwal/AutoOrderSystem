@@ -177,7 +177,7 @@ const ProvinceTable = () => {
         <IoMdCloseCircleOutline className="text-2xl" />
       </button>
       <EditProvince
-        province={editProvinceData}  // Pass the province data to EditProvince
+        province={editProvinceData} 
         onClose={() => setShowEdit(false)}
         onUpdated={handleProvinceUpdated}
       />

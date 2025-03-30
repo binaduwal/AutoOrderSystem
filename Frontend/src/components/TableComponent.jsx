@@ -9,24 +9,24 @@ const TableComponent = ({ columns, data, actions }) => {
             {columns.map((col, index) => (
               <th
                 key={index}
-                className="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase"
+                className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
               >
                 {col.label}
               </th>
             ))}
-            {actions && <th className="px-3 py-3 text-center text-xs font-medium text-gray-700 uppercase">Actions</th>}
+            {actions && <th className="px-3 py-3 text-center text-xs font-medium text-black-700 uppercase">Actions</th>}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((item, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-4 py-3 text-sm text-gray-700">
+                <td key={colIndex} className="px-4 py-3 text-sm text-black-700">
                   {item[col.key]}
                 </td>
               ))}
               {actions && (
-                <td className="px-4 py-3 text-sm text-center text-gray-700">
+                <td className="px-4 py-3 text-sm text-center text-black-700">
                   {actions(item)}
                 </td>
               )}

@@ -4,7 +4,7 @@ const Province = require('../models/ProvinceModel');
 
 router.post('/create', async (req, res) => {
   try {
-    const provinceName = req.body.name.trim().toLowerCase(); // Normalize name
+    const provinceName = req.body.name.trim().toLowerCase();
     const existingProvince = await Province.findOne({ name: { $regex: new RegExp(`^${provinceName}$`, 'i') } });
 
     if (existingProvince) {

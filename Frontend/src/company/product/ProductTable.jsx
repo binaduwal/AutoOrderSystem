@@ -33,7 +33,9 @@ const fetchDetails=async()=>{
         if(response.ok)
         {
             const data=await response.json()
-            setProducts(data)
+            // setProducts(data)
+            setProducts(Array.isArray(data) ? data : data.data || [])
+
         }
         else{
             console.error("Failed to fetch products")
@@ -78,8 +80,10 @@ const fetchCategories = async () => {
 
 const indexOfLast = currentPage * itemsPerPage
 const indexOfFirst = indexOfLast - itemsPerPage
-const currentData = products.slice(indexOfFirst, indexOfLast)
-const totalPages = Math.ceil(products.length / itemsPerPage)
+// const currentData = products.slice(indexOfFirst, indexOfLast)
+const currentData = (products || []).slice(indexOfFirst, indexOfLast)
+// const totalPages = Math.ceil(products.length / itemsPerPage)
+const totalPages = Math.ceil((products?.length || 0) / itemsPerPage)
 
 const handlePageChange = (pageNumber) => {
   setCurrentPage(pageNumber)
@@ -152,6 +156,7 @@ const handleUpdated=async()=>{
                 <thead className="bg-white-200">
                   <tr>
                     <th className="border border-gray-200 p-2">SN</th>
+                    <th className="border border-gray-200 p-2">Image</th>
                     <th className="border border-gray-200 p-2">Name</th>
                     <th className="border border-gray-200 p-2">Product Code</th>
                     <th className="border border-gray-200 p-2">Category</th>
@@ -169,7 +174,23 @@ const handleUpdated=async()=>{
                     return (
                       <tr key={product._id} className="text-center border border-gray-200 odd:bg-gray-100">
                         <td className="border border-gray-200 p-2">{index + 1 + indexOfFirst}</td>
-                        <td className="border border-gray-200 p-2">{product.name}</td>
+                        <td className='border border-gray-200 p-2 text-center'>
+                          {product.productImage ? (
+                            <img
+                              src={`http://localhost:5000/uploads/${product.productImage}`}
+                              alt={product.name}
+                              className='w-10 h-10 object-cover rounded-full mx-auto'
+                              onError={(e) => {
+                                e.target.onerror = null 
+                                e.target.src = 'fallback-image-url'
+                              }}
+                            />                
+                          ) : (
+                            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                              <span className="text-gray-600 text-sm">N/A</span>
+                            </div>
+                          )}
+                      </td>                        <td className="border border-gray-200 p-2">{product.name}</td>
                         <td className="border border-gray-200 p-2">{product.productCode}</td>
                         <td className="border border-gray-200 p-2">
                           {categories.find(category=>category._id===product.categoryId)?.category_name||"N/A"}

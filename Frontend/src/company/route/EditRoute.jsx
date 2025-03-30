@@ -76,7 +76,7 @@ const EditRoute = ({routeData,onUpdated,onClose}) => {
   return (
 <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg'>
 <h2 className='text-md font-semibold flex items-center mb-6'>
-Payment Mode <FaAngleRight/>Edit Payment</h2>
+Route <FaAngleRight/>Edit Route</h2>
 <form onSubmit={handleSubmit}
 >
     <div>

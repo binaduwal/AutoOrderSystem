@@ -183,7 +183,7 @@ const buildTree=(categories,parentId=null)=>{
     
 
   return (
-    <div className="max-h-auto w-full mx-auto bg-white p-6 rounded shadow-md">
+    <div className="max-h-auto w-full mx-auto bg-white p-6 rounded">
       <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
       <div className="overflow-y-auto max-h-[500px]">
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">

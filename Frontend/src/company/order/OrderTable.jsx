@@ -1,40 +1,46 @@
 import React, { useState, useEffect } from 'react'
 import TableComponent from '../../components/TableComponent'
 import Pagination from '../../components/Pagination'
-import { CiSearch } from "react-icons/ci"
-import { RiDeleteBin6Line } from 'react-icons/ri'
-import { FaEdit } from 'react-icons/fa'
 import { useNavigate, useLocation } from 'react-router-dom'
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
+import ActionButtons from '../../components/ActionButtons'
+import SearchBar from '../../components/SearchBar'
+
 
 const OrderTable = () => {
   const [orders, setOrders] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState('')
-  const navigate = useNavigate()
-  const location = useLocation() 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [deleteData, setDeleteData] = useState(null)
+  const [loading, setLoading] = useState(true)
+    const navigate = useNavigate()
+  const location = useLocation()
   const itemsPerPage = 5
 
-  const columns = [
-    { label: 'SN', key: 'serialNumber' },
-    { label: 'Party', key: 'partyName' },
-    { label: 'Delivery Date', key: 'formattedDeliveryDate' },
-    { label: 'Salesman', key: 'salesmanName' },
-    { label: 'Total', key: 'grandTotal' },
-    { label: 'Status', key: 'status' },
-  ]
+  const statusStyles = {
+    Pending: 'bg-yellow-100 text-yellow-800',
+    Completed: 'bg-green-100 text-green-800',
+    Cancelled: 'bg-red-100 text-red-800'
+  }
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
+        setLoading(true)
         const response = await fetch('http://localhost:5000/order/all')
+        
         if (response.ok) {
           const data = await response.json()
           setOrders(Array.isArray(data) ? data : [])
         }
       } catch (error) {
         console.error("Error fetching orders:", error)
+      } finally {
+        setLoading(false)
       }
     }
+
     fetchDetails()
 
     if (location.state?.shouldRefresh) {
@@ -42,23 +48,28 @@ const OrderTable = () => {
     }
   }, [location.state, navigate])
 
-  // Search filtering logic
-  const normalizeString = (str) => (str || '').toLowerCase().replace(/[-\s]/g, '')
-  const filteredOrders = orders.filter(order => 
-    normalizeString(order.partyID?.partyName).includes(normalizeString(searchTerm))
-  )
+  const handleEdit = (order) => {
+    navigate(`/company/edit-order/${order._id}`) 
+  }
+  const confirmDelete = (order) => {
+    setDeleteData(order)
+    setShowDeleteConfirmation(true)
+  }
 
-  // Function to compute the grand total in case it isn’t stored with the order
-  const computeGrandTotal = (order) => {
-    try {
-      return (order.orderItems || []).reduce((sum, item) => {
-        const amount = Number(item.amount) || 0
-        const vat = Number(item.vat) || 0
-        return sum + amount + vat
-      }, 0)
-    } catch (error) {
-      console.error('Error calculating total:', error)
-      return 0
+  const handleDelete = async () => {
+    if (deleteData) {
+      try {
+        const response = await fetch(`http://localhost:5000/order/delete/${deleteData._id}`, {
+          method: 'DELETE',
+        })
+        
+        if (response.ok) {
+          setOrders(orders.filter((p) => p._id !== deleteData._id))
+        }
+      } catch (error) {
+        console.error('Error deleting order:', error)
+      }
+      setShowDeleteConfirmation(false)
     }
   }
 
@@ -72,58 +83,43 @@ const OrderTable = () => {
     })
   }
 
-  const transformedData = filteredOrders.map((order, index) => {
-    const partyName = order.partyID?.partyName || order.partyName || 'N/A'
-    const salesmanName = order.salesmanID?.name || order.salesmanName || 'N/A'
-    const total = order.grandTotal !== undefined ? Number(order.grandTotal) : computeGrandTotal(order)
-    
-    return {
-      ...order,
-      serialNumber: index + 1,
-      partyName,
-      salesmanName,
-      grandTotal: `Rs. ${total.toLocaleString('en-IN')}`,
-      formattedDeliveryDate: formatDate(order.estimatedDeliveryDate),
-      status: order.status || 'Pending'
-    }
-  })
+  const normalizeString = (str) => (str || '').toLowerCase().replace(/[-\s]/g, '')
+  const filteredOrders = orders.filter(order => 
+    normalizeString(order.partyID?.partyName).includes(normalizeString(searchTerm))
+  )
+
+  const transformedData = filteredOrders.map((order, index) => ({
+    ...order,
+    serialNumber: index + 1,
+    partyName: order.partyID?.partyName || 'N/A',
+    salesmanName: order.salesmanID?.name || 'N/A',
+    grandTotal: `Rs. ${(order.grandTotal || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`,
+    formattedDeliveryDate: formatDate(order.estimatedDeliveryDate),
+    status: (
+      <span className={`px-2 py-1 rounded-full text-sm ${statusStyles[order.status || 'Pending']}`}>
+        {order.status || 'Pending'}
+      </span>
+    )
+  }))
 
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = transformedData.slice(indexOfFirstItem, indexOfLastItem)
   const totalPages = Math.ceil(transformedData.length / itemsPerPage)
 
-  const actions = (order) => (
-    <div className="flex">
-      <button
-        className="text-blue-600 hover:text-blue-800 mr-3"
-      >
-        <FaEdit size={18} />
-      </button>
-      <button
-        className="text-red-600 hover:text-red-800"
-        onClick={() => console.log('Delete order:', order._id)}
-      >
-        <RiDeleteBin6Line size={18} />
-      </button>
-    </div>
-  )
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Manage Orders</h2>
+<div className='bg-white min-h-screen w-full relative'>
+    <div className='w-full p-2 bg-white rounded-lg'>
+      <h2 className="text-xl font-semibold text-left text-black-600 mb-4 mt-10">Manage Orders</h2>
       
       <div className="flex justify-between items-center mb-6">
-        <div className="relative w-64">
-          <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by party name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
+        <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />         
         <button
           className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
           onClick={() => navigate('/company/create-order')}
@@ -132,22 +128,48 @@ const OrderTable = () => {
         </button>
       </div>
 
-      <TableComponent
-        columns={columns}
-        data={currentItems}
-        actions={actions}
-        emptyMessage="No orders found"
-        className="mb-6"
-      />
+      {loading ? (
+        <div className="text-center py-8">Loading orders...</div>
+      ) : (
+        <>
+          <TableComponent
+            columns={[
+              { label: 'SN', key: 'serialNumber' },
+              { label: 'Party', key: 'partyName' },
+              { label: 'Delivery Date', key: 'formattedDeliveryDate' },
+              { label: 'Salesman', key: 'salesmanName' },
+              { label: 'Total', key: 'grandTotal' },
+              { label: 'Status', key: 'status' },
+            ]}
+            data={currentItems}
+            emptyMessage="No orders found"
+            className="mb-6"
+            actions={(order) => (
+              <ActionButtons 
+                item={order}
+                onEdit={handleEdit}
+                onDelete={confirmDelete}
+              />
+            )}
+          />
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-          className="justify-center"
-        />
+          <DeleteConfirmationModal
+            isOpen={showDeleteConfirmation}
+            onClose={() => setShowDeleteConfirmation(false)}
+            onConfirm={handleDelete}
+          />
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              className="justify-center"
+            />
+          )}
+        </>
       )}
+    </div>
     </div>
   )
 }

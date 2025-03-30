@@ -13,13 +13,13 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'User not found' })
       }
   
-      const isPasswordMatch = await bcrypt.compare(password, user.password)
+      const isPasswordMatch = await bcrypt.compare(password, admin.password)
       if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Incorrect password.' })
       }
   
       const token = jwt.sign(
-        { id: user._id, username: admin.username },
+        { id: admin._id, username: admin.username },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
       )

@@ -6,6 +6,7 @@ const CreateSalesperson
     const [name,setName]=useState("")
         const [status,setStatus]=useState(true)
         const [error, setError] = useState("")
+        
         const handleSubmit= async (e)=>{
             e.preventDefault()
                 const salespersonData={

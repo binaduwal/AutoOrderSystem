@@ -91,7 +91,7 @@ const CreateCompany = () => {
       const result = await response.json();
       if (response.ok) {
         setMessage("Company created successfully!");
-        navigate('/company');
+        navigate('/admin/ company');
         setFormData({
           companyName: "",
           email: "",

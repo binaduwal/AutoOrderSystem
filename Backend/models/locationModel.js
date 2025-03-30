@@ -6,10 +6,11 @@ const locationSchema = new mongoose.Schema({
     required: true,
   },
   city: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'City',
+    required: true
   },
-  address: {
+    address: {
     type: String,
     required: true,
   },

@@ -30,7 +30,7 @@ const SignIn = () => {
         alert("Login successful!");
 
         if (username === "superadmin") {
-          navigate("/dashboard");
+          navigate("/admin/dashboard");
         } else {
           navigate("/userdashboard");
         }

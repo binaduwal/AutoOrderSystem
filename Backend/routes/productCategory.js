@@ -2,6 +2,7 @@ const express=require('express')
 const router=express.Router()
 const ProductCategory=require('../models/productModel')
 const multer=require('multer')
+const { ObjectId } = require('mongoose').Types
 const path = require('path');
 const fs = require("fs")
 
@@ -45,8 +46,10 @@ router.get('/all',async(req,res)=>
 {
     try{
         const product=await ProductCategory.find()
-        res.json(product)
-    }
+        res.status(200).json({
+          message: "Products retrieved successfully",
+          data: product 
+        });    }
 
     catch(error){
         console.error("Error fetching product:",error)
@@ -85,31 +88,7 @@ router.delete("/delete/:id", async (req, res) => {
 
 
 
-// router.put("/edit/:id",async(req,res)=>{
-//     const {id}=req.params
-//     try{
-//         const updatedProduct=await ProductCategory.findByIdAndUpdate(id,
-//         req.body, 
-//         { new: true })
-//     if(!updatedProduct)
-//     {
-//         return res.status(404).json({
-//             error:"Not found"
-//         })
-//     }
-//     res.json(updatedProduct)
-//     }
 
-//     catch(error)
-//     {
-//         console.error(error)
-//         res.status(500).json({
-//             error:"Server error"
-//         })
-//     }
-// })
-
-const { ObjectId } = require('mongoose').Types
 
 router.put("/edit/:id", async (req, res) => {
   const { id } = req.params
@@ -133,6 +112,17 @@ router.put("/edit/:id", async (req, res) => {
       return res.status(404).json({ error: "Product not found" })
     }
 
+    if (updatedProduct.productImage) {
+      const imagePath = path.join(__dirname, "..", "uploads", updatedProduct.productImage);
+      if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+          console.log(`Deleted image: ${imagePath}`);
+      } else {
+          console.log(`Image file not found: ${imagePath}`);
+      }
+    }
+
+
     res.json(updatedProduct)
   } catch (error) {
     console.error("Error updating product:", error)
@@ -144,5 +134,6 @@ router.put("/edit/:id", async (req, res) => {
     res.status(500).json({ error: "Server error" })
   }
 })
+
 
 module.exports=router

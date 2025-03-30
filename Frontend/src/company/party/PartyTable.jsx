@@ -103,8 +103,9 @@ const PartyTable = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Manage Party</h2>
+<div className='bg-white min-h-screen w-full relative'>
+    <div className='w-full p-2 bg-white rounded-lg'>
+      <h2 className="text-xl font-semibold text-left text-black-600 mb-4 mt-10">Manage Party</h2>
       <div className="flex justify-between items-center mb-2">
         <div className="relative w-1/4">
           <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -189,6 +190,7 @@ const PartyTable = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+    </div>
     </div>
   )
 }

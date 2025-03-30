@@ -13,6 +13,6 @@ const categoryGroupSchema = new Schema({
   }
 }, { timestamps: true }) 
 
-const Category = mongoose.model('PartyGroup', categoryGroupSchema)
+const Category = mongoose.model('CategoryGroup', categoryGroupSchema)
 
 module.exports = Category

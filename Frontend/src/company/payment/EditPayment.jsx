@@ -1,41 +1,40 @@
 import React, { useEffect, useState } from 'react'
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleRight } from "react-icons/fa6"
 
 const EditPayment = ({paymentData,onUpdated,onClose}) => {
     const [formData,setFormData]=useState({
-        name:paymentData?.name|"",
+        name:paymentData?.name||"",
         status:paymentData?.status==="active"
     })
-    const paymentId = paymentData?._id;
+    const paymentId = paymentData?._id
     
-    useEffect(()=>{
-        if(paymentId){
-            const fetchDetails= async()=>{
-                try {
-    console.log("Fetching details:", paymentId)
-    const response = await fetch(`http://localhost:5000/paymentmode/${paymentId}`)
-
-    if(response.ok){
-        const data=await response.json()
-        console.log("Fetched data:",data)
-        setFormData({
-            name:data.name||'',
-            status:data.status==='active'
-        })
-    }
-    else {
-        alert('Failed to fetch  details.')
-      }
-    
-                } catch (error) {
-                    console.error('Error fetching data:', error)
-                }
+    useEffect(() => {
+        if (paymentId) {
+          const fetchDetails = async () => {
+            try {
+              console.log("Fetching details:", paymentId)
+              const response = await fetch(`http://localhost:5000/paymentmode/${paymentId}`)
+      
+              if (response.ok) {
+                const data = await response.json()
+                console.log("Fetched data:", data)
+                setFormData({
+                  name: data.name || '',
+                  status: data.status === 'active',
+                })
+              } else {
+                alert('Failed to fetch details.')
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error)
             }
-            fetchDetails()
+          }
+          fetchDetails()
+        } else {
+          console.error('Invalid paymentId')
         }
-    
-    },[paymentId])
-    
+      }, [paymentId])
+          
  
     const handleSubmit=async(e)=>{
         e.preventDefault()
@@ -55,7 +54,7 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
                 const data=await response.json()
                 console.log(data)
                 if(onUpdated){
-                    onUpdated(data)
+                    onUpdated(data.updated)
                 }
                 if(onClose){
                     onClose()

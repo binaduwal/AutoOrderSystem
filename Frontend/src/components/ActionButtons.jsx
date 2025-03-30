@@ -1,22 +1,27 @@
-import React from 'react'
-import { RiDeleteBin6Line } from 'react-icons/ri'
-import { FaEdit } from 'react-icons/fa'
+import React from 'react';
+import { FaEdit } from 'react-icons/fa';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
-const ActionButtons = ({ route, onEdit, onDelete }) => (
-    <>
+const ActionButtons = ({ item, onEdit, onDelete, extraButtons }) => (
+  <div className="flex items-center space-x-1">
+    {onEdit && (
       <button
-        className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded mr-1 text-xl"
-        onClick={() => onEdit(route)}
+        className="text-black-600 hover:text-indigo-700 font-bold py-1 rounded text-xl"
+        onClick={() => onEdit(item)}
       >
         <FaEdit />
       </button>
+    )}
+    {onDelete && (
       <button
-        className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded mr-2 text-xl"
-        onClick={() => onDelete(route)}
+        className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded text-xl"
+        onClick={() => onDelete(item)}
       >
         <RiDeleteBin6Line />
       </button>
-    </>
-  )
-  
-export default ActionButtons
+    )}
+    {extraButtons}
+  </div>
+);
+
+export default ActionButtons;

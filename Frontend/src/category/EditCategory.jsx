@@ -11,7 +11,7 @@ const EditCategory = ({ category, onClose, onUpdated }) => {
       setDescription(category.description)
       setStatus(category.status)
     }
-  }, [category])
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

@@ -19,31 +19,24 @@ const partySchema = new Schema({
     type: String,
     required: true,
   },
-  countryId: {
+  provinceId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Country', 
+    ref: 'Province', 
     required: true,
   },
-  stateId: {
+  cityId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'State', 
+    ref:'City',
     required: true,
   },
-  districtId: {
+  locationId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'District', 
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
+    ref:'Location',
     required: true,
   },
   vatPan: {
     type: String,
+    enum: ['vat', 'pan'],
     required: true,
   },
   vatPanNo: {
@@ -65,7 +58,8 @@ const partySchema = new Schema({
     ref: 'PartyGroup', 
     required: true,
   },
-}, { timestamps: true })
+}
+)
 
 const Party = mongoose.model('Party', partySchema)
 
