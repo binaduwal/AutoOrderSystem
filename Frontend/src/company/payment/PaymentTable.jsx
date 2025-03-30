@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { FaEdit } from "react-icons/fa"
-import { RiDeleteBin6Line } from "react-icons/ri"
 import Pagination from '../../components/Pagination'
 import CreatePayment from './CreatePayment'
 import { IoMdCloseCircleOutline } from "react-icons/io"
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import EditPayment from './EditPayment'
+import TableComponent from '../../components/TableComponent'
+import SearchBar from '../../components/SearchBar'
+import ActionButtons from '../../components/ActionButtons'
+
 
 
 const PaymentTable = () => {
@@ -16,8 +18,36 @@ const [showDeleteConfirmation,setShowDeleteConfirmation]=useState(false)
 const [DeleteData, setDeleteData] = useState(null)
 const [showEdit, setShowEdit] = useState(false)
 const [editData, setEditData] = useState(null)
+const [searchTerm, setSearchTerm] = useState('')
  
+
 const itemsPerPage=5
+const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
+  const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
+  const filtered = payment.filter((sp) =>
+    normalizeString(sp.name || '').includes(normalizeString(searchTerm))
+  )
+
+  const indexOfLast = currentPage * itemsPerPage
+  const indexOfFirst = indexOfLast - itemsPerPage
+  const currentData = filtered.slice(indexOfFirst, indexOfLast)
+  const totalPages = Math.ceil(filtered.length / itemsPerPage)
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+
+
+const columns = [
+    { label: 'SN', key: 'serialNumber' },
+    { label: 'Name', key: 'name' },
+    { label: 'Status', key: 'status' },
+  ]
+
 
 useEffect(()=>{
     fetchDetails()
@@ -39,14 +69,6 @@ try {
 }
 }
 
-const indexOfLast = currentPage * itemsPerPage
-const indexOfFirst = indexOfLast - itemsPerPage
-const currentData = payment.slice(indexOfFirst, indexOfLast)
-const totalPages = Math.ceil(payment.length / itemsPerPage)
-
-const handlePageChange = (pageNumber) => {
-  setCurrentPage(pageNumber)
-}
 
 const handleCreated=(newPayment)=>{
     setPayment(prev=>[...prev,newPayment])
@@ -101,56 +123,33 @@ const handleEdit=(unit)=>{
   return (
 <div className='bg-white min-h-screen w-full relative'>
     <div className='w-full p-2 bg-white rounded-lg'>
-        <h1 className='text-xl font-semibold text-left text-black-600 mb-4'>Unit Management</h1>
-        <button className='bg-indigo-700 text-white p-2 rounded-lg hover:bg-indigo-500 transition duration-400'
-        onClick={()=>setShowCreate(true)}
-        >+Create Payment mode</button>
-
-    </div>
+        <h1 className='text-xl font-semibold text-left text-black-600 mb-4 mt-10'>Payment Management</h1>
+    <div className="flex justify-between items-center mb-2">
+        <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
+        
+        <button 
+          className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
+          onClick={()=>setShowCreate(true)}
+        >+Create</button>
+      </div>
+      </div>
 
     <div className='overflow-x-auto'>
-        <table className='w-full border-collapse border border-gray-50'>
-            <thead className='bg-white-200'>
-                <tr>
-                    <th className='border border-gray-100 p-2'>SN</th>
-                    <th className='border border-gray-100 p-2'>Name</th>
-                    <th className='border border-gray-100 p-2'>Status</th>
-                    <th className='border border-gray-100 p-2'>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {currentData.length > 0 ? 
-            (currentData.map((payment,index)=>(
-                <tr>
-                    <td key={payment._id} className='border border-gray-100 p-2'>{index + 1 + indexOfFirst}</td>
-                    <td className='border border-gray-100 p-2'>{payment.name}</td>
-                    <td className='border border-gray-100 p-2'>{payment.status}</td>
-                    <td className='border border-gray-100 p-2'>
-                        <button className='text-black-600 hover:text-indigo-800 mr-4'
-                    onClick={() => handleEdit(payment)}
-
-                        >
-                            <FaEdit/>
-                        </button>
-
-                        <button className='text-black-600 hover:text-red-800 mr-4'
-                        onClick={()=>confirmDelete(payment)}
-                        >
-                            <RiDeleteBin6Line/>
-                        </button>
-                    </td>
-                </tr>
-
-            ))
-        ):(
-                <tr>
-                    <td colSpan="5" className='text-center p-4 text-gray-500'>
-                    No units Available
-                    </td>
-                </tr>
+      <TableComponent
+        columns={columns}
+        data={currentData.map((payment, index) => ({
+          ...payment,
+          serialNumber: (currentPage - 1) * itemsPerPage + index + 1,
+        }))}
+        actions={(payment) => (
+          <ActionButtons 
+            item={payment}
+            onEdit={handleEdit} 
+            onDelete={confirmDelete}
+          />
         )}
-            </tbody>
-        </table>
+      />
+
 
         <Pagination 
                 currentPage={currentPage}
@@ -166,7 +165,8 @@ const handleEdit=(unit)=>{
 
 
 {showCreate && (
-          <div className="fixed inset-0 flex justify-center items-center z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+          <div className="fixed inset-0 flex justify-center items-center z-50" 
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
             <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
@@ -174,14 +174,16 @@ const handleEdit=(unit)=>{
               >
                 <IoMdCloseCircleOutline className="text-2xl" />
               </button>
-              <CreatePayment OnCreated={handleCreated} />
+              <CreatePayment 
+              OnCreated={handleCreated} />
             </div>
           </div>
         )}
 
 {showEdit && (
-          <div className="fixed inset-0 flex justify-center items-center z-50">
-            <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
+          <div className="fixed inset-0 flex justify-center items-center z-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+            <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
                 onClick={() => setShowEdit(false)}
@@ -192,6 +194,12 @@ const handleEdit=(unit)=>{
             </div>
           </div>
         )}
+     {/* <EditRouteModal
+     isOpen={showEdit}
+     onClose={()=> setShowEdit(false)}
+     paymentData={editData}
+     onUpdated={handleUpdated}
+/>    */}
 
     </div>
 </div>
