@@ -1,11 +1,11 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState ,useEffect} from "react"
 
 const CreateAddress = ({ onCreated }) => {
   const [formData, setFormData] = useState({
     province: "",
     city: "",
     address: "",
-  });
+  })
 
   const [provinces,setProvinces]=useState([])
   const [cities, setCities] = useState([]) 
@@ -28,35 +28,36 @@ const CreateAddress = ({ onCreated }) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const newLocation = {
       province: formData.province,
       city: formData.city,
       address: formData.address,
-    };
+    }
 
     try {
       const response = await fetch("http://localhost:5000/location/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newLocation),
-      });
+      })
 
       if (response.ok) {
-        const createdAddress = await response.json();
-        onCreated(createdAddress.newLocation); 
+        const createdAddress = await response.json()
+        onCreated(createdAddress)
+        setFormData({ province: "", city: "", address: "" })
       } else {
-        console.log("Failed to create address");
+        console.log("Failed to create address")
       }
     } catch (error) {
-      console.error("Error while creating address", error);
+      console.error("Error while creating address", error)
     }
-  };
+  }
 
 
       useEffect(() => {
@@ -93,7 +94,7 @@ const CreateAddress = ({ onCreated }) => {
               <label className="block text-gray-700 font-medium">Province</label>
               <select
                 name="provinceId"
-                className="w-full p-1 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 value={formData.province}
                 onChange={(e) => setFormData({
                   ...formData, 
@@ -117,7 +118,7 @@ const CreateAddress = ({ onCreated }) => {
               <label className="block text-gray-700 font-medium">City</label>
               <select
                 name="city"
-                className="w-full p-1 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 value={formData.city}
                 onChange={(e)=>setFormData({
                   ...formData,city:e.target.value
@@ -160,7 +161,7 @@ const CreateAddress = ({ onCreated }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateAddress;
+export default CreateAddress

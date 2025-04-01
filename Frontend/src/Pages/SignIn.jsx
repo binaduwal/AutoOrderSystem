@@ -27,6 +27,8 @@ const SignIn = () => {
 
       if (response.data.token) {
         sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("userRole", "admin")
+
         alert("Login successful!");
 
         if (username === "superadmin") {

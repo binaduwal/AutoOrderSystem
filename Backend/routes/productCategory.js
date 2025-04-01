@@ -98,10 +98,6 @@ router.put("/edit/:id", async (req, res) => {
   }
 
   try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({ error: "No data provided for update" })
-    }
-
     const updatedProduct = await ProductCategory.findByIdAndUpdate(
       id,
       req.body,
@@ -112,15 +108,6 @@ router.put("/edit/:id", async (req, res) => {
       return res.status(404).json({ error: "Product not found" })
     }
 
-    if (updatedProduct.productImage) {
-      const imagePath = path.join(__dirname, "..", "uploads", updatedProduct.productImage);
-      if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-          console.log(`Deleted image: ${imagePath}`);
-      } else {
-          console.log(`Image file not found: ${imagePath}`);
-      }
-    }
 
 
     res.json(updatedProduct)

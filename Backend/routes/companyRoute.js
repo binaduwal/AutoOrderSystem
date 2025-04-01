@@ -235,16 +235,16 @@ const {
     getAllCompanies,
     loginCompany,
     updatePassword
-} = require("../controllers/companyController")
+} = require("../controllers/companycontroller")
 
-const authMiddleware = require("../middlewares/authMiddleware")
+// const authMiddleware = require("../middlewares/authMiddleware")
 
 router.post("/create", createCompany)
-router.put("/edit/:id", authMiddleware, editCompany)
-router.delete("/delete/:id", authMiddleware, deleteCompany)
-router.get("/edit/:id", authMiddleware, getCompanyById)
-router.get("/all", authMiddleware, getAllCompanies)
+router.put("/edit/:id", editCompany)
+router.delete("/delete/:id", deleteCompany)
+router.get("/edit/:id", getCompanyById)
+router.get("/all", getAllCompanies)
 router.post("/login", loginCompany)
-router.put("/update-password/:id", authMiddleware, updatePassword)
+router.put("/update-password/:id", updatePassword)
 
 module.exports = router

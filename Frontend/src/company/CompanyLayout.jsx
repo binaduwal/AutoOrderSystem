@@ -3,7 +3,6 @@ import { useNavigate, Outlet } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
-import { IoSettingsOutline } from 'react-icons/io5';
 import { PiSignOut } from 'react-icons/pi';
 import { LuRoute } from 'react-icons/lu';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
@@ -45,25 +44,72 @@ const CompanyLayout = () => {
     };
 
     const navItems = [
-        { name: 'Dashboard', path: '/company', icon: <TbDeviceDesktopAnalytics /> },
-        { name: 'Category', path: '/company/category', icon: <MdOutlineDashboardCustomize /> },
+        { name: 'Dashboard',
+             path: '/company',
+             icon: <TbDeviceDesktopAnalytics /> 
+        },
+        
+        { name: 'Category',
+             path: '/company/category',
+             icon: <MdOutlineDashboardCustomize /> 
+        },
+        
         {
             name: 'Product',
+            
             hasDropdown: true,
+            
             icon: <FaBoxOpen />,
+            
             subItems: [
-                { name: 'Create Product', path: '/company/product' },
-                { name: 'Product Unit', path: '/company/unit-list' },
+                { name: 'Create Product',
+                     path: '/company/product' 
+                },
+                
+                { name: 'Product Unit',
+                     path: '/company/unit-list' 
+                },
+                
             ],
+            
+        
+    },
+                
+        { name: 'Sign Out',
+             action: handleSignOut,
+             icon: <PiSignOut /> 
         },
-        { name: 'Settings', path: '/company/settings', icon: <IoSettingsOutline /> },
-        { name: 'Sign Out', action: handleSignOut, icon: <PiSignOut /> },
-        { name: 'Payment', path: '/company/payment', icon: <PiCurrencyCircleDollar /> },
-        { name: 'Route', path: '/company/route', icon: <LuRoute /> },
-        { name: 'Party Group', path: '/company/partygroup', icon: <FaPeopleGroup /> },
-        { name: 'Salesperson', path: '/company/salesperson', icon: <FaRegUser /> },
-        { name: 'Order', path: '/company/order', icon: <LuNotebookPen /> },
-        { name: 'Party', path: '/company/party', icon: <IoPeopleOutline /> },
+        
+        { name: 'Payment',
+             path: '/company/payment',
+             icon: <PiCurrencyCircleDollar /> 
+        },
+        
+        { name: 'Route',
+             path: '/company/route',
+             icon: <LuRoute /> 
+        },
+        
+        { name: 'Party Group',
+             path: '/company/partygroup',
+             icon: <FaPeopleGroup /> 
+        },
+        
+        { name: 'Salesperson',
+             path: '/company/salesperson',
+             icon: <FaRegUser /> 
+        },
+        
+        { name: 'Order',
+             path: '/company/order',
+             icon: <LuNotebookPen /> 
+        },
+        
+        { name: 'Party',
+             path: '/company/party',
+             icon: <IoPeopleOutline /> 
+        },
+        
     ];
 
     return (
@@ -80,15 +126,15 @@ const CompanyLayout = () => {
             <div
                 className={`fixed md:relative top-0 left-0 w-64 bg-white text-black p-4 shadow-md flex flex-col justify-between transition-transform duration-300 ease-in-out z-50 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
             >
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-center pb-1">
                     <h2 className="text-xl font-bold">Company</h2>
                     <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
                         <FiX className="text-xl" />
                     </button>
                 </div>
-                <ul>
+                <ul className="mt-3">
                     {navItems.map((item, index) => (
-                        <li key={index} className="mb-1 p-1 rounded">
+                        <li key={index} className="mt-4 rounded">
                             {item.hasDropdown ? (
                                 <>
                                     <button

@@ -10,7 +10,7 @@ const PrivateRoute = ({ requiredRole }) => {
   if (!isAuthenticated) {
     return (
       <Navigate
-        to={isCompanyRoute ? "/login" : "/"}
+        to={isCompanyRoute ? "/company/login" : "/"}
         replace
         state={{ 
           message: "You need to log in first",
@@ -23,7 +23,7 @@ const PrivateRoute = ({ requiredRole }) => {
   if (requiredRole && userRole !== requiredRole) {
     return (
       <Navigate
-        to="/"
+        to="/company/login"
         replace
         state={{ 
           message: "You do not have permission to access this page",

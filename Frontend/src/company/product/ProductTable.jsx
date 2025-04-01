@@ -6,6 +6,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io"
 import CreateProduct from './CreateProduct'
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import EditProduct from './EditProduct'
+import SearchBar from '../../components/SearchBar'
 
 
 const ProductTable = () => {
@@ -18,6 +19,8 @@ const [showEdit, setShowEdit] = useState(false)
 const [editData, setEditData] = useState(null)
 const [units, setUnits] = useState([])
 const [categories, setCategories] = useState([])
+const [searchTerm, setSearchTerm] = useState('')
+
 const itemsPerPage = 5
 
 
@@ -33,7 +36,6 @@ const fetchDetails=async()=>{
         if(response.ok)
         {
             const data=await response.json()
-            // setProducts(data)
             setProducts(Array.isArray(data) ? data : data.data || [])
 
         }
@@ -77,12 +79,20 @@ const fetchCategories = async () => {
   }
 }
 
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value)
+  setCurrentPage(1)
+}
+
+const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
+const filtered = products.filter((sp) =>
+  normalizeString(sp.name || '').includes(normalizeString(searchTerm))
+)
+
 
 const indexOfLast = currentPage * itemsPerPage
 const indexOfFirst = indexOfLast - itemsPerPage
-// const currentData = products.slice(indexOfFirst, indexOfLast)
-const currentData = (products || []).slice(indexOfFirst, indexOfLast)
-// const totalPages = Math.ceil(products.length / itemsPerPage)
+const currentData = (filtered || []).slice(indexOfFirst, indexOfLast)
 const totalPages = Math.ceil((products?.length || 0) / itemsPerPage)
 
 const handlePageChange = (pageNumber) => {
@@ -138,43 +148,57 @@ const handleUpdated=async()=>{
 
 
     return (
-        <div>
-        <div className="relative w-full min-h-screen bg-white">
-          <div className="w-full p-2 bg-white shadow-lg rounded-lg">
-            <h1 className="text-xl font-semibold text-left text-black-600 mb-4">
+<div className='bg-white min-h-screen w-full relative'>
+    <div className='w-full p-2 bg-white rounded-lg'>
+            <h1 className="text-xl font-semibold text-left text-black-600 mb-4 mt-10">
               Product Management
             </h1>
+            <div className="flex justify-between items-center mb-2">
+            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
+
             <button
                 className="bg-indigo-700 text-white p-2 mb-3 rounded-lg hover:bg-indigo-500 transition duration-400"
                 onClick={() => setShowCreate(true)}
               >
                 + CREATE PRODUCT
               </button>
-    
+              </div>
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-50">
-                <thead className="bg-white-200">
+                <thead className=" bg-gray-50">
                   <tr>
-                    <th className="border border-gray-200 p-2">SN</th>
-                    <th className="border border-gray-200 p-2">Image</th>
-                    <th className="border border-gray-200 p-2">Name</th>
-                    <th className="border border-gray-200 p-2">Product Code</th>
-                    <th className="border border-gray-200 p-2">Category</th>
-                    <th className="border border-gray-200 p-2">Unit</th>
-                    <th className="border border-gray-200 p-2">VATable</th>
-                    <th className="border border-gray-200 p-2">Selling Price</th>
-                    <th className="border border-gray-200 p-2">Discount</th>
-                    <th className="border border-gray-200 p-2">Status</th>
-                    <th className="border border-gray-200 p-2">Actions</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>SN</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Image</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Name</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Product Code</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Category</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Unit</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>VATable</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Selling Price</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Discount</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Status</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
+>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                 {currentData.length > 0 ? (
                   currentData.map((product, index) => {
                     return (
-                      <tr key={product._id} className="text-center border border-gray-200 odd:bg-gray-100">
-                        <td className="border border-gray-200 p-2">{index + 1 + indexOfFirst}</td>
-                        <td className='border border-gray-200 p-2 text-center'>
+                      <tr key={product._id} className="text-center">
+                        <td className="px-4 py-3 text-sm text-black-700">{index + 1 + indexOfFirst}</td>
+                        <td className='p-2 text-center'>
                           {product.productImage ? (
                             <img
                               src={`http://localhost:5000/uploads/${product.productImage}`}
@@ -190,20 +214,20 @@ const handleUpdated=async()=>{
                               <span className="text-gray-600 text-sm">N/A</span>
                             </div>
                           )}
-                      </td>                        <td className="border border-gray-200 p-2">{product.name}</td>
-                        <td className="border border-gray-200 p-2">{product.productCode}</td>
-                        <td className="border border-gray-200 p-2">
+                      </td>                        <td className=" p-2">{product.name}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">{product.productCode}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">
                           {categories.find(category=>category._id===product.categoryId)?.category_name||"N/A"}
                         </td>
 
-                        <td className="border border-gray-200 p-2">
+                        <td className="px-4 py-3 text-sm text-black-700">
                           {units.find(unit => unit._id === product.productUnitId)?.unitName || "N/A"}
                         </td>  
-                        <td className="border border-gray-200 p-2">{product.vatable ? "True" : "False"}</td>
-                        <td className="border border-gray-200 p-2">{product.maxSellingPrice}</td>
-                        <td className="border border-gray-200 p-2">{product.maxDiscount}</td>
-                        <td className="border border-gray-200 p-2">{product.status}</td>
-                        <td className="border border-gray-200 p-2">
+                        <td className="px-4 py-3 text-sm text-black-700">{product.vatable ? "True" : "False"}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">{product.maxSellingPrice}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">{product.maxDiscount}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">{product.status}</td>
+                        <td className="px-4 py-3 text-sm text-black-700">
                           <button
                             className="text-black-600 hover:text-indigo-800 mr-4"
                             onClick={() => handleEdit(product)}
@@ -274,7 +298,6 @@ const handleUpdated=async()=>{
               </div>
             )}
           </div>
-        </div>
         </div>
     
       )

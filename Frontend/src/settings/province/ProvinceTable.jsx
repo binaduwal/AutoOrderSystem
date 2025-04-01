@@ -4,19 +4,27 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import EditProvince from './EditProvince';
+import SearchBar from '../../components/SearchBar'
+import Pagination from '../../components/Pagination'
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
+
 
 const ProvinceTable = () => {
   const [province, setProvince] = useState([]);
   const [showProvince, setShowProvince] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [permissionToDelete, setPermissionToDelete] = useState(null);
-    const [showEdit, setShowEdit] = useState(false)
-      const [editProvinceData, setEditProvinceData] = useState(null)
-    
-      const handleEdit = (province) => {
-        setEditProvinceData(province)
-        setShowEdit(true)
-      }
+  const [showEdit, setShowEdit] = useState(false)
+  const [editProvinceData, setEditProvinceData] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+const [currentPage, setCurrentPage] = useState(1)
+const itemsPerPage = 5
+
+
+  const handleEdit = (province) => {
+    setEditProvinceData(province)
+    setShowEdit(true)
+  }
     
     
 
@@ -72,50 +80,68 @@ const ProvinceTable = () => {
   }
 
 
-  return (
-    <div className="relative w-full min-h-screen bg-gray-50">
-      <div className="w-full p-8 bg-white shadow-lg rounded-lg">
-        <h1 className="text-2xl font-semibold text-gray-700 mb-6">Province Management</h1>
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
 
-        <div className="flex justify-between items-center mb-6">
-          <input
-            type="text"
-            placeholder="Search Province"
-            className="p-3 border rounded-lg w-2/3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
-          />
+  const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
+const filtered = province.filter((sp) =>
+  normalizeString(sp.name || '').includes(normalizeString(searchTerm))
+)
+
+
+const indexOfLast = currentPage * itemsPerPage
+const indexOfFirst = indexOfLast - itemsPerPage
+const currentData = (filtered || []).slice(indexOfFirst, indexOfLast)
+const totalPages = Math.ceil((province?.length || 0) / itemsPerPage)
+
+
+const handlePageChange = (pageNumber) => {
+  setCurrentPage(pageNumber)
+}
+
+  
+
+  return (
+<div className='bg-white min-h-screen w-full relative'>
+<div className='w-full p-2 bg-white rounded-lg'>
+        <h2 className="text-xl font-semibold text-left text-black-600 mb-4 mt-10">Province Management</h2>
+        <div className="flex justify-between items-center mb-2">
+
+        <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
           <button
-            className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300"
+            className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition duration-300"
             onClick={() => setShowProvince(true)}
           >
             + Create Province
           </button>
         </div>
 
-        <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
-          <table className="w-full border-collapse table-auto">
-            <thead className="bg-white-200">
+        <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
               <tr>
-                <th className="border border-gray-200 p-3 text-left">SN</th>
-                <th className="border border-gray-200 p-3 text-left">Name</th>
-                <th className="border border-gray-200 p-3 text-left">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">SN</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {province.map((data, index) => (
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentData.map((data, index) => (
                 <tr key={data._id}>
-                  <td className="border border-gray-200 p-3">{index + 1}</td>
-                  <td className="border border-gray-200 p-3">{data.name}</td>
-                  <td className="border border-gray-200 p-3">
+                  <td className="px-4 py-3 text-sm text-gray-900">{index + 1}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">{data.name}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
                     <button
-                      className="text-indigo-600 hover:text-indigo-800 mr-4"
-                      onClick={()=>handleEdit(data)}
+                  className="text-black-600 hover:text-indigo-700 font-bold py-1 px-3 rounded text-xl"
+                  onClick={()=>handleEdit(data)}
                     >
                       <FaEdit size={18} />
                     </button>
                     <button
                       onClick={() => confirmDelete(data)}
-                      className="text-red-600 hover:text-red-800"
-                    >
+                      className="text-black-600 hover:text-red-700 font-bold py-1 px-3 rounded text-xl"
+                      >
                       <RiDeleteBin6Line size={18} />
                     </button>
                   </td>
@@ -124,7 +150,6 @@ const ProvinceTable = () => {
             </tbody>
           </table>
         </div>
-      </div>
 
       {showProvince && (
         <div className="fixed inset-0 flex justify-center items-center z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
@@ -143,29 +168,18 @@ const ProvinceTable = () => {
         </div>
       )}
 
-      {showDeleteConfirmation && (
-        <div className="absolute inset-0 flex justify-center items-center bg-white-500 bg-opacity-50">
-          <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[400px] border border-gray-200">
-            <h2 className="text-lg text-center font-semibold text-gray-800 mb-4">
-              Are you sure you want to delete?
-            </h2>
-            <div className="flex justify-around">
-              <button
-                onClick={handleDelete}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500"
-              >
-                Yes, Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirmation(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination 
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+      />
+
+  <DeleteConfirmationModal
+    isOpen={showDeleteConfirmation}
+    onClose={() => setShowDeleteConfirmation(false)}
+    onConfirm={handleDelete}
+  />
+      
 
 {showEdit && (
   <div className="fixed inset-0 flex justify-center items-center z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>

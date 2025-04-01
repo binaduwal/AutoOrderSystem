@@ -7,6 +7,8 @@ import { RiDeleteBin6Line } from 'react-icons/ri'
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal"
 import PasswordForm from '../components/PasswordForm'
 import TableComponent from '../components/TableComponent'
+import SearchBar from '../components/SearchBar'
+import Pagination from '../components/Pagination'
 
 
 const CompanyList = () => {
@@ -17,8 +19,10 @@ const CompanyList = () => {
   const [companyToDelete, setCompanyToDelete] = useState(null)
   const [showEditCompany, setShowEditCompany] = useState(null)
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false)
-    const [userForPasswordChange, setUserForPasswordChange] = useState(null)
-    const [currentPage, setCurrentPage] = useState(1)
+  const [userForPasswordChange, setUserForPasswordChange] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+    
   const itemsPerPage = 5
 
   const fetchCompanies = async () => {
@@ -36,6 +40,13 @@ const CompanyList = () => {
   useEffect(() => {
     fetchCompanies()
   }, [])
+
+  
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
 
   const handleChangePassword=(company)=>{
     setUserForPasswordChange(company)
@@ -83,9 +94,15 @@ const CompanyList = () => {
     { label: 'Status', key: 'status' },
   ]
 
+  const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
+  const filtered = companies.filter((sp) =>
+    normalizeString(sp.companyName || '').includes(normalizeString(searchTerm))
+  )
+
+
   const indexOfLastCompany = currentPage * itemsPerPage
   const indexOfFirstCompany = indexOfLastCompany - itemsPerPage
-  const currentCompanies = companies.slice(indexOfFirstCompany, indexOfLastCompany)
+  const currentCompanies = filtered.slice(indexOfFirstCompany, indexOfLastCompany)
   const totalPages = Math.ceil(companies.length / itemsPerPage)
 
   const handlePageChange = (pageNumber) => {
@@ -119,51 +136,28 @@ const CompanyList = () => {
 
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Manage Company</h2>
+<div className='bg-white min-h-screen w-full relative'>
+<div className='w-full p-2 bg-white rounded-lg'>
+
+<h2 className="text-xl font-semibold text-left text-black-600 mb-4 mt-5">Manage Company</h2>
+<div className="flex justify-between items-center mb-2">
+
+      <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
+
       <button
-        className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300 mb-6"
+        className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
         onClick={() => navigate('/admin/create-company')}
       >
         + CREATE Company
       </button>
-
+</div>
     <TableComponent columns={columns} 
     data={currentCompanies.map((company, index) => ({
       ...company,
       serialNumber: (currentPage - 1) * itemsPerPage + index + 1
     }))} 
-    actions={actions} />
-
-
-      <div className="flex justify-center mt-6">
-        {/* Pagination Controls */}
-        <button
-          className="px-4 py-2 text-white bg-indigo-600 rounded-l-lg hover:bg-indigo-700"
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-        >
-          Prev
-        </button>
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            className={`px-4 py-2 text-white ${currentPage === index + 1 ? 'bg-indigo-600' : 'bg-indigo-400'} hover:bg-indigo-500`}
-            onClick={() => handlePageChange(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          className="px-4 py-2 text-white bg-indigo-600 rounded-r-lg hover:bg-indigo-700"
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
-
-
+    actions={actions}
+     />
 
       {showEditCompany && (
         <div
@@ -189,6 +183,13 @@ const CompanyList = () => {
         </div>
       )}
 
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+      
+
       <DeleteConfirmationModal
         isOpen={showDeleteConfirmation}
         onClose={() => setShowDeleteConfirmation(false)}
@@ -203,6 +204,7 @@ const CompanyList = () => {
         />
       )}
 
+    </div>
     </div>
   )
 }

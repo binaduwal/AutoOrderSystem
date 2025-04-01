@@ -194,12 +194,6 @@ const handleEdit=(unit)=>{
             </div>
           </div>
         )}
-     {/* <EditRouteModal
-     isOpen={showEdit}
-     onClose={()=> setShowEdit(false)}
-     paymentData={editData}
-     onUpdated={handleUpdated}
-/>    */}
 
     </div>
 </div>

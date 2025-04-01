@@ -40,7 +40,7 @@ const CreateUser = () => {
   
       if (response.ok) {
         alert('User created successfully!');
-        navigate('/manage')
+        navigate('/admin/manage')
         console.log(await response.json()); 
       } else {
         const errorData = await response.json();

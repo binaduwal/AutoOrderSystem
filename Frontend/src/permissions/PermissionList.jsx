@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CreatePermission from './CreatePermission'
 import EditPermission from './EditPermission'
-import { FaEdit } from "react-icons/fa"
-import { RiDeleteBin6Line } from "react-icons/ri"
 import { IoMdCloseCircleOutline } from "react-icons/io"
+import SearchBar from '../components/SearchBar'
+import TableComponent from '../components/TableComponent'
+import ActionButtons from '../components/ActionButtons'
+import Pagination from '../components/Pagination'
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
+
 
 
 const PermissionList = () => {
@@ -18,11 +22,19 @@ const PermissionList = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10 
+  const itemsPerPage = 5 
 
   useEffect(() => {
     fetchPermissions()
   }, [])
+
+  const columns = [
+    { label: 'SN', key: 'serialNumber' },
+    { label: 'Name', key: 'name' },
+    { label: 'Display Name', key: 'display_name' },
+    { label: 'Description', key: 'description' },
+  ]
+
 
   const fetchPermissions = async () => {
     try {
@@ -96,34 +108,24 @@ const PermissionList = () => {
   const indexOfFirstPermission = indexOfLastPermission - itemsPerPage
   const currentPermissions = filteredPermissions.slice(indexOfFirstPermission, indexOfLastPermission)
   const totalPages = Math.ceil(filteredPermissions.length / itemsPerPage)
+ 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
 
   return (
-    <div className="relative w-full min-h-screen bg-white ">
-        <div className="w-full p-8 bg-white shadow-lg rounded-lg">
-          <h1 className="text-xl font-semibold text-left text-black-600 mb-6">
+<div className='bg-white min-h-screen w-full relative'>
+<div className='w-full p-2 bg-white rounded-lg'>
+          <h2 className="text-xl font-semibold text-left text-black-600 mb-6">
             Permission Management
-          </h1>
+          </h2>
 
-          <div className="flex justify-between items-center mb-6">
-          {/* <SearchBar
-            placeholder="Search Permission"
-            value={searchTerm}
-            onChange={handleSearch}
-          /> */}
+          <div className="flex justify-between items-center mb-2">
+          <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 
-<input
-      type="text"
-      placeholder="Search Permission"
-      value={searchTerm}
-      onChange={handleSearch}
-            className="p-3 border rounded-lg w-2/3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    />
 
             <button
-              className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300"
+              className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
               onClick={() => setShowCreatePermission(true)}
             >
               + CREATE PERMISSION
@@ -131,80 +133,25 @@ const PermissionList = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-500">
-              <thead className="bg-white-200">
-                <tr>
-                  <th className="border border-gray-200 p-2">SN</th>
-                  <th className="border border-gray-200 p-2">Name</th>
-                  <th className="border border-gray-200 p-2">Display Name</th>
-                  <th className="border border-gray-200 p-2">Description</th>
-                  <th className="border border-gray-200 p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentPermissions.length > 0 ? (
-                  currentPermissions.map((perm, index) => (
-                    <tr key={perm._id} className="text-center border border-gray-200 odd:bg-gray-100">
-                      <td className="border border-gray-300 p-2">{index + 1 + indexOfFirstPermission}</td>
-                      <td className="border border-gray-300 p-2">{perm.name}</td>
-                      <td className="border border-gray-300 p-2">{perm.display_name}</td>
-                      <td className="border border-gray-300 p-2">{perm.description}</td>
-                      <td className="border border-gray-300 p-2">
-                        <button
-                          onClick={() => handleEdit(perm)}
-                          className="text-black-600 hover:text-indigo-800 mr-4"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => confirmDelete(perm)}
-                          className="text-black-00 hover:text-red-800"
-                        >
-                          <RiDeleteBin6Line />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-center p-4 text-gray-500">
-                      No permission available.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
           </div>
-
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, idx) => (
-                <button
-                  key={idx + 1}
-                  onClick={() => handlePageChange(idx + 1)}
-                  className={`px-3 py-1 mx-1 rounded ${currentPage === idx + 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
         </div>
+
+
+                <TableComponent columns={columns} 
+                data={currentPermissions.map((company, index) => ({
+                  ...company,
+                  serialNumber: (currentPage - 1) * itemsPerPage + index + 1
+                }))} 
+                actions={(permission) => (
+                  <ActionButtons 
+                    item={permission}
+                    onEdit={handleEdit} 
+                    onDelete={confirmDelete}
+                  />
+                )}
+                     />
+            
+    
 
       {showCreatePermission && (
         <div className="fixed inset-0 flex justify-center items-center  z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} >
@@ -222,6 +169,19 @@ const PermissionList = () => {
           </div>
         </div>
       )}
+
+      <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    />
+
+    <DeleteConfirmationModal
+            isOpen={showDeleteConfirmation}
+            onClose={() => setShowDeleteConfirmation(false)}
+            onConfirm={handleDelete}
+          />
+      
 
       {showEditPermission && (
         <div className="fixed inset-0 flex justify-center items-center  z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} >

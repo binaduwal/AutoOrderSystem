@@ -5,7 +5,7 @@ const [units,setUnits]=useState([])
 const [selectedUnit, setSelectedUnit] = useState("") 
 const [categories, setCategories] = useState([])
 const [selectedFile,setSelectedFile]=useState(null)
-
+const [previewImage, setPreviewImage] = useState("");
 const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
 
@@ -81,63 +81,6 @@ const fetchUnits=async()=>{
 useEffect(()=>{
   fetchUnits()
 },[])
-
-// const renderOptions = (categories, depth = 0) => {
-//   return categories.map(category => (
-//     <React.Fragment key={category._id}>
-//       <option 
-//         value={category._id}
-//         style={{ paddingLeft: `${20 * depth}px` }}
-//       >
-//         {category.category_name}
-//       </option>
-//       {renderOptions(category.children, depth + 1)}
-//     </React.Fragment>
-//   ))
-// }
-
-
-
-
-// const renderCategories = (categories, depth = 0) => {
-//   return categories.map((category) => (
-//     <div key={category._id} className="relative group">
-//       {/* Parent category */}
-//       <div
-//         className={`${getPaddingClass(depth)} pr-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center`}
-//         onClick={() => {
-//           setFormData(prev => ({ ...prev, categoryId: category._id }));
-//           setSelectedCategoryName(category.category_name);
-//           setIsCategoryOpen(false);
-//         }}
-//       >
-//         <span>{category.category_name}</span>
-//         {category.children?.length > 0 && (
-//           <svg
-//             className="w-4 h-4 ml-2 transform transition-transform group-hover:rotate-90"
-//             fill="none"
-//             stroke="currentColor"
-//             viewBox="0 0 24 24"
-//           >
-//             <path
-//               strokeLinecap="round"
-//               strokeLinejoin="round"
-//               strokeWidth={2}
-//               d="M9 5l7 7-7 7"
-//             />
-//           </svg>
-//         )}
-//       </div>
-
-//       {/* Child categories */}
-//       {category.children?.length > 0 && (
-//         <div className="pl-4">
-//           {renderCategories(category.children, depth + 1)}
-//         </div>
-//       )}
-//     </div>
-//   ));
-// };
 
 
 const renderCategories = (categories, depth = 0) => {
@@ -288,7 +231,11 @@ const res=await fetch('http://localhost:5000/product/upload',{
 }
 
 const handleFileChange=(e)=>{
+  const file = e.target.files[0]
   setSelectedFile(e.target.files[0])
+  if (file) {
+    setPreviewImage(URL.createObjectURL(file));
+  }
 }
 
 
@@ -441,7 +388,7 @@ return (
         </div>
 
 
-<div className="col-span-full">
+{/* <div className="col-span-full">
       <label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">Image</label>
       <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
         <div className="text-center">
@@ -463,7 +410,42 @@ return (
           <p className="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
         </div>
       </div>
-    </div> 
+    </div>  */}
+
+<div className="col-span-full">
+            <label htmlFor="cover-photo" className="block text-sm font-medium text-gray-900">
+              Image
+            </label>
+            <div className="mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
+              {previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded mb-2"
+                />
+              ) : (
+                <p className="text-sm text-gray-600 mb-2">No file chosen</p>
+              )}
+              <div className="flex text-sm text-gray-600">
+                <label
+                  htmlFor="file-upload-input"
+                  className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
+                >
+                  <span>Upload a file</span>
+                  <input
+                    id="file-upload-input"
+                    name="file-upload"
+                    type="file"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                  />
+                </label>
+                <p className="pl-1">or drag and drop</p>
+              </div>
+              <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            </div>
+          </div>
+
 
 
         <button

@@ -1,4 +1,4 @@
-import React, {useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 const EditProduct = ({ productData, onUpdated }) => {
   const [formData, setFormData] = useState({
@@ -10,79 +10,20 @@ const EditProduct = ({ productData, onUpdated }) => {
     maxDiscount: productData?.maxDiscount || 0,
     status: productData?.status === 'active' ? 'Active' : 'Inactive',
     categoryId: productData?.categoryId || '',
-  })
-
-  const [units, setUnits] = useState([])
-  const [categories, setCategories] = useState([])
-  const [selectedUnit, setSelectedUnit] = useState(productData?.productUnitId || '')
-  const [selectedFile,setSelectedFile]=useState(null)
-
-
-  const fetchUnits = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/unit/all')
-      const data = await response.json()
-      if (Array.isArray(data)) {
-        setUnits(data)
-      } else {
-        console.error('Unexpected response format:', data)
-        setUnits([])
-      }
-    } catch (error) {
-      console.error('Error fetching units:', error)
-    }
-  }
-
-const fetchCategories=async()=>{
-    try{
-const response=await fetch('http://localhost:5000/category/all')
-const data=await response.json()
-const tree=buildTree(data)
-setCategories(tree)
-    }
-    catch(error)
-    {
-        console.error("Error while fetching catergoreis",error)
-    }
-}
-
-const buildTree=(categories,parentId=null)=>{
-    return categories
-    .filter(category=>category.parentId===parentId)
-    .map(category=>({
-        ...category,
-        children:buildTree(categories,category._id)
-    }))
-}
-
-
-  useEffect(() => {
-    fetchUnits()
-    fetchCategories()
-  }, [])
-
-
-  const renderOptions=(categories,depth=0)=>{
-    return categories.map(category=>(
-        <React.Fragment key={category._id}>
-            <option value={category._id}
-            style={{paddingLeft:`${20*depth}px`}}
-            >
-                {category.category_name}
-            </option>
-            {renderOptions(category.children,depth+1)}
-        </React.Fragment>
-    ))
-  }
+  });
+  const [selectedUnit, setSelectedUnit] = useState(productData?.productUnitId || '');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(
+    productData?.productImage ? `http://localhost:5000/uploads/${productData.productImage}` : ''
+  );
 
   useEffect(() => {
     if (productData?._id) {
       const fetchDetails = async () => {
         try {
-          console.log('Fetching details for product:', productData._id)
-          const response = await fetch(`http://localhost:5000/product/${productData._id}`)
+          const response = await fetch(`http://localhost:5000/product/${productData._id}`);
           if (response.ok) {
-            const data = await response.json()
+            const data = await response.json();
             setFormData({
               name: data.name || '',
               productCode: data.productCode || '',
@@ -92,95 +33,95 @@ const buildTree=(categories,parentId=null)=>{
               maxDiscount: data.maxDiscount || 0,
               status: data.status === 'active' ? 'Active' : 'Inactive',
               categoryId: data.categoryId || '',
-            })
-            setSelectedUnit(data.productUnitId || '')
+            });
+            setSelectedUnit(data.productUnitId || '');
+            if (data.productImage) {
+              setPreviewImage(`http://localhost:5000/uploads/${data.productImage}`);
+            }
           } else {
-            alert('Failed to fetch product details.')
+            alert('Failed to fetch product details.');
           }
         } catch (error) {
-          console.error('Error fetching product details:', error)
+          console.error('Error fetching product details:', error);
         }
-      }
-      fetchDetails()
+      };
+      fetchDetails();
     }
-  }, [productData])
+  }, [productData]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: name === 'vatable' ? value === 'true' : value,
-    }))
-  }
+    }));
+  };
 
   const handleUnitChange = (e) => {
-    setSelectedUnit(e.target.value)
-  }
+    setSelectedUnit(e.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleFileUpload = async (file) => {
+    const data = new FormData();
+    data.append("file-upload", file);
+    const res = await fetch('http://localhost:5000/product/upload', {
+      method: 'POST',
+      body: data,
+    });
+    if (res.ok) {
+      const responseData = await res.json();
+      return responseData.filename;
+    } else {
+      throw new Error("File upload failed");
+    }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    let fileUrl=""
-    if(selectedFile)
-    {
-      try{
-        fileUrl=await handleFileUpload(selectedFile)
-      }
-      catch(error)
-      {
-        console.error("File upload failed",error)
+    e.preventDefault();
+    let fileUrl = formData.productImage;
+    if (selectedFile) {
+      try {
+        fileUrl = await handleFileUpload(selectedFile);
+      } catch (error) {
+        console.error("File upload failed", error);
+        return;
       }
     }
-    
     const payload = {
       ...formData,
       status: formData.status === 'Active' ? 'active' : 'inactive',
       productUnitId: selectedUnit,
-      productImage:fileUrl
-    }
+      productImage: fileUrl,
+    };
     if (!payload.categoryId) {
-        delete payload.categoryId;
-      }
-
+      delete payload.categoryId;
+    }
     try {
       const response = await fetch(`http://localhost:5000/product/edit/${productData._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      })
+      });
       if (response.ok) {
-        const data = await response.json()
-        console.log('Product updated:', data)
-        onUpdated(data)
+        const updatedData = await response.json();
+        console.log('Product updated:', updatedData);
+        onUpdated(updatedData);
       } else {
-        const result = await response.json()
-        console.error('Failed to update product:', result)
+        const result = await response.json();
+        console.error('Failed to update product:', result);
       }
     } catch (error) {
-      console.error('Error updating product:', error)
+      console.error('Error updating product:', error);
     }
-  }
-
-  const handleFileUpload=async(file)=>{
-    const formData=new FormData()
-    formData.append("file-upload",file)
-    const res=await fetch('http://localhost:5000/product/upload',{
-      method:'POST',
-      body:formData
-      })
-    
-      if(res.ok){
-        const data=await res.json()
-        return data.filename
-      }
-      else{
-        throw new Error("File upload failed")
-      }
-    }
-    
-    const handleFileChange=(e)=>{
-      setSelectedFile(e.target.files[0])
-    }
-    
+  };
 
   return (
     <div className="max-h-auto w-full mx-auto bg-white p-6 rounded">
@@ -200,7 +141,6 @@ const buildTree=(categories,parentId=null)=>{
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block mb-1 font-medium" htmlFor="productCode">
               Product Code
@@ -214,7 +154,6 @@ const buildTree=(categories,parentId=null)=>{
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block mb-1 font-medium" htmlFor="maxSellingPrice">
               Selling Price
@@ -228,7 +167,6 @@ const buildTree=(categories,parentId=null)=>{
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block mb-1 font-medium" htmlFor="maxDiscount">
               Max Discount Allowed
@@ -238,11 +176,10 @@ const buildTree=(categories,parentId=null)=>{
               name="maxDiscount"
               value={formData.maxDiscount}
               onChange={handleChange}
-              placeholder="Enter Discount (Max 10%)"
+              placeholder="Enter Discount"
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block mb-1 font-medium" htmlFor="vatable">
               VAT
@@ -258,7 +195,6 @@ const buildTree=(categories,parentId=null)=>{
               <option value="false">False</option>
             </select>
           </div>
-
           <div>
             <label className="block mb-1 font-medium" htmlFor="unit">
               Unit
@@ -270,31 +206,21 @@ const buildTree=(categories,parentId=null)=>{
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
             >
               <option value="">Select Unit</option>
-              {units
-                .filter((unit) => unit.status === "active")
-                .map((unit) => (
-                  <option key={unit._id} value={unit._id}>
-                    {unit.unitName}
-                  </option>
-                ))}
             </select>
           </div>
-
           <div>
-          <label className="block mb-1 font-medium" htmlFor="categoryId">
-            Category
-          </label>
-          <select
-          name="categoryId"
-          value={formData.categoryId || ""}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
-          >
-            <option value="">Select Category</option>
-            {renderOptions(categories)}
-          </select>
-        </div>
-
+            <label className="block mb-1 font-medium" htmlFor="categoryId">
+              Category
+            </label>
+            <select
+              name="categoryId"
+              value={formData.categoryId || ""}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+            >
+              <option value="">Select Category</option>
+            </select>
+          </div>
           <div>
             <label className="block mb-1 font-medium" htmlFor="status">
               Status
@@ -310,43 +236,50 @@ const buildTree=(categories,parentId=null)=>{
             </select>
           </div>
 
-          <div className="col-span-full">
-      <label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">Image</label>
-      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-        <div className="text-center">
-          <svg className="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
-            <path fillRule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clipRule="evenodd" />
-          </svg>
-          <div className="mt-4 flex text-sm/6 text-gray-600">
-            <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
-              <span>Upload a file</span>
-              <input 
-              id="file-upload" 
-              name="file-upload" 
-              type="file" 
-              onChange={handleFileChange}
-              className="sr-only"/>
-
+<div className="col-span-full">
+            <label htmlFor="file-upload" className="block text-sm font-medium text-gray-900">
+              Image
             </label>
-            <p className="pl-1">or drag and drop</p>
+            <div className="mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
+              {previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded mb-2"
+                />
+              ) : (
+                <p className="text-sm text-gray-600 mb-2">No file chosen</p>
+              )}
+              <div className="flex text-sm text-gray-600">
+                <label
+                  htmlFor="file-upload-input"
+                  className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
+                >
+                  <span>Upload a file</span>
+                  <input
+                    id="file-upload-input"
+                    name="file-upload"
+                    type="file"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                  />
+                </label>
+                <p className="pl-1">or drag and drop</p>
+              </div>
+              <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            </div>
           </div>
-          <p className="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-        </div>
-      </div>
-    </div> 
+
 
           <div className="col-span-full">
-            <button
-              type="submit"
-              className="px-2 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
+            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
               Update Product
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditProduct
+export default EditProduct;
