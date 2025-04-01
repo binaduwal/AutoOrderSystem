@@ -22,17 +22,17 @@ const partySchema = new Schema({
   provinceId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Province', 
-    required: true,
+    required: false,
   },
   cityId: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'City',
-    required: true,
+    required: false,
   },
   locationId: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'Location',
-    required: true,
+    required: false,
   },
   vatPan: {
     type: String,

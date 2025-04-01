@@ -72,7 +72,7 @@ try{
 
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-xl mx-auto p-6 bg-white">
           <h2 className="text-2xl font-bold mb-6">Edit Unit</h2>
           <form onSubmit={handleSubmit}>
             <div>

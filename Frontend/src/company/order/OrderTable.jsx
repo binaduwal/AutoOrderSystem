@@ -18,6 +18,8 @@ const OrderTable = () => {
   const location = useLocation()
   const itemsPerPage = 5
 
+
+
   const statusStyles = {
     Pending: 'bg-yellow-100 text-yellow-800',
     Completed: 'bg-green-100 text-green-800',
@@ -121,7 +123,7 @@ const OrderTable = () => {
       <div className="flex justify-between items-center mb-6">
         <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />         
         <button
-          className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-2xl hover:bg-indigo-700 transition-colors"
           onClick={() => navigate('/company/create-order')}
         >
           + Create Order

@@ -82,7 +82,7 @@ const CreateUser = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
+            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-indigo-300"
           />
         </div>
 
@@ -97,7 +97,7 @@ const CreateUser = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
+            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-indigo-300"
           />
         </div>
 
@@ -112,7 +112,7 @@ const CreateUser = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm Password"
-            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-blue-300"
+            className="w-full px-3 py-2 border border-gray-300  rounded focus:outline-none focus:ring focus:border-indigo-300"
           />
         </div>
 

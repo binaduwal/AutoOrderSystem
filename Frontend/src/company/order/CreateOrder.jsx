@@ -82,7 +82,6 @@ const CreateOrder = () => {
       ...newItems[index],
       product: selectedProduct,
       originalPrice: selectedProduct?.maxSellingPrice || 0,
-      // Initially, no discount applied so discounted price equals original price.
       price: selectedProduct?.maxSellingPrice || 0,
       vat: selectedProduct?.vatable ? 13 : 0,
       maxDiscount: selectedProduct?.maxDiscount || 0,
@@ -93,14 +92,11 @@ const CreateOrder = () => {
     setOrderItems(newItems)
   }
 
-  // When handling discount (or quantity) changes,
-  // we do NOT change the originalPrice.
   const handleInputChange = (index, field, value) => {
     const newItems = [...orderItems]
     let numericValue = Number(value)
   
     if (field === 'discount') {
-      // Clamp discount between 0 and maxDiscount.
       numericValue = Math.min(Math.max(numericValue, 0), newItems[index].maxDiscount)
       newItems[index].discount = numericValue
     } else if (field === 'quantity') {
@@ -111,19 +107,14 @@ const CreateOrder = () => {
     setOrderItems(newItems)
   }
 
-  // This function calculates the discounted price from the original price.
-  // The "price" field here will be the discounted price, used in further calculations,
-  // while the original price remains intact.
   const calculateValues = (item) => {
-    // Compute the discounted (final) price without modifying originalPrice.
     const discountedPrice = item.originalPrice * ((100 - item.discount) / 100)
     
     let rate, amount, vatAmount
     if (item.product?.vatable) {
-      // If VAT is applicable, we assume price is VAT inclusive.
       rate = discountedPrice / (1 + 0.13)
       vatAmount = (discountedPrice - rate) * item.quantity
-      amount = discountedPrice * item.quantity  // Total price after discount for quantity
+      amount = discountedPrice * item.quantity  
     } else {
       rate = discountedPrice
       vatAmount = 0
@@ -131,18 +122,12 @@ const CreateOrder = () => {
     }
     return {
       ...item,
-      // Store the computed discounted price in "price" field.
       price: Number(discountedPrice.toFixed(2)),
       rate: Number(rate.toFixed(2)),
       vat: Number(vatAmount.toFixed(2)),
       amount: Number(amount.toFixed(2))
     }
-  }
-
-  // const subtotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
-  // const totalVat = orderItems.reduce((sum, item) => sum + item.vat, 0)
-  // const grandTotal = subtotal + totalVat
-  
+  }  
 
   const subtotal = orderItems.reduce((sum, item) => sum + (item.rate * item.quantity), 0)
 const totalVat = orderItems.reduce((sum, item) => sum + item.vat, 0)
@@ -162,11 +147,8 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
       grandTotal: grandTotal
     }
 
-    // In the payload, you might want to send the discounted price (price field)
-    // along with other calculated values.
     const orderItemsPayload = orderItems.map(item => ({
       productId: item.product?._id,
-      // Use the discounted price in the payload if that’s the intended value.
       price: item.price,
       qty: item.quantity,
       discount: item.discount,
@@ -220,7 +202,9 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
                   required
                 >
                   <option value="">Select Party</option>
-                  {parties.map(party => (
+                  {parties
+                  .filter(party => party.status === 'active') 
+                  .map(party => (
                     <option key={party._id} value={party._id}>
                       {party.partyName}
                     </option>
@@ -236,7 +220,9 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
                   required
                 >
                   <option value="">Select Salesman</option>
-                  {salesmen.map(salesman => (
+                  {salesmen
+                  .filter(salesman=>salesman.status==='active')
+                  .map(salesman => (
                     <option key={salesman._id} value={salesman._id}>
                       {salesman.name}
                     </option>
@@ -268,7 +254,9 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
                   required
                 >
                   <option value="">Select Payment</option>
-                  {paymentModes.map(payment => (
+                  {paymentModes
+                      .filter(payment => payment.status === 'active')
+                  .map(payment => (
                     <option key={payment._id} value={payment._id}>
                       {payment.name}
                     </option>
@@ -311,7 +299,7 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
                 {/* Product Selection */}
                 <div className="col-span-1">
                   <select
-                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500"
                     value={item.product?._id || ''}
                     onChange={(e) => handleProductSelect(index, e.target.value)}
                     required
@@ -429,7 +417,7 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
           </div>
 
           {/* Submit Button */}
-          <div className="mt-6">
+          <div className="text-left mt-6">
             <button
               type="submit"
               className="w-full md:w-auto bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition duration-300 text-lg"

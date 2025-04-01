@@ -1,6 +1,5 @@
 const Party = require('../models/partiesModel')
 
-// Get all parties
 exports.getAllParties = async (req, res) => {
     try {
         const parties = await Party.find().populate('provinceId cityId locationId routeId partyGroupId')
@@ -16,7 +15,6 @@ exports.getAllParties = async (req, res) => {
     }
 }
 
-// Get single party by ID
 exports.getPartyById = async (req, res) => {
     try {
         const party = await Party.findById(req.params.id).populate('provinceId cityId locationId routeId partyGroupId')
@@ -37,7 +35,6 @@ exports.getPartyById = async (req, res) => {
     }
 }
 
-// Create a new party
 exports.createParty = async (req, res) => {
     try {
         const newParty = new Party(req.body)
@@ -54,7 +51,6 @@ exports.createParty = async (req, res) => {
     }
 }
 
-// Update party by ID
 exports.updateParty = async (req, res) => {
     try {
         const updatedParty = await Party.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -75,7 +71,6 @@ exports.updateParty = async (req, res) => {
     }
 }
 
-// Delete party by ID
 exports.deleteParty = async (req, res) => {
     try {
         const deletedParty = await Party.findByIdAndDelete(req.params.id)

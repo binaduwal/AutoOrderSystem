@@ -84,7 +84,9 @@ useEffect(()=>{
 
 
 const renderCategories = (categories, depth = 0) => {
-  return categories.map((category) => (
+  return categories
+  .filter(category=>category.status==='active')
+  .map((category) => (
     <div key={category._id} className="relative group">
       {/* Parent category */}
       <div

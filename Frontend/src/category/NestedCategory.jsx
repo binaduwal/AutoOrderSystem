@@ -58,7 +58,6 @@ const fetchCategories = async () => {
           category_name: formData.name,
           description: formData.description,
           status: formData.status,
-          // parentId: parentIdArg === "new" ? parentId : parentIdArg,
           parentId: parentIdArg === null ? parentId : parentIdArg,
         })
       })
@@ -121,7 +120,7 @@ const fetchCategories = async () => {
           <td className="py-2 px-4 flex space-x-2">
             <button
               onClick={() => setModalParentId(node._id)}
-              className="text-blue-600 hover:text-blue-800"
+              className="text-indigo-600 hover:text-indigo-800"
             >
               <PlusIcon className="w-5 h-5" />
             </button>
@@ -139,13 +138,13 @@ const fetchCategories = async () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 h-screen overflow-y-auto bg-gray-100">
+    <div className="max-w-4xl mx-auto p-4 h-screen overflow-y-auto bg-white-100">
       <h2 className="text-2xl font-bold mb-4">Categories</h2>
       <button
         onClick={() => setModalParentId("new")}
-        className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 flex items-center space-x-2"
+        className="px-4 py-2 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 flex items-center space-x-2"
       >
-        <PlusIcon className="w-5 h-5" /> <span>Add Category</span>
+        <PlusIcon className="w-5 h-5 " /> <span>Add Category</span>
       </button>
 
       <div className="mt-4 p-1 rounded">

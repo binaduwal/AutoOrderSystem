@@ -95,16 +95,17 @@ const CompanyLayout = () => {
              icon: <FaRegUser /> 
         },
         
+        { name: 'Party',
+            path: '/company/party',
+            icon: <IoPeopleOutline /> 
+       },
+
+
         { name: 'Order',
              path: '/company/order',
              icon: <LuNotebookPen /> 
         },
         
-        { name: 'Party',
-             path: '/company/party',
-             icon: <IoPeopleOutline /> 
-        },
-
         { name: 'Sign Out',
             action: handleSignOut,
             icon: <PiSignOut /> 

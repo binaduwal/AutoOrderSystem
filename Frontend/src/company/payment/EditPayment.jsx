@@ -6,8 +6,11 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
         name:paymentData?.name||"",
         status:paymentData?.status==="active"
     })
+      const [error, setError] = useState("")
+    
     const paymentId = paymentData?._id
     
+
     useEffect(() => {
         if (paymentId) {
           const fetchDetails = async () => {
@@ -38,6 +41,7 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
  
     const handleSubmit=async(e)=>{
         e.preventDefault()
+        setError("")
         const payload={
             name:formData.name,
             status:formData.status?'active':'inactive'
@@ -61,7 +65,10 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
                 }
             }
             else{
-            console.error('Failed to update data')
+              const errorData=await response.json()
+              console.log("Failed to create data",errorData)
+              setError(errorData.message || "Failed to create. It may already exist.")
+
        
             }
             } catch (error) {
@@ -101,6 +108,12 @@ Payment Mode <FaAngleRight/>Edit Payment</h2>
         />
         <label htmlFor='active_payment' className='text-gray-700 font-medium pl-2'>Status</label>
     </div>
+
+    {error && (
+          <div className="mb-3 text-red-600">
+            {error}
+          </div>
+        )}
 
     <button
     type='submit'

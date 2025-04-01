@@ -8,6 +8,7 @@ import ActionButtons from '../../components/ActionButtons'
 import EditParty from './EditParty'
 import { IoMdCloseCircleOutline } from "react-icons/io"
 
+
 const PartyTable = () => {
   const [parties, setParties] = useState([])
   const [currentPage, setCurrentPage] = useState(1)

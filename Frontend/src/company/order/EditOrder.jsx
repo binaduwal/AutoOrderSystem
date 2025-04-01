@@ -220,7 +220,9 @@ const transformedItems = orderData.orderItems?.map(item => ({
                 required
               >
                 <option value="">Select Party</option>
-                {parties.map(party => (
+                {parties
+                .filter(party=>party.status==='active')
+                .map(party => (
                   <option key={party._id} value={party._id}>
                     {party.partyName}
                   </option>
@@ -236,7 +238,9 @@ const transformedItems = orderData.orderItems?.map(item => ({
                 required
               >
                 <option value="">Select Salesman</option>
-                {salesmen.map(salesman => (
+                {salesmen
+                .filter(salesman=>salesman.status==='active')
+                .map(salesman => (
                   <option key={salesman._id} value={salesman._id}>
                     {salesman.name}
                   </option>
@@ -268,7 +272,9 @@ const transformedItems = orderData.orderItems?.map(item => ({
                 required
               >
                 <option value="">Select Payment</option>
-                {paymentModes.map(payment => (
+                {paymentModes
+                .filter(payment=>payment.status==='active')
+                .map(payment => (
                   <option key={payment._id} value={payment._id}>
                     {payment.name}
                   </option>
@@ -308,7 +314,7 @@ const transformedItems = orderData.orderItems?.map(item => ({
             <div key={index} className="grid grid-cols-8 gap-4 items-center p-3">
               <div className="col-span-1">
                 <select
-                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500"
                   value={item.product?._id || ''}
                   onChange={(e) => handleProductSelect(index, e.target.value)}
                   required
@@ -418,7 +424,7 @@ const transformedItems = orderData.orderItems?.map(item => ({
           </div>
         </div>
 
-        <div className="text-center mt-6">
+        <div className="text-left mt-6">
           <button
             type="submit"
             className="w-full md:w-auto bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition duration-300 text-lg"

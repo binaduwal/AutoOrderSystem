@@ -153,6 +153,14 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
       status: formData.status ? "active" : "inactive"
     }
 
+    const objectIdFields = ['provinceId', 'cityId', 'locationId', 'routeId', 'partyGroupId'];
+    objectIdFields.forEach(field => {
+      if (updateData[field] === '') {
+        updateData[field] = undefined;
+      }
+    })
+
+    console.log("Sending update request:", updateData)
     try {
       const response = await fetch(`http://localhost:5000/party/edit/${partyId}`, {
         method: 'PUT',
@@ -173,16 +181,16 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-      <h2 className="text-xl font-medium mb-6 flex items-center">
-        Party <FaAngleRight className="mx-1"/> Edit Party
+<div className="max-w-3xl mx-auto bg-white p-4 md:p-8 h-[90vh] overflow-y-auto my-auto">
+<h2 className="text-lg md:text-xl font-medium mb-4 md:mb-6 flex items-center">
+          Party <FaAngleRight className="mx-1"/> Edit Party
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-800">Party Info</h3>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="flex flex-col">
+        <h3 className="text-md md:text-lg font-medium text-gray-800">Party Info</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div className="flex flex-col">
               <label className="block text-gray-700 font-medium">Party Name</label>
               <input
                 type="text"
@@ -213,7 +221,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="flex flex-col">
               <label className="block text-gray-700 font-medium">Email</label>
               <input
@@ -245,7 +253,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div className="flex flex-col">
               <label className="block text-gray-700 font-medium">Province</label>
               <select
@@ -309,9 +317,9 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
           </div>
         </div>
 
-        <div className="flex gap-6">
-          <div className="flex flex-col w-1/9">
-            <label className="block text-gray-700 font-medium">Tax Type</label>
+        <div className="grid grid-cols-1 md:flex gap-4 md:gap-6">
+        <div className="flex flex-col w-full md:w-1/3">
+        <label className="block text-gray-700 font-medium">Tax Type</label>
             <select
               name="vatPan"
               className="w-full p-1 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -340,7 +348,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
             />
           </div>
 
-          <div className="flex flex-col w-5/10">
+          <div className="flex flex-col w-full md:w-1/3">
             <label className="block text-gray-700 font-medium">Status</label>
             <select
               name="status"
@@ -356,7 +364,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="flex flex-col">
             <label className="block text-gray-700 font-medium">Route</label>
             <select
@@ -368,7 +376,9 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
               }
             >
               <option value="">Select Route</option>
-              {routes.map((route) => (
+              {routes
+              .filter(route => route.status === 'active')
+              .map((route) => (
                 <option key={route._id} value={route._id}>
                   {route.routename}
                 </option>
@@ -387,7 +397,9 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
               }
             >
               <option value="">Select Party Group</option>
-              {partygroups.map((partygroup) => (
+              {partygroups
+                .filter(partygroup => partygroup.status === 'active') 
+                .map((partygroup) => (
                 <option key={partygroup._id} value={partygroup._id}>
                   {partygroup.partyGroupName}
                 </option>
@@ -396,7 +408,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="text-center sticky bottom-0 bg-white pt-4 pb-2">
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300"

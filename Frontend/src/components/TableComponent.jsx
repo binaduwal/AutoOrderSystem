@@ -21,12 +21,12 @@ const TableComponent = ({ columns, data, actions }) => {
           {data.map((item, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-4 py-3 text-sm text-black-700">
+                <td key={colIndex} className="px-3 py-3 text-sm text-black-700">
                   {item[col.key]}
                 </td>
               ))}
               {actions && (
-                <td className="px-4 py-3 text-sm text-center text-black-700">
+                <td className="py-3 text-sm text-center text-black-700">
                   {actions(item)}
                 </td>
               )}

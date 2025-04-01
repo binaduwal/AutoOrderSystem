@@ -376,7 +376,9 @@ const CreateParty = ({onCreated}) => {
             
             >
               <option value="">Select Route</option>
-              {routes.map((route)=>(
+              {routes
+              .filter(route => route.status === 'active') 
+              .map((route)=>(
                 <option key={route._id} value={route._id}>
                   {route.routename}
                 </option>
@@ -399,7 +401,10 @@ const CreateParty = ({onCreated}) => {
             
             >
               <option value="">Select Party Group</option>
-              {partygroups.map((partygroup)=>(
+              {partygroups
+              .filter(partygroup => partygroup.status === 'active') 
+
+              .map((partygroup)=>(
                 <option key={partygroup._id} value={partygroup._id}>
                   {partygroup.partyGroupName}
                 </option>

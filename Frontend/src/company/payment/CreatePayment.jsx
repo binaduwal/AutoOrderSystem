@@ -5,8 +5,13 @@ import { FaAngleRight } from "react-icons/fa6";
 const CreatePayment = ({OnCreated}) => {
     const [name,setName]=useState("")
     const [status,setStatus]=useState(true)
+    const [error, setError] = useState("")
+
+
     const handleSubmit= async (e)=>{
         e.preventDefault()
+        setError("")
+
             const paymentData={
                 name,
                 status:status?"active":"inactive"
@@ -30,6 +35,8 @@ const CreatePayment = ({OnCreated}) => {
             else{
                 const errorData=await response.json()
                 console.log("Failed to create data",errorData)
+                setError(errorData.message || "Failed to create. It may already exist.")
+
             }
         } catch (error) {
             console.error("Error while creating unit", error)
@@ -61,6 +68,12 @@ Payment Mode <FaAngleRight/>Create Payment</h2>
         />
         <label htmlFor='active_payment' className='text-gray-700 font-medium pl-2'>Status</label>
     </div>
+
+    {error && (
+          <div className="mb-3 text-red-600">
+            {error}
+          </div>
+        )}
 
     <button
     type='submit'
