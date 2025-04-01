@@ -116,13 +116,13 @@ const CreateCompany = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-semibold text-left mb-6">Create Company</h2>
-      {message && <p className="mb-4 text-red-500">{message}</p>}
+    <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg">
+      <h2 className="text-xl font-semibold text-left mb-3">Create Company</h2>
+      {message && <p className="mb-3 text-red-500">{message}</p>}
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-medium text-black-700">Company Info</h3>
+          <h3 className="text-lg mb-1 font-medium text-black-700">Company Info</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-medium">Company Name</label>
@@ -179,7 +179,7 @@ const CreateCompany = () => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium text-black-700">Tax Info</h3>
+          <h3 className="text-lg mb-1 font-medium text-black-700">Tax Info</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-medium">Tax Number</label>
@@ -209,7 +209,7 @@ const CreateCompany = () => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium text-black-700">Location Info</h3>
+          <h3 className="text-lg mb-1 font-medium text-black-700">Location Info</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-medium">Province</label>
@@ -254,10 +254,10 @@ const CreateCompany = () => {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-gray-700 font-medium">Address</label>
+            <label className="block  text-gray-700 font-medium">Address</label>
             <input
               type="text"
-              name="address"
+              name="address"  
               placeholder="Enter address"
               value={formData.address}
               onChange={handleChange}
@@ -287,7 +287,7 @@ const CreateCompany = () => {
               placeholder="Enter description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 h-24"
+              className="w-full p-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 h-20"
             ></textarea>
           </div>
 
@@ -297,13 +297,13 @@ const CreateCompany = () => {
               name="status"
               checked={formData.status}
               onChange={handleChange}
-              className="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
             />
             <label className="text-gray-700 font-medium">Active</label>
           </div>
         </div>
 
-        <div className="text-center mt-6">
+        <div className="text-center mt-2">
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300"

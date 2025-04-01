@@ -161,8 +161,8 @@ useEffect(() => {
       
     
     return (
-        <div className="max-w-4xl mx-auto bg-white p-4 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-left mb-2">Edit Company</h2>   
+        <div className="max-w-3xl mx-auto bg-white p-4 rounded-lg ">
+          <h2 className="text-xl font-semibold text-left mb-2">Edit Company</h2>   
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2">
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-4">

@@ -10,7 +10,7 @@ const ModalWrapper = ({ isOpen, onClose, children }) => {
         className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
       >
-        <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px]">
+        <div className="relative bg-white p-8 w-[500px]">
           <button
             className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
             onClick={onClose}

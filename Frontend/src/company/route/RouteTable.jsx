@@ -108,7 +108,7 @@ const RouteTable = () => {
           className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
           onClick={() => setShowCreateForm(true)}
         >
-          + Create Route
+          + Add Route
         </button>
       </div>
 

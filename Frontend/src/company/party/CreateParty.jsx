@@ -168,14 +168,14 @@ const CreateParty = ({onCreated}) => {
     }, []);
     
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto bg-white p-8">
       <h2 className="text-xl font-medium mb-6 flex items-center">
         Party <FaAngleRight className="mx-1"/> Create Party
       </h2>
 
       <form  onSubmit={handleSubmit} className="space-y-8">
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-800">Party Info</h3>
+          <h3 className="text-lg font-semibold text-gray-800">Party Info</h3>
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col">
               <label className="block text-gray-700 font-medium">Party Name</label>

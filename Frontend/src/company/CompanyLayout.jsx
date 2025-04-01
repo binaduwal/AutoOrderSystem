@@ -75,11 +75,6 @@ const CompanyLayout = () => {
         
     },
                 
-        { name: 'Sign Out',
-             action: handleSignOut,
-             icon: <PiSignOut /> 
-        },
-        
         { name: 'Payment',
              path: '/company/payment',
              icon: <PiCurrencyCircleDollar /> 
@@ -109,6 +104,12 @@ const CompanyLayout = () => {
              path: '/company/party',
              icon: <IoPeopleOutline /> 
         },
+
+        { name: 'Sign Out',
+            action: handleSignOut,
+            icon: <PiSignOut /> 
+       },
+
         
     ];
 
@@ -124,7 +125,7 @@ const CompanyLayout = () => {
 
             {/* Sidebar */}
             <div
-                className={`fixed md:relative top-0 left-0 w-64 bg-white text-black p-4 shadow-md flex flex-col justify-between transition-transform duration-300 ease-in-out z-50 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+                className={`fixed md:relative top-0 left-0 w-64 bg-white text-black p-4 flex flex-col justify-between transition-transform duration-300 ease-in-out z-50 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
             >
                 <div className="flex justify-between items-center pb-1">
                     <h2 className="text-xl font-bold">Company</h2>

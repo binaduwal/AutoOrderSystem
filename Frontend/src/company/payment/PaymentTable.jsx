@@ -130,7 +130,7 @@ const handleEdit=(unit)=>{
         <button 
           className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
           onClick={()=>setShowCreate(true)}
-        >+Create</button>
+        >+Add Payment Mode</button>
       </div>
       </div>
 

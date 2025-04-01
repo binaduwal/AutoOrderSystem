@@ -88,21 +88,19 @@ const RolesList = () => {
     }
   };
 
-  // Update search term and reset pagination on new search
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
 
-  // Normalize strings by removing spaces and hyphens for flexible matching
-  const normalizeString = (str) => str.toLowerCase().replace(/[-\s]/g, '');
+  const normalizeString = (str) => {
+    return str ? str.toLowerCase().replace(/[-\s]/g, '') : '';
+  }
 
-  // Filter roles based on the normalized 'name' property
   const filteredRoles = roles.filter((role) =>
     normalizeString(role.name).includes(normalizeString(searchTerm))
   );
 
-  // Pagination calculation based on filtered roles
   const indexOfLastRoles = currentPage * itemsPerPage;
   const indexOfFirstRoles = indexOfLastRoles - itemsPerPage;
   const currentRoles = filteredRoles.slice(indexOfFirstRoles, indexOfLastRoles);
@@ -127,7 +125,7 @@ const RolesList = () => {
             className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
             onClick={() => setShowCreateRole(true)}
           >
-            + CREATE ROLE
+            + Create Role
           </button>
         </div>
 

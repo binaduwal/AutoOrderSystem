@@ -1,0 +1,22 @@
+middleware,routes,controller &utils
+
+
+import React from 'react';
+import CreateEntity from './CreateEntity';
+
+const CreateRoute = ({ onCreated }) => {
+  return (
+    <CreateEntity
+      title="Route"
+      apiEndpoint="http://localhost:5000/route/create"
+      nameLabel="Route Name"
+      fieldKey="routename"
+      onCreated={onCreated}
+    />
+  );
+};
+
+export default CreateRoute;
+
+//to make unique
+db.members.createIndex( { "user_id": 1 }, { unique: true } )

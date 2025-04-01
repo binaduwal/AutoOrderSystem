@@ -34,8 +34,8 @@ const CreateUnit = ({onCreated}) => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Create New Unit</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white">
+      <h2 className="text-xl font-semibold mb-6">Create New Unit</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label className="block text-gray-700 font-medium text-left">Name</label>

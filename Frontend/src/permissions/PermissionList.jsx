@@ -128,7 +128,7 @@ const PermissionList = () => {
               className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
               onClick={() => setShowCreatePermission(true)}
             >
-              + CREATE PERMISSION
+              + Create Permission
             </button>
           </div>
 

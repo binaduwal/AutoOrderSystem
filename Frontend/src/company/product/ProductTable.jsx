@@ -160,7 +160,7 @@ const handleUpdated=async()=>{
                 className="bg-indigo-700 text-white p-2 mb-3 rounded-lg hover:bg-indigo-500 transition duration-400"
                 onClick={() => setShowCreate(true)}
               >
-                + CREATE PRODUCT
+                + Create Product
               </button>
               </div>
 
@@ -168,29 +168,20 @@ const handleUpdated=async()=>{
               <table className="w-full border-collapse border border-gray-50">
                 <thead className=" bg-gray-50">
                   <tr>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->SN</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Image</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Name</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Product Code</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Category</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Unit</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->VATable</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Selling Price</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Discount</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Status</th>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase"
->Actions</th>
-                  </tr>
+              <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">SN</th>
+
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Image</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Name</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Product Code</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Category</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Unit</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">VATable</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Selling Price</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Discount</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Status</th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-black-700 uppercase">Actions</th>
+
+              </tr>
                 </thead>
                 <tbody>
                 {currentData.length > 0 ? (
@@ -214,7 +205,8 @@ const handleUpdated=async()=>{
                               <span className="text-gray-600 text-sm">N/A</span>
                             </div>
                           )}
-                      </td>                        <td className=" p-2">{product.name}</td>
+                      </td>
+                        <td className="px-4 py-3 text-sm text-black-700">{product.name}</td>
                         <td className="px-4 py-3 text-sm text-black-700">{product.productCode}</td>
                         <td className="px-4 py-3 text-sm text-black-700">
                           {categories.find(category=>category._id===product.categoryId)?.category_name||"N/A"}
@@ -269,7 +261,8 @@ const handleUpdated=async()=>{
     
     
             {showCreate && (
-              <div className="fixed inset-0 flex justify-center items-center z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+              <div className="fixed inset-0 flex justify-center items-center z-50"
+               style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
                 <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
                   <button
                     className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
@@ -285,7 +278,8 @@ const handleUpdated=async()=>{
             )}
     
             {showEdit && (
-              <div className="fixed inset-0 flex justify-center items-center z-50">
+              <div className="fixed inset-0 flex justify-center items-center z-50" 
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
                 <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
                   <button
                     className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"

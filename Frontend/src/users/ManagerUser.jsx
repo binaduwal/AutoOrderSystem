@@ -141,10 +141,10 @@ const ManageUser = () => {
       <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
       
       <button
-        className="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300 mb-6"
+        className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
         onClick={() => navigate('/admin/user')}
       >
-        + CREATE USER
+        + Create User
       </button>
 </div>
 

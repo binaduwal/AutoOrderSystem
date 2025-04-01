@@ -126,10 +126,10 @@ const totalPages = Math.ceil(filtered.length / itemsPerPage)
         <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 
         <button
-            className="bg-indigo-700 text-white p-2 mb-3 rounded-lg hover:bg-indigo-500 transition duration-400"
+            className="bg-indigo-600 text-white p-2 mb-3 rounded-2xl hover:bg-indigo-500 transition duration-400"
             onClick={() => setShowCreate(true)}
           >
-            + CREATE UNIT
+            + Add Unit
           </button>
           </div>
 

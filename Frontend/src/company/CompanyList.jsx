@@ -148,7 +148,7 @@ const CompanyList = () => {
         className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
         onClick={() => navigate('/admin/create-company')}
       >
-        + CREATE Company
+        + Create Company
       </button>
 </div>
     <TableComponent columns={columns} 
