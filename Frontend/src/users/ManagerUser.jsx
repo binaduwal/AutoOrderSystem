@@ -24,10 +24,14 @@ const ManageUser = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/admin/all');
-      if (!response.ok) throw new Error('Failed to fetch data');
+      const token = sessionStorage.getItem('token')
+      const response = await fetch('http://localhost:5000/admin/all', {
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        }
+      });      if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
-      setUsers(data?.admins || []);
+      setUsers(data?.users || []);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -40,7 +44,7 @@ const ManageUser = () => {
   const columns = [
     { label: 'SN', key: 'serialNumber' },
     { label: 'UserName', key: 'username' },
-    { label: 'Name', key: 'email' },
+    { label: 'Email', key: 'email' },
     { label: 'Role', key: 'role' },
     { label: 'Status', key: 'status' },
   ]
@@ -52,19 +56,18 @@ const ManageUser = () => {
 
   const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '')
   const filtered = users.filter((sp) =>
-    normalizeString(sp.UserName || '').includes(normalizeString(searchTerm))
+    normalizeString(sp.username || '').includes(normalizeString(searchTerm))
   )
 
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentUsers = filtered.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Delete functionality
   const confirmDelete = (user) => {
     setUserToDelete(user);
     setShowDeleteConfirmation(true);
@@ -89,12 +92,15 @@ const ManageUser = () => {
     }
   };
 
+  const handleEdit = (user) => {
+    setShowEditUser(user._id);
+  };
 
   const handleUserUpdated = (updatedUser) => {
     setUsers((prevUsers) =>
       prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
     );
-    setShowEditUser(null);
+    setShowEditUser(true);
   };
 
   const handleChangePassword = (user) => {

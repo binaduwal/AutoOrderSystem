@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/userModel')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
+const authMiddleware=require('../middlewares/authMiddleware')
 
 
 router.post('/create', async (req, res) => {
@@ -38,7 +39,7 @@ router.post('/create', async (req, res) => {
   }
 });
 
-router.get('/all', async (req, res) => {
+router.get('/all',authMiddleware, async (req, res) => {
     try {
       const users = await User.find({ username: { $ne: 'superadmin' } });
       res.status(200).json({ users });  

@@ -14,17 +14,17 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
     if (!userId) return;
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/admin/edit/${userId}`);
+        const response = await fetch(`http://localhost:5000/admin/${userId}`);
         if (response.ok) {
           const data = await response.json();
-          setFormData({
+          setFormData(
+            {
             username: data.username || '',
             email: data.email || '',
-            contactNo: data.contactNo || '', 
-            address: data.address || '',     
             status: data.status === 'active',
             role: data.role || 'salesperson'
-          });
+          }
+        );
         } else {
           alert('Failed to fetch user details.');
         }
@@ -63,7 +63,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
       });
       if (response.ok) {
         const result = await response.json();
-        const updatedUser = result.admin; 
+        const updatedUser = result.user; 
          alert('User updated successfully!');
         if (onUserUpdated) {
           onUserUpdated(updatedUser);
@@ -86,7 +86,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
       <h1 className="text-xl font-bold mb-4 text-black">Edit User</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="username" className="block text-gray-700 font-medium mb-1">User Name</label>
+          <label htmlFor="username" className="block text-gray-700 font-medium mb-1">Username</label>
           <input
             type="text"
             id="username"
@@ -111,7 +111,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
           />
         </div>
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="contactNo" className="block text-gray-700 font-medium mb-1">Contact Number</label>
           <input
             type="text"
@@ -122,9 +122,9 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
             placeholder="Contact Number"
             className="w-full px-3 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring"
           />
-        </div>
+        </div> */}
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="address" className="block text-gray-700 font-medium mb-1">Address</label>
           <input
             type="text"
@@ -135,7 +135,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
             placeholder="Address"
             className="w-full px-3 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring"
           />
-        </div>
+        </div> */}
 
         <div className="mb-3 flex items-center">
           <input
