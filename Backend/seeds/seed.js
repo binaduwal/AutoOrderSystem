@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const Admin = require('../models/AdminModel')
+const Admin = require('../models/userModel')
+
 const connectDB=require('../database/db')
 
 const seedSuperAdmin = async () => {

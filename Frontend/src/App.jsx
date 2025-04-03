@@ -31,6 +31,7 @@ import Salesperson from './company/salesperson/SalespersonTable'
 import Order from './company/order/OrderTable'
 import Party from './company/party/PartyTable'
 import EditOrder from './company/order/EditOrder'
+import UserDashboard from './Pages/UserDashboard'
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<SignIn/>} />
          <Route path="/signup" element={<SignUp />} />
          <Route path="/company/login" element={<LoginForm />} />
+         <Route path="/user" element={<UserDashboard />} />
 
 
       <Route element={<PrivateRoute />}>

@@ -4,7 +4,7 @@ const cors = require('cors')
 const connection = require('./database/db')
 const permission = require('./routes/permissionRoutes') 
 // const authRoute=require('./routes/authRoutes')
-const Login=require('./routes/loginTest')
+// const Login=require('./routes/loginTest')
 const role = require('./routes/rolesRoute')
 const adminCreateUser=require('./routes/adminCreateUser')
 const company=require('./routes/companyRoute')
@@ -32,7 +32,7 @@ app.use(cors({
   methods: ["GET", "POST","DELETE","PUT"]
 }))
 
-app.use('/', Login)
+// app.use('/', Login)
 // app.use('/auth',authRoute)
 
 app.use('/permission', permission) 

@@ -12,7 +12,7 @@ const companySchema = new mongoose.Schema({
     province: { type: String, required: true },
     address: { type: String, required: true },
     password: { type: String, required: true },
-    description: { type: String },
+    description: { type: String }
 }, { timestamps: true });
 
 const CompanyModel=mongoose.model("CompanyModel", companySchema);

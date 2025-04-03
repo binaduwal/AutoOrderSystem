@@ -1,7 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const Admin = require('../models/AdminModel')
+const User = require('../models/userModel')
 const router = express.Router()
+const jwt = require('jsonwebtoken')
+
 
 router.post('/create', async (req, res) => {
   const { username, email, password, confirmPassword, status, role } = req.body;
@@ -10,7 +12,7 @@ router.post('/create', async (req, res) => {
     return res.status(400).json({ message: 'Passwords do not match' });
   }
 
-  const existingUsername = await Admin.findOne({ username });
+  const existingUsername = await User.findOne({ username });
 
 
   if (existingUsername) {
@@ -20,26 +22,26 @@ router.post('/create', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newAdmin = new Admin({
+    const newUser = new User({
       username,
       email,
       password: hashedPassword,
       status: status || 'active',  
       role: role || 'salesperson',     });
 
-    await newAdmin.save();
+    await newUser.save();
 
-    res.status(201).json({ message: 'created successfully', admin: newAdmin });
+    res.status(201).json({ message: 'created successfully', User: newUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-router.get('/admins', async (req, res) => {
+router.get('/all', async (req, res) => {
     try {
-      const admins = await Admin.find(); 
-      res.status(200).json({ admins });  
+      const users = await User.find({ username: { $ne: 'superadmin' } });
+      res.status(200).json({ users });  
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
@@ -48,21 +50,21 @@ router.get('/admins', async (req, res) => {
 
   router.delete('/delete/:id', async (req, res) => {
     try {
-      const admin = await Admin.findByIdAndDelete(req.params.id);
-      if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' });
+      const user = await User.findByIdAndDelete(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: 'Not found' });
       }
-      res.status(200).json({ message: 'Admin deleted successfully' });
+      res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
     }
   });
 
-  router.get("/edit/:id", async (req, res) => {
+  router.get("/:id", async (req, res) => {
     const userId = req.params.id;
     try {
-      const user = await Admin.findById(userId);
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "Not found" });
       }
@@ -78,13 +80,13 @@ router.get('/admins', async (req, res) => {
     const {email, contactNo, address, status, role} = req.body;
     
     try {
-      const currentAdmin = await Admin.findById(req.params.id);
-      if (!currentAdmin) {
-        return res.status(404).json({ message: 'Admin not found' });
+      const currentUser = await User.findById(req.params.id);
+      if (!currentUser) {
+        return res.status(404).json({ message: 'User not found' });
       }
   
       const updateData = {
-        username: currentAdmin.username, 
+        username: currentUser.username, 
         email,       
         contactNo,
         address,
@@ -93,9 +95,9 @@ router.get('/admins', async (req, res) => {
       };
   
   
-      const updatedAdmin = await Admin.findByIdAndUpdate(req.params.id, updateData, 
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, 
         { new: true });
-      res.status(200).json({ message: 'Admin updated successfully', admin: updatedAdmin });
+      res.status(200).json({ message: 'updated successfully', user: updatedUser });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
@@ -113,14 +115,14 @@ router.put('/update-password/:id', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    const updatedAdmin = await Admin.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { password: hashedPassword },
       { new: true }
     );
 
-    if (!updatedAdmin) {
-      return res.status(404).json({ message: 'Admin not found' });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Not found' });
     }
 
     res.status(200).json({ message: 'Password updated successfully' });
@@ -129,7 +131,34 @@ router.put('/update-password/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-  
-    
+   
+
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body
+
+    const user = await User.findOne({ username })
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' })
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password)
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: 'Incorrect password.' })
+    }
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    )
+
+    res.json({ message: "Login successful", token, role: user.role })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 
 module.exports = router;
