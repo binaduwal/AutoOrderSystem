@@ -19,6 +19,9 @@ const CreateUser = () => {
       alert('Passwords do not match');
       return;
     }
+
+    const actualRole = role === 'superadmin' ? 'admin' : role;
+
   
     const userData = {
       username,
@@ -26,7 +29,7 @@ const CreateUser = () => {
       password,
       confirmPassword,
       status: status ? 'active' : 'inactive',
-      role
+      role:actualRole
     };
   
     try {
@@ -134,14 +137,14 @@ const CreateUser = () => {
         <div className="mb-4 flex items-center">
           <input
             type="radio"
-            id="super_admin"
+            id="superadmin"
             name="role"
             value="superadmin"
             checked={role === 'superadmin'}
             onChange={(e) => setRole(e.target.value)}
             className="mr-2"
           />
-          <label htmlFor="super_admin" className="text-black-700">
+          <label htmlFor="superadmin" className="text-black-700">
             Super Administrator
           </label>
         </div>

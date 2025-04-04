@@ -33,7 +33,7 @@ const SignIn = () => {
         sessionStorage.setItem("role", data.role); 
         console.log("Returned data:", data);
         alert("Login successful!");
-        if (data.role === 'superadmin') {
+        if (data.role === 'superadmin'|| data.role==='admin') {
           navigate('/admin/dashboard');
         } else if (data.role === 'salesperson') {
           navigate('/user');

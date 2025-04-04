@@ -67,7 +67,7 @@ const CreateRole = ({onRoleCreated }) => {
   }
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
+    <div className="p-4 bg-white">
       <h1 className="text-xl font-semibold text-indigo-600 mb-4">
         Create New Role
       </h1>

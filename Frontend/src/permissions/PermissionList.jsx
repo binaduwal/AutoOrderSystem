@@ -19,10 +19,10 @@ const PermissionList = () => {
   const [permissionToDelete, setPermissionToDelete] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
 
-
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5 
+
+  const userRole = sessionStorage.getItem("role")
 
   useEffect(() => {
     fetchPermissions()
@@ -113,6 +113,11 @@ const PermissionList = () => {
     setCurrentPage(pageNumber)
   }
 
+  if (userRole !== "admin") {
+    columns.push({ label: "Actions", key: "actions" });
+  }
+
+
   return (
 <div className='bg-white min-h-screen w-full relative'>
 <div className='w-full p-2 bg-white rounded-lg'>
@@ -124,37 +129,40 @@ const PermissionList = () => {
           <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 
 
+
+          {userRole !== "admin" && (
             <button
               className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
               onClick={() => setShowCreatePermission(true)}
             >
               + Create Permission
             </button>
+          )}
+
           </div>
 
           <div className="overflow-x-auto">
           </div>
         </div>
 
-
                 <TableComponent columns={columns} 
-                data={currentPermissions.map((company, index) => ({
-                  ...company,
-                  serialNumber: (currentPage - 1) * itemsPerPage + index + 1
+                data={currentPermissions.map((perm, index) => ({
+                  ...perm,
+                  serialNumber: (currentPage - 1) * itemsPerPage + index + 1,
+                  actions:
+                  userRole !== "admin" ? (
+                    <ActionButtons item={perm} onEdit={handleEdit} onDelete={confirmDelete} />
+                  ) : null
+    
                 }))} 
-                actions={(permission) => (
-                  <ActionButtons 
-                    item={permission}
-                    onEdit={handleEdit} 
-                    onDelete={confirmDelete}
-                  />
-                )}
+                
                      />
             
     
 
       {showCreatePermission && (
-        <div className="fixed inset-0 flex justify-center items-center  z-50" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} >
+        <div className="fixed inset-0 flex justify-center items-center  z-50"
+         style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} >
           <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[500px] border border-gray-200">
             <button
               className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
@@ -193,8 +201,8 @@ const PermissionList = () => {
              <IoMdCloseCircleOutline className='text-2xl'/>
              </button>
             <EditPermission
-              permission={editPermissionData}
-              onClose={() => setShowEditPermission(false)}
+            DataId={editPermissionData?._id} 
+             onClose={() => setShowEditPermission(false)}
               onPermissionUpdated={handlePermissionUpdated}
             />
           </div>

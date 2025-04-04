@@ -181,7 +181,8 @@ const ManageUser = () => {
     <TableComponent columns={columns} 
     data={currentUsers.map((user, index) => ({
       ...user,
-      serialNumber: (currentPage - 1) * itemsPerPage + index + 1
+      serialNumber: (currentPage - 1) * itemsPerPage + index + 1,
+      role: user.role === 'admin' ? 'superadmin' : user.role
     }))} 
     actions={actions}
      />

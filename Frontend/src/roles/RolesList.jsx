@@ -8,7 +8,6 @@ import ActionButtons from '../components/ActionButtons'
 import Pagination from '../components/Pagination'
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
 
-
 const RolesList = () => {
   const [showCreateRole, setShowCreateRole] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -19,6 +18,8 @@ const RolesList = () => {
   const itemsPerPage = 5;
   const [editRoleData, setEditRoleData] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const userRole = sessionStorage.getItem("role"); 
 
   useEffect(() => {
     fetchRole();
@@ -108,7 +109,11 @@ const RolesList = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
+  }
+
+  if (userRole !== "admin") {
+    columns.push({ label: "Actions", key: "actions" });
+  }
 
   return (
 <div className='bg-white min-h-screen w-full relative'>
@@ -121,29 +126,29 @@ const RolesList = () => {
         <div className="flex justify-between items-center mb-2">
         <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 
+        {userRole !== "admin" && (
           <button
             className="bg-indigo-600 text-white p-2 rounded-2xl hover:bg-indigo-700 transition duration-300 mb-6"
             onClick={() => setShowCreateRole(true)}
           >
             + Create Role
           </button>
+        )}
         </div>
 
         <div className="overflow-x-auto">
         </div>
 
             <TableComponent columns={columns} 
-            data={currentRoles.map((company, index) => ({
-              ...company,
-              serialNumber: (currentPage - 1) * itemsPerPage + index + 1
+            data={currentRoles.map((role, index) => ({
+              ...role,
+              serialNumber: (currentPage - 1) * itemsPerPage + index + 1,
+              actions:
+              userRole !== "admin" ? (
+                <ActionButtons item={role} onEdit={handleEdit} onDelete={confirmDelete} />
+              ) : null
+            
             }))} 
-            actions={(role) => (
-              <ActionButtons 
-                item={role}
-                onEdit={handleEdit} 
-                onDelete={confirmDelete}
-              />
-            )}
                  />
         
         <Pagination
@@ -174,8 +179,10 @@ const RolesList = () => {
 
 
         {showEditRole && (
-          <div className="fixed inset-0 flex justify-center items-center z-50">
-            <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
+          <div className="fixed inset-0 flex justify-center items-center z-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} >
+
+           <div className="relative bg-white p-8 rounded-xl shadow-2xl w-[700px] border border-gray-200">
               <button
                 className="absolute top-4 right-3 text-gray-600 hover:text-gray-800"
                 onClick={() => setShowEditRole(false)}

@@ -42,7 +42,7 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
   }
 
   return (
-    <div className="p-7 bg-white shadow-lg rounded-lg w-full max-w-md ">
+    <div className="p-7 bg-white w-full max-w-md ">
       <h1 className="text-xl font-semibold text-left text-indigo-600 mb-4">
         Create New Permission
       </h1>
