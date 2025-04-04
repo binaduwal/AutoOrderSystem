@@ -1,93 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 
-const EditRole = ({ onRoleUpdated }) => {
-  const { id } = useParams();
-  const [name, setName] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [description, setDescription] = useState("");
-  const [permissions, setPermissions] = useState([]);
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
+const EditRole = ({ roleData, onRoleUpdated }) => {
+  const { id: urlId } = useParams()
+  const roleId = roleData ? roleData._id : urlId
+
+  const [name, setName] = useState("")
+  const [displayName, setDisplayName] = useState("")
+  const [description, setDescription] = useState("")
+  const [permissions, setPermissions] = useState([])
+  const [selectedPermissions, setSelectedPermissions] = useState([])
 
   useEffect(() => {
-    const fetchRoleDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/role/${id}`);
-        if (response.ok) {
-          const role = await response.json();
-          setName(role.name);
-          setDisplayName(role.display_name);
-          setDescription(role.description);
-          setSelectedPermissions(role.permissions.map(p => p._id));
+    if (roleData) {
+      setName(roleData.name)
+      setDisplayName(roleData.display_name)
+      setDescription(roleData.description)
+      setSelectedPermissions(roleData.permissions.map(p => (p._id ? p._id : p)))
+    } else if (roleId) {
+      const fetchRoleDetails = async () => {
+        try {
+          const response = await fetch(`http://localhost:5000/role/${roleId}`)
+          if (response.ok) {
+            const role = await response.json()
+            setName(role.name)
+            setDisplayName(role.display_name)
+            setDescription(role.description)
+            setSelectedPermissions(role.permissions.map(p => (p._id ? p._id : p)))
+          } else {
+            console.error("Failed to fetch role details, status:", response.status)
+          }
+        } catch (error) {
+          console.error("Error fetching role details:", error)
         }
-      } catch (error) {
-        console.error("Error fetching role details:", error);
       }
-    };
+      fetchRoleDetails()
+    } else {
+      console.error("No role ID provided")
+    }
+  }, [roleData, roleId])
 
+  useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/permission/all");
+        const response = await fetch("http://localhost:5000/permission/all")
         if (response.ok) {
-          const data = await response.json();
-          setPermissions(data);
+          const data = await response.json()
+          setPermissions(data)
+        } else {
+          console.error("Failed to fetch permissions, status:", response.status)
         }
       } catch (error) {
-        console.error("Error fetching permissions:", error);
+        console.error("Error fetching permissions:", error)
       }
-    };
+    }
 
-    fetchRoleDetails();
-    fetchPermissions();
-  }, []);
+    fetchPermissions()
+  }, [])
 
   const handleCheckboxChange = (permissionId) => {
     setSelectedPermissions(prev =>
       prev.includes(permissionId)
         ? prev.filter(id => id !== permissionId)
         : [...prev, permissionId]
-    );
-  };
+    )
+  }
 
   const handleDisplayNameChange = (e) => {
-    const updatedDisplayName = e.target.value;
-    setDisplayName(updatedDisplayName);
-    setName(updatedDisplayName.replace(/\s+/g, "-").toLowerCase());
-  };
+    const updatedDisplayName = e.target.value
+    setDisplayName(updatedDisplayName)
+    setName(updatedDisplayName.replace(/\s+/g, "-").toLowerCase())
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const roleData = {
+    e.preventDefault()
+
+    const roleDataToUpdate = {
       name,
       display_name: displayName,
       description,
       permissions: selectedPermissions,
-    };
+    }
 
     try {
-      const response = await fetch(`http://localhost:5000/role/edit/${id}`, {
+      const response = await fetch(`http://localhost:5000/role/edit/${roleId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(roleData),
-      });
+        body: JSON.stringify(roleDataToUpdate),
+      })
 
       if (response.ok) {
-        const updatedRole = await response.json();
-        console.log("Role Updated", updatedRole);
-        onRoleUpdated(updatedRole);
+        const result = await response.json()
+        console.log("Role Updated", result)
+        onRoleUpdated(result.updatedRole || result)
       } else {
-        console.log("Failed to update role");
+        const errorResult = await response.json()
+        console.error("Failed to update role:", errorResult)
       }
     } catch (error) {
-      console.error("Error updating role:", error);
+      console.error("Error updating role:", error)
     }
-  };
+  }
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
-      <h1 className="text-xl font-semibold text-indigo-600 mb-4">
-        Edit Role
-      </h1>
+    <div className="p-4 bg-white">
+      <h1 className="text-xl font-semibold text-indigo-600 mb-4">Edit Role</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-700 font-medium text-left">
@@ -147,7 +164,8 @@ const EditRole = ({ onRoleUpdated }) => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default EditRole;
+export default EditRole
+

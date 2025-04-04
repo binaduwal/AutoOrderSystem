@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Role = require('../models/RoleModel')
 const Permission = require('../models/permissionModel')
 
@@ -37,16 +38,32 @@ exports.getAllRoles = async (req, res) => {
   }
 }
 
+exports.getRoleById = async (req, res) => {
+  try {
+    console.log("Fetching role ID:", req.params.id) 
+    const role = await Role.findById(req.params.id).populate('permissions')
+
+    if (!role) {
+      console.log("Role not found for ID:", req.params.id) 
+      return res.status(404).json({ error: 'Role not found' })
+    }
+    res.json(role)
+  } catch (error) {
+    console.error("Error fetching role:", error) 
+    res.status(500).json({ error: 'Server error' })
+  }
+}
+
 exports.editRole = async (req, res) => {
   try {
-    const { id } = req.params
-    const { name, display_name, description, permissions } = req.body
-  
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid ID format' })
+    }
     const editedRole = await Role.findByIdAndUpdate(
-      id,
-      { name, display_name, description, permissions },
+      req.params.id,
+      req.body,
       { new: true }
-    )
+    ).populate('permissions')
   
     if (!editedRole) {
       return res.status(404).json({ error: 'Role not found' })
@@ -61,7 +78,6 @@ exports.editRole = async (req, res) => {
     res.status(500).json({ error: 'Server Error', message: error.message })
   }
 }
-
 exports.deleteRole = async (req, res) => {
   try {
     const { id } = req.params
