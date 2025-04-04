@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import BASE_URL from '../config'
 
 const EditRole = ({ roleData, onRoleUpdated }) => {
   const { id: urlId } = useParams()
@@ -20,7 +21,7 @@ const EditRole = ({ roleData, onRoleUpdated }) => {
     } else if (roleId) {
       const fetchRoleDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/role/${roleId}`)
+          const response = await fetch(`${BASE_URL}/role/${roleId}`)
           if (response.ok) {
             const role = await response.json()
             setName(role.name)
@@ -43,7 +44,7 @@ const EditRole = ({ roleData, onRoleUpdated }) => {
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/permission/all")
+        const response = await fetch(`${BASE_URL}/permission/all`)
         if (response.ok) {
           const data = await response.json()
           setPermissions(data)
@@ -83,7 +84,7 @@ const EditRole = ({ roleData, onRoleUpdated }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/role/edit/${roleId}`, {
+      const response = await fetch(`${BASE_URL}/role/edit/${roleId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(roleDataToUpdate),

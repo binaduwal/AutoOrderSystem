@@ -1,4 +1,5 @@
 import React, { useEffect, useState} from "react"
+import BASE_URL from '../../config'
 
 const CreateProduct = ({onCreated,onClose}) => {
 const [units,setUnits]=useState([])
@@ -25,7 +26,7 @@ const [selectedCategoryName, setSelectedCategoryName] = useState("");
 useEffect(() => {
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/category/all')
+      const response = await fetch(`${BASE_URL}/category/all`)
       const data = await response.json()
       const tree = buildTree(data)
       setCategories(tree)
@@ -63,7 +64,7 @@ const buildTree = (categories, parentId = null) => {
 
 const fetchUnits=async()=>{
   try{
-    const response=await fetch('http://localhost:5000/unit/all')
+    const response=await fetch(`${BASE_URL}/unit/all`)
     const data=await response.json()
     if (Array.isArray(data)){
       setUnits(data)
@@ -169,7 +170,7 @@ const updatedData = {
 }
 
 try{
-  const response=await fetch("http://localhost:5000/product/create",{
+  const response=await fetch(`${BASE_URL}/product/create`,{
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -218,7 +219,7 @@ const handleUnitChange = (e) => {
 const handleFileUpload=async(file)=>{
 const formData=new FormData()
 formData.append("file-upload",file)
-const res=await fetch('http://localhost:5000/product/upload',{
+const res=await fetch(`${BASE_URL}/product/upload`,{
   method:'POST',
   body:formData
   })

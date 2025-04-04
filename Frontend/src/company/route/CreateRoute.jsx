@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6";
+import BASE_URL from '../../config'
 
 
 const CreateRoute = ({onCreated}) => {
@@ -13,7 +14,7 @@ const CreateRoute = ({onCreated}) => {
             }
       
         try {
-            const response=await fetch("http://localhost:5000/route/create",{
+            const response=await fetch(`${BASE_URL}/route/create`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",

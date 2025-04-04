@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useNavigate } from 'react-router-dom'
+import BASE_URL from '../../config'
 
 const CreateOrder = () => {
   const navigate = useNavigate()
@@ -36,10 +37,10 @@ const CreateOrder = () => {
     const fetchData = async () => {
       try {
         const [partiesRes, salesmenRes, paymentRes, productsRes] = await Promise.all([
-          fetch('http://localhost:5000/party/all'),
-          fetch('http://localhost:5000/salesperson/all'),
-          fetch('http://localhost:5000/paymentmode/all'),
-          fetch('http://localhost:5000/product/all')
+          fetch(`${BASE_URL}/party/all`),
+          fetch(`${BASE_URL}/salesperson/all`),
+          fetch(`${BASE_URL}/paymentmode/all`),
+          fetch(`${BASE_URL}/product/all`)
         ])
 
         const partiesData = await partiesRes.json()
@@ -158,7 +159,7 @@ const grandTotal = orderItems.reduce((sum, item) => sum + item.amount, 0)
     }))
     
     try {
-      const response = await fetch('http://localhost:5000/order/create', {
+      const response = await fetch(`${BASE_URL}/order/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

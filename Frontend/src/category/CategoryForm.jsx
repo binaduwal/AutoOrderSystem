@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import BASE_URL from '../config'
 
 const CategoryForm = ({ onClose,onCategoryCreated }) => {
   const [name, setName] = useState("")
@@ -30,7 +31,7 @@ const CategoryForm = ({ onClose,onCategoryCreated }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/category/create", {
+      const response = await fetch(`${BASE_URL}/category/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

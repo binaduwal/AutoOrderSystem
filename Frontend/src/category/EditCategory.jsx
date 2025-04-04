@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import BASE_URL from '../config'
 
 const EditCategory = ({ category, onClose, onUpdated }) => {
   const [name, setName] = useState('')
@@ -16,7 +17,7 @@ const EditCategory = ({ category, onClose, onUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch(`http://localhost:5000/category/edit/${category._id}`, {
+      const response = await fetch(`${BASE_URL}/category/edit/${category._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

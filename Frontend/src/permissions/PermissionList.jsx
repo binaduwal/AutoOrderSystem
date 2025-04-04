@@ -7,6 +7,7 @@ import TableComponent from '../components/TableComponent'
 import ActionButtons from '../components/ActionButtons'
 import Pagination from '../components/Pagination'
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
+import BASE_URL from '../config'
 
 
 
@@ -38,7 +39,7 @@ const PermissionList = () => {
 
   const fetchPermissions = async () => {
     try {
-      const response = await fetch("http://localhost:5000/permission/all")
+      const response = await fetch(`${BASE_URL}/permission/all`)
       if (response.ok) {
         const data = await response.json()
         setPermissions(data)
@@ -64,7 +65,7 @@ const PermissionList = () => {
   const handleDelete = async () => {
     if (permissionToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/permission/delete/${permissionToDelete._id}`, {
+        const response = await fetch(`${BASE_URL}/permission/delete/${permissionToDelete._id}`, {
           method: 'DELETE',
         })
         if (response.ok) {

@@ -7,6 +7,7 @@ import EditRouteModal from '../../components/EditRouteModal';
 import ActionButtons from '../../components/ActionButtons';
 import CreateEntityModal from '../../components/CreateEntityModal';
 import CreateRoute from './CreateRoute';
+import BASE_URL from '../../config'
 
 const RouteTable = () => {
   const [routes, setRoutes] = useState([]);
@@ -25,7 +26,7 @@ const RouteTable = () => {
 
   const fetchDetails = async () => {
     try {
-      const response = await fetch('http://localhost:5000/route/all');
+      const response = await fetch(`${BASE_URL}/route/all`);
       if (response.ok) {
         const data = await response.json();
         setRoutes(Array.isArray(data) ? data.filter(route => route && route._id) : []);
@@ -74,7 +75,7 @@ const RouteTable = () => {
   const handleDelete = async () => {
     if (deleteData) {
       try {
-        const response = await fetch(`http://localhost:5000/route/delete/${deleteData._id}`, {
+        const response = await fetch(`${BASE_URL}/route/delete/${deleteData._id}`, {
           method: 'DELETE',
         });
         if (response.ok) {

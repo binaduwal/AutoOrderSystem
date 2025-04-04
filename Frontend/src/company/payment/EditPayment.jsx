@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
+import BASE_URL from '../../config'
 
 const EditPayment = ({paymentData,onUpdated,onClose}) => {
     const [formData,setFormData]=useState({
@@ -16,7 +17,7 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
           const fetchDetails = async () => {
             try {
               console.log("Fetching details:", paymentId)
-              const response = await fetch(`http://localhost:5000/paymentmode/${paymentId}`)
+              const response = await fetch(`${BASE_URL}/paymentmode/${paymentId}`)
       
               if (response.ok) {
                 const data = await response.json()
@@ -48,7 +49,7 @@ const EditPayment = ({paymentData,onUpdated,onClose}) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/paymentmode/edit/${paymentId}`, {
+            const response = await fetch(`${BASE_URL}/paymentmode/edit/${paymentId}`, {
             method:'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
+import BASE_URL from '../../config'
 
 const CreatePartyGroup = ({onCreated}) => {
     const [name,setName]=useState("")
@@ -13,7 +14,7 @@ const CreatePartyGroup = ({onCreated}) => {
                 }
           
             try {
-                const response=await fetch("http://localhost:5000/partygroup/create",{
+                const response=await fetch(`${BASE_URL}/partygroup/create`,{
                     method:"POST",
                     headers:{
                         "Content-Type":"application/json",
@@ -43,7 +44,7 @@ const CreatePartyGroup = ({onCreated}) => {
   return (
 <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg'>
 <h2 className='text-md font-semibold flex items-center mb-6'>
-Payment Group<FaAngleRight/>Create Payment Group</h2>
+Party Group<FaAngleRight/>Create Party Group</h2>
 <form onSubmit={handleSubmit}
 >
     <div>

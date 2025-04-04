@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6";
+import BASE_URL from '../../config'
 
 const EditPartyGroup= ({entityData,onUpdated,onClose}) => {
     const [formData,setFormData]=useState({
@@ -15,7 +16,7 @@ const EditPartyGroup= ({entityData,onUpdated,onClose}) => {
             const fetchDetails= async()=>{
                 try {
     console.log("Fetching details:", partyGroupId)
-    const response = await fetch(`http://localhost:5000/partygroup/${partyGroupId}`)
+    const response = await fetch(`${BASE_URL}/partygroup/${partyGroupId}`)
 
     if(response.ok){
         const data=await response.json()
@@ -47,7 +48,7 @@ const EditPartyGroup= ({entityData,onUpdated,onClose}) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/partygroup/edit/${partyGroupId}`, {
+            const response = await fetch(`${BASE_URL}/partygroup/edit/${partyGroupId}`, {
             method:'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

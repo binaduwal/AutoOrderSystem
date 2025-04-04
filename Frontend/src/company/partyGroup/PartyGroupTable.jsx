@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import TableComponent from '../../components/TableComponent'
 import Pagination from '../../components/Pagination'
-import { CiSearch } from "react-icons/ci"
 import CreateEntityModal from '../../components/CreateEntityModal'
 import CreatePartyGroup from './CreatePartyGroup'
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
@@ -9,6 +8,7 @@ import ActionButtons from '../../components/ActionButtons'
 import EditEntityModal from '../../components/EditEntityModal'
 import EditPartyGroup from './EditPartyGroup'
 import SearchBar from '../../components/SearchBar'
+import BASE_URL from '../../config'
 
 
 const PartyGroupTable = () => {
@@ -29,7 +29,7 @@ const [searchTerm, setSearchTerm] = useState('')
 
   const fetchDetails = async () => {
     try {
-      const response = await fetch('http://localhost:5000/partygroup/all')
+      const response = await fetch(`${BASE_URL}/partygroup/all`)
       if (response.ok) {
         const data = await response.json()
         setPartyGroups(Array.isArray(data) ? data.filter(pg => pg && pg._id) : [])
@@ -68,7 +68,7 @@ const [searchTerm, setSearchTerm] = useState('')
   const handleDelete = async () => {
     if (deleteData) {
       try {
-        const response = await fetch(`http://localhost:5000/partygroup/delete/${deleteData._id}`, {
+        const response = await fetch(`${BASE_URL}/partygroup/delete/${deleteData._id}`, {
           method: 'DELETE',
         })
         if (response.ok) {

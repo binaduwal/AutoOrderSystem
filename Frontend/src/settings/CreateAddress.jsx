@@ -1,4 +1,5 @@
 import React, { useState ,useEffect} from "react"
+import BASE_URL from '../config'
 
 const CreateAddress = ({ onCreated }) => {
   const [formData, setFormData] = useState({
@@ -13,7 +14,7 @@ const CreateAddress = ({ onCreated }) => {
   useEffect(()=>{
     const fetchProvinces=async()=>{
       try {
-        const response=await fetch('http://localhost:5000/province/all')
+        const response=await fetch(`${BASE_URL}/province/all`)
         const data= await response.json()
         setProvinces(data)
       } catch (error) {
@@ -41,7 +42,7 @@ const CreateAddress = ({ onCreated }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/location/create", {
+      const response = await fetch(`${BASE_URL}/location/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newLocation),
@@ -64,7 +65,7 @@ const CreateAddress = ({ onCreated }) => {
         const fetchCities = async () => {
           if (formData.province) { 
             try {
-              const response = await fetch(`http://localhost:5000/city/province/${formData.province}`)
+              const response = await fetch(`${BASE_URL}/city/province/${formData.province}`)
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
               }

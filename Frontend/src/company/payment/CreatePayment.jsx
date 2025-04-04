@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6";
+import BASE_URL from '../../config'
 
 
 const CreatePayment = ({OnCreated}) => {
@@ -18,7 +19,7 @@ const CreatePayment = ({OnCreated}) => {
             }
       
         try {
-            const response=await fetch("http://localhost:5000/paymentmode/create",{
+            const response=await fetch(`${BASE_URL}/paymentmode/create`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",

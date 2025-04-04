@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../config'
 
 
 const EditCompany = ({ companyId, onClose, onCompanyUpdated }) => {
@@ -25,7 +26,7 @@ useEffect(() => {
   if (!companyId) return;
   const fetchDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/company/edit/${companyId}`);
+      const response = await fetch(`${BASE_URL}/company/edit/${companyId}`);
       if (response.ok) {
         const data = await response.json();
 
@@ -36,7 +37,7 @@ useEffect(() => {
 
         if (data.province) {
           const cityResponse = await fetch(
-            `http://localhost:5000/city/province/${data.province}`
+            `${BASE_URL}/city/province/${data.province}`
           );
           if (cityResponse.ok) {
             const citiesData = await cityResponse.json();
@@ -71,7 +72,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchProvinces = async () => {
     try {
-      const response = await fetch('http://localhost:5000/province/all');
+      const response = await fetch(`${BASE_URL}/province/all`);
       if (response.ok) {
         const data = await response.json();
         setProvinces(data);
@@ -88,7 +89,7 @@ useEffect(() => {
     if (formData.province) {
       try {
         const response = await fetch(
-          `http://localhost:5000/city/province/${formData.province}`
+          `${BASE_URL}/city/province/${formData.province}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -132,7 +133,7 @@ useEffect(() => {
               };
         
             try {
-              const response = await fetch(`http://localhost:5000/company/edit/${companyId}`, {
+              const response = await fetch(`${BASE_URL}/company/edit/${companyId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

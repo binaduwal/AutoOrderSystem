@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
+import BASE_URL from '../../config'
 
 const CreateSalesperson
  = ({onCreated}) => {
     const [name,setName]=useState("")
-        const [status,setStatus]=useState(true)
+        const [status,setStatus]=useState(false)
         const [error, setError] = useState("")
         
         const handleSubmit= async (e)=>{
@@ -15,7 +16,7 @@ const CreateSalesperson
                 }
           
             try {
-                const response=await fetch("http://localhost:5000/salesperson/create",{
+                const response=await fetch(`${BASE_URL}/salesperson/create`,{
                     method:"POST",
                     headers:{
                         "Content-Type":"application/json",

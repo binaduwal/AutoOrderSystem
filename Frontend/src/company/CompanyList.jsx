@@ -9,6 +9,7 @@ import PasswordForm from '../components/PasswordForm'
 import TableComponent from '../components/TableComponent'
 import SearchBar from '../components/SearchBar'
 import Pagination from '../components/Pagination'
+import BASE_URL from '../config'
 
 
 const CompanyList = () => {
@@ -27,7 +28,7 @@ const CompanyList = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await fetch('http://localhost:5000/company/all')
+      const response = await fetch(`${BASE_URL}/company/all`)
       if (!response.ok) throw new Error('Failed to fetch data')
       const data = await response.json()
       console.log("Fetched Companies:", data)
@@ -67,7 +68,7 @@ const CompanyList = () => {
   const handleDelete = async () => {
     if (companyToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/company/delete/${companyToDelete._id}`, {
+        const response = await fetch(`${BASE_URL}/company/delete/${companyToDelete._id}`, {
           method: 'DELETE',
         })
         if (response.ok) {

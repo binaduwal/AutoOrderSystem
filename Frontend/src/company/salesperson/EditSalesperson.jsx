@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
+import BASE_URL from '../../config'
 
 const EditSalesperson
 = ({entityData,onUpdated,onClose}) => {
@@ -16,7 +17,7 @@ const EditSalesperson
             const fetchDetails= async()=>{
                 try {
     console.log("Fetching details:", salespersonId)
-    const response = await fetch(`http://localhost:5000/salesperson/${salespersonId}`)
+    const response = await fetch(`${BASE_URL}/salesperson/${salespersonId}`)
 
     if(response.ok){
         const data=await response.json()
@@ -48,7 +49,7 @@ const EditSalesperson
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/salesperson/edit/${salespersonId}`, {
+            const response = await fetch(`${BASE_URL}/salesperson/edit/${salespersonId}`, {
             method:'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

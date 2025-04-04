@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BASE_URL from '../../config'
 
 const EditProduct = ({ productData, onUpdated }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const EditProduct = ({ productData, onUpdated }) => {
   const [selectedUnit, setSelectedUnit] = useState(productData?.productUnitId || '')
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewImage, setPreviewImage] = useState(
-    productData?.productImage ? `http://localhost:5000/uploads/${productData.productImage}` : ''
+    productData?.productImage ? `${BASE_URL}/uploads/${productData.productImage}` : ''
   )
   const [categories, setCategories] = useState([])
     const [isCategoryOpen, setIsCategoryOpen] = useState(false)
@@ -25,7 +26,7 @@ const EditProduct = ({ productData, onUpdated }) => {
 useEffect(() => {
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/category/all')
+      const response = await fetch(`${BASE_URL}/category/all`)
       const data = await response.json()
       const tree = buildTree(data)
       setCategories(tree)
@@ -126,7 +127,7 @@ const buildTree = (categories) => {
 
   const fetchUnits = async () => {
     try {
-      const response = await fetch('http://localhost:5000/unit/all')
+      const response = await fetch(`${BASE_URL}/unit/all`)
       const data = await response.json()
       if (Array.isArray(data)) {
         setUnits(data)
@@ -144,7 +145,7 @@ const buildTree = (categories) => {
     if (productData?._id) {
       const fetchDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/product/${productData._id}`)
+          const response = await fetch(`${BASE_URL}/product/${productData._id}`)
           if (response.ok) {
             const data = await response.json()
             setFormData({
@@ -159,7 +160,7 @@ const buildTree = (categories) => {
             })
             setSelectedUnit(data.productUnitId || '')
             if (data.productImage) {
-              setPreviewImage(`http://localhost:5000/uploads/${data.productImage}`)
+              setPreviewImage(`${BASE_URL}/uploads/${data.productImage}`)
             }
           } 
         } catch (error) {
@@ -194,7 +195,7 @@ const buildTree = (categories) => {
   const handleFileUpload = async (file) => {
     const data = new FormData()
     data.append("file-upload", file)
-    const res = await fetch('http://localhost:5000/product/upload', {
+    const res = await fetch(`${BASE_URL}/product/upload`, {
       method: 'POST',
       body: data,
     })
@@ -227,7 +228,7 @@ const buildTree = (categories) => {
       delete payload.categoryId
     }
     try {
-      const response = await fetch(`http://localhost:5000/product/edit/${productData._id}`, {
+      const response = await fetch(`${BASE_URL}/product/edit/${productData._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

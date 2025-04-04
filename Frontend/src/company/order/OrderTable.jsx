@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import ActionButtons from '../../components/ActionButtons'
 import SearchBar from '../../components/SearchBar'
+import BASE_URL from '../../config'
 
 
 const OrderTable = () => {
@@ -30,7 +31,7 @@ const OrderTable = () => {
     const fetchDetails = async () => {
       try {
         setLoading(true)
-        const response = await fetch('http://localhost:5000/order/all')
+        const response = await fetch(`${BASE_URL}/order/all`)
         
         if (response.ok) {
           const data = await response.json()
@@ -61,7 +62,7 @@ const OrderTable = () => {
   const handleDelete = async () => {
     if (deleteData) {
       try {
-        const response = await fetch(`http://localhost:5000/order/delete/${deleteData._id}`, {
+        const response = await fetch(`${BASE_URL}/order/delete/${deleteData._id}`, {
           method: 'DELETE',
         })
         

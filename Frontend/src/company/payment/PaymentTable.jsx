@@ -7,6 +7,7 @@ import EditPayment from './EditPayment'
 import TableComponent from '../../components/TableComponent'
 import SearchBar from '../../components/SearchBar'
 import ActionButtons from '../../components/ActionButtons'
+import BASE_URL from '../../config'
 
 
 
@@ -55,7 +56,7 @@ useEffect(()=>{
 
 const fetchDetails=async()=>{
 try {
-    const response=await fetch('http://localhost:5000/paymentmode/all')
+    const response=await fetch(`${BASE_URL}/paymentmode/all`)
     if(response.ok){
         const data=await response.json()
         setPayment(data)
@@ -79,7 +80,7 @@ const handleCreated=(newPayment)=>{
 const handleDelete=async()=>{
     if(DeleteData){
         try {
-            const response=await fetch(`http://localhost:5000/paymentmode/delete/${DeleteData._id}`,{
+            const response=await fetch(`${BASE_URL}/paymentmode/delete/${DeleteData._id}`,{
                 method:'DELETE'
             })
 

@@ -7,6 +7,7 @@ import EditEntityModal from "../components/EditEntityModal";
 import EditAddress from "./EditAddress";
 import Pagination from "../components/Pagination";
 import SearchBar from "../components/SearchBar";
+import BASE_URL from '../config'
 
 const LocationTable = () => {
   const [locations, setLocations] = useState([]);
@@ -29,7 +30,7 @@ const LocationTable = () => {
     if (locationToDelete) {
       try {
         const response = await fetch(
-          `http://localhost:5000/location/delete/${locationToDelete._id}`,
+          `${BASE_URL}/location/delete/${locationToDelete._id}`,
           { method: "DELETE" }
         );
         if (response.ok) {
@@ -52,7 +53,7 @@ const LocationTable = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("http://localhost:5000/location/all");
+        const response = await fetch(`${BASE_URL}/location/all`);
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched locations:", data);
@@ -80,7 +81,7 @@ const LocationTable = () => {
 
   const handleUpdated = async () => {
     try {
-      const response = await fetch("http://localhost:5000/location/all");
+      const response = await fetch(`${BASE_URL}/location/all`);
       if (response.ok) {
         const data = await response.json();
         setLocations(data);
@@ -99,7 +100,7 @@ const LocationTable = () => {
   const normalizeString = (str = "") =>
     str.toLowerCase().replace(/[-\s]/g, "");
   const filtered = locations.filter((sp) =>
-    normalizeString(sp.address || "").includes(normalizeString(searchTerm))
+    normalizeString(sp.province?.name || "").includes(normalizeString(searchTerm))
   );
 
   const indexOfLast = currentPage * itemsPerPage;

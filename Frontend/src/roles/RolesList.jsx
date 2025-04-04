@@ -7,6 +7,8 @@ import TableComponent from '../components/TableComponent'
 import ActionButtons from '../components/ActionButtons'
 import Pagination from '../components/Pagination'
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
+import BASE_URL from '../config'
+
 
 const RolesList = () => {
   const [showCreateRole, setShowCreateRole] = useState(false);
@@ -27,7 +29,7 @@ const RolesList = () => {
 
   const fetchRole = async () => {
     try {
-      const response = await fetch("http://localhost:5000/role/all");
+      const response = await fetch(`${BASE_URL}/role/all`);
       if (response.ok) {
         const data = await response.json();
         setRoles(data);
@@ -70,7 +72,7 @@ const RolesList = () => {
   const handleDelete = async () => {
     if (DeleteRoleData) {
       try {
-        const response = await fetch(`http://localhost:5000/role/delete/${DeleteRoleData._id}`, {
+        const response = await fetch(`${BASE_URL}/role/delete/${DeleteRoleData._id}`, {
           method: 'DELETE',
         });
         if (response.ok) {

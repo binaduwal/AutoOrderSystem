@@ -7,6 +7,7 @@ import EditProvince from './EditProvince';
 import SearchBar from '../../components/SearchBar'
 import Pagination from '../../components/Pagination'
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
+import BASE_URL from '../../config'
 
 
 const ProvinceTable = () => {
@@ -31,7 +32,7 @@ const itemsPerPage = 5
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await fetch("http://localhost:5000/province/all");
+        const response = await fetch(`${BASE_URL}/province/all`);
         if (response.ok) {
           const data = await response.json();
           setProvince(data);
@@ -49,7 +50,7 @@ const itemsPerPage = 5
   const handleDelete = async () => {
     if (permissionToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/province/delete/${permissionToDelete._id}`, {
+        const response = await fetch(`${BASE_URL}/province/delete/${permissionToDelete._id}`, {
           method: 'DELETE',
         });
         if (response.ok) {

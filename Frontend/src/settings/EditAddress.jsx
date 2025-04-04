@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import BASE_URL from '../config'
 
 const EditAddress = ({ entityData, onUpdated, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const EditAddress = ({ entityData, onUpdated, onCancel }) => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch("http://localhost:5000/province/all")
+        const response = await fetch(`${BASE_URL}/province/all`)
         const data = await response.json()
         setProvinces(data)
       } catch (error) {
@@ -40,7 +41,7 @@ const EditAddress = ({ entityData, onUpdated, onCancel }) => {
       if (formData.province) {
         try {
           const response = await fetch(
-            `http://localhost:5000/city/province/${formData.province}`
+            `${BASE_URL}/city/province/${formData.province}`
           )
           const data = await response.json()
           setCities(data)
@@ -64,7 +65,7 @@ const EditAddress = ({ entityData, onUpdated, onCancel }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/location/${entityData._id}`,
+        `${BASE_URL}/location/edit/${entityData._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -87,7 +88,7 @@ const EditAddress = ({ entityData, onUpdated, onCancel }) => {
   if (loading) return <div className="text-center p-4">Loading...</div>
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-lg mx-auto p-6 bg-white">
       <h2 className="text-2xl font-bold mb-6 text-center">Edit Address</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mb-4">

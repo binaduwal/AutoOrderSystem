@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { PlusIcon, XMarkIcon, TrashIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
+import BASE_URL from '../config'
 
 const NestedCategory = ({ parentId}) => {
   const [nodes, setNodes] = useState([])
@@ -18,7 +19,7 @@ const NestedCategory = ({ parentId}) => {
 
 const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/category/all')
+      const response = await fetch(`${BASE_URL}/category/all`)
       const data = await response.json()
       const nestedData = buildTree(data, parentId);
       setNodes(nestedData)
@@ -49,7 +50,7 @@ const fetchCategories = async () => {
     }
   
     try {
-      const response = await fetch('http://localhost:5000/category/create', {
+      const response = await fetch(`${BASE_URL}/category/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +76,7 @@ const fetchCategories = async () => {
   }
   const removeNode = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/category/delete/${id}`, {
+      const response = await fetch(`${BASE_URL}/category/delete/${id}`, {
         method: 'DELETE'
       })
   

@@ -10,6 +10,7 @@
   import NestedCategory from './NestedCategory'
   import Pagination from '../components/Pagination'
   import { CiSearch } from "react-icons/ci"
+  import BASE_URL from '../config'
 
 
   const CategoryTable = () => {
@@ -28,7 +29,7 @@
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:5000/category/all?parent=true')
+        const response = await fetch(`${BASE_URL}/category/all?parent=true`)
         if (!response.ok) throw new Error('Failed to fetch data')
         const data = await response.json()
         setCategories(Array.isArray(data) ? data.filter(category => category && category._id) : [])
@@ -59,7 +60,7 @@
 const handleDelete = async () => {
   if (categoryToDelete) {
     try {
-      const response = await fetch(`http://localhost:5000/category/delete/${categoryToDelete._id}`, {
+      const response = await fetch(`${BASE_URL}/category/delete/${categoryToDelete._id}`, {
         method: 'DELETE',
       })
       if (response.ok) {

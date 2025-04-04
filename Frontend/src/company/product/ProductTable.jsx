@@ -7,6 +7,7 @@ import CreateProduct from './CreateProduct'
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import EditProduct from './EditProduct'
 import SearchBar from '../../components/SearchBar'
+import BASE_URL from '../../config'
 
 
 const ProductTable = () => {
@@ -32,7 +33,7 @@ useEffect(()=>{
 
 const fetchDetails=async()=>{
     try{
-        const response=await fetch('http://localhost:5000/product/all')
+        const response=await fetch(`${BASE_URL}/product/all`)
         if(response.ok)
         {
             const data=await response.json()
@@ -51,7 +52,7 @@ catch (error) {
 
 const fetchUnits = async () => {
   try {
-    const response = await fetch('http://localhost:5000/unit/all')
+    const response = await fetch(`${BASE_URL}/unit/all`)
     const data = await response.json()
     if (Array.isArray(data)) {
       setUnits(data)
@@ -66,7 +67,7 @@ const fetchUnits = async () => {
 
 const fetchCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/category/all')
+    const response = await fetch(`${BASE_URL}/category/all`)
     const data = await response.json()
     if (Array.isArray(data)) {
       setCategories(data)
@@ -114,7 +115,7 @@ const handleDelete=async()=>{
   if(DeleteData)
   {
     try{
-      const response=await fetch(`http://localhost:5000/product/delete/${DeleteData._id}`,{
+      const response=await fetch(`${BASE_URL}/product/delete/${DeleteData._id}`,{
                 method:'DELETE'
     })
     if(response.ok){
@@ -192,7 +193,7 @@ const handleUpdated=async()=>{
                         <td className='p-2 text-center'>
                           {product.productImage ? (
                             <img
-                              src={`http://localhost:5000/uploads/${product.productImage}`}
+                              src={`${BASE_URL}/uploads/${product.productImage}`}
                               alt={product.name}
                               className='w-10 h-10 object-cover rounded-full mx-auto'
                               onError={(e) => {

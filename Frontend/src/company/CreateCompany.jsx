@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../config'
 
 const CreateCompany = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const CreateCompany = () => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch('http://localhost:5000/province/all');
+        const response = await fetch(`${BASE_URL}/province/all`);
         const data = await response.json();
         setProvinces(data);
       } catch (error) {
@@ -41,7 +42,7 @@ const CreateCompany = () => {
     const fetchCities = async () => {
       if (formData.province) { 
         try {
-          const response = await fetch(`http://localhost:5000/city/province/${formData.province}`);
+          const response = await fetch(`${BASE_URL}/city/province/${formData.province}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -81,7 +82,7 @@ const CreateCompany = () => {
         taxType: formData.taxType.toUpperCase(),
       };
 
-      const response = await fetch("http://localhost:5000/company/create", {
+      const response = await fetch(`${BASE_URL}/company/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

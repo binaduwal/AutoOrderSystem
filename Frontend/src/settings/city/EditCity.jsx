@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import BASE_URL from '../../config'
+
 
 export default function EditCity({ city, onClose, onUpdated }) {
   const [cityName, setCity] = useState("");
@@ -15,7 +17,7 @@ export default function EditCity({ city, onClose, onUpdated }) {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch("http://localhost:5000/province/all");
+        const response = await fetch(`${BASE_URL}/province/all`);
         if (response.ok) {
           const data = await response.json();
           setProvinces(Array.isArray(data) ? data : data.provinces || []);
@@ -55,7 +57,7 @@ export default function EditCity({ city, onClose, onUpdated }) {
     }, null, 2));
 
     try {
-        const response = await fetch(`http://localhost:5000/city/edit/${city._id}`, {
+        const response = await fetch(`${BASE_URL}/city/edit/${city._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

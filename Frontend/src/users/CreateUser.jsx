@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../config'
 
 
 const CreateUser = () => {
@@ -33,7 +34,7 @@ const CreateUser = () => {
     };
   
     try {
-      const response = await fetch('http://localhost:5000/admin/create', {
+      const response = await fetch(`${BASE_URL}/admin/create`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',

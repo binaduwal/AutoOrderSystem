@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import BASE_URL from '../config'
 
 const CreatePermission = ({ onClose, onPermissionCreated }) => {
   const [name, setName] = useState("")
@@ -21,7 +22,7 @@ const CreatePermission = ({ onClose, onPermissionCreated }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/permission/create", {
+      const response = await fetch(`${BASE_URL}/permission/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

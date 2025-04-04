@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BASE_URL from '../../config'
 
 
 export default function EditProvince({ province, onClose, onUpdated }) {
@@ -13,7 +14,7 @@ export default function EditProvince({ province, onClose, onUpdated }) {
       };
   
       try {
-        const response = await fetch(`http://localhost:5000/province/edit/${province._id}`, {
+        const response = await fetch(`${BASE_URL}/province/edit/${province._id}`, {
             method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(updatedData),

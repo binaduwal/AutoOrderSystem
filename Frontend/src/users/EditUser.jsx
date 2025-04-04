@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BASE_URL from '../config'
 
 const EditUser = ({ userId, onClose, onUserUpdated }) => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
     if (!userId) return;
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/admin/${userId}`);
+        const response = await fetch(`${BASE_URL}/admin/${userId}`);
         if (response.ok) {
           const data = await response.json();
           setFormData(
@@ -56,7 +57,7 @@ const EditUser = ({ userId, onClose, onUserUpdated }) => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5000/admin/edit/${userId}`, {
+      const response = await fetch(`${BASE_URL}/admin/edit/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

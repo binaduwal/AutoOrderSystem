@@ -8,6 +8,7 @@ import PasswordForm from '../components/PasswordForm';
 import Pagination from '../components/Pagination';
 import TableComponent from '../components/TableComponent'
 import SearchBar from '../components/SearchBar'
+import BASE_URL from '../config'
 
 
 const ManageUser = () => {
@@ -25,7 +26,7 @@ const ManageUser = () => {
   const fetchUsers = async () => {
     try {
       const token = sessionStorage.getItem('token')
-      const response = await fetch('http://localhost:5000/admin/all', {
+      const response = await fetch(`${BASE_URL}/admin/all`, {
         headers: {
           'Authorization': `Bearer ${token}` 
         }
@@ -76,7 +77,7 @@ const ManageUser = () => {
   const handleDelete = async () => {
     if (userToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/admin/delete/${userToDelete._id}`, {
+        const response = await fetch(`${BASE_URL}/admin/delete/${userToDelete._id}`, {
           method: 'DELETE',
         });
         if (response.ok) {

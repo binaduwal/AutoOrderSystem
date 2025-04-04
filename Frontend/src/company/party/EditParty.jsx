@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6"
+import BASE_URL from '../../config'
 
 const EditParty = ({ partyId, onUpdated, onClose }) => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
   useEffect(() => {
     const fetchPartyDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/party/${partyId}`)
+        const response = await fetch(`${BASE_URL}/party/${partyId}`)
         if (response.ok) {
           const { data } = await response.json()
           setFormData({
@@ -60,7 +61,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch('http://localhost:5000/province/all')
+        const response = await fetch(`${BASE_URL}/province/all`)
         const data = await response.json()
         setProvinces(data)
       } catch (error) {
@@ -74,7 +75,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
     const fetchCities = async () => {
       if (formData.provinceId) {
         try {
-          const response = await fetch(`http://localhost:5000/city/province/${formData.provinceId}`)
+          const response = await fetch(`${BASE_URL}/city/province/${formData.provinceId}`)
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
           }
@@ -97,7 +98,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
     const fetchLocations = async () => {
       if (formData.cityId) {
         try {
-          const response = await fetch(`http://localhost:5000/location/city/${formData.cityId}`)
+          const response = await fetch(`${BASE_URL}/location/city/${formData.cityId}`)
           const data = await response.json()
           setLocations(Array.isArray(data) ? data : [])
         } catch (error) {
@@ -114,7 +115,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
   useEffect(() => {
     const fetchRoutes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/route/all')
+        const response = await fetch(`${BASE_URL}/route/all`)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
@@ -130,7 +131,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
   useEffect(() => {
     const fetchPartyGroup = async () => {
       try {
-        const response = await fetch('http://localhost:5000/partygroup/all')
+        const response = await fetch(`${BASE_URL}/partygroup/all`)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
@@ -162,7 +163,7 @@ const EditParty = ({ partyId, onUpdated, onClose }) => {
 
     console.log("Sending update request:", updateData)
     try {
-      const response = await fetch(`http://localhost:5000/party/edit/${partyId}`, {
+      const response = await fetch(`${BASE_URL}/party/edit/${partyId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

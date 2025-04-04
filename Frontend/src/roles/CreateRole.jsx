@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+import BASE_URL from '../config'
+
 
 const CreateRole = ({onRoleCreated }) => {
   const [name, setName] = useState("")
@@ -10,7 +12,7 @@ const CreateRole = ({onRoleCreated }) => {
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/permission/all")
+        const response = await fetch(`${BASE_URL}/permission/all`)
         if (response.ok) {
           const data = await response.json()
           setPermissions(data)
@@ -47,7 +49,7 @@ const CreateRole = ({onRoleCreated }) => {
     }
     
     try {
-      const response = await fetch("http://localhost:5000/role/create", {
+      const response = await fetch(`${BASE_URL}/role/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(roleData),

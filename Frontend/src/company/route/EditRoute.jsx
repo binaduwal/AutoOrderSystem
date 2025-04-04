@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from "react-icons/fa6";
+import BASE_URL from '../../config'
 
 const EditRoute = ({routeData,onUpdated,onClose}) => {
     const [formData,setFormData]=useState({
@@ -13,7 +14,7 @@ const EditRoute = ({routeData,onUpdated,onClose}) => {
             const fetchDetails= async()=>{
                 try {
     console.log("Fetching details:", routeId)
-    const response = await fetch(`http://localhost:5000/route/${routeId}`)
+    const response = await fetch(`${BASE_URL}/route/${routeId}`)
 
     if(response.ok){
         const data=await response.json()
@@ -45,7 +46,7 @@ const EditRoute = ({routeData,onUpdated,onClose}) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/route/edit/${routeId}`, {
+            const response = await fetch(`${BASE_URL}/route/edit/${routeId}`, {
             method:'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

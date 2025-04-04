@@ -8,6 +8,7 @@ import EditEntityModal from '../../components/EditEntityModal'
 import SearchBar from '../../components/SearchBar'
 import CreateSalesperson from './CreateSalesperson'
 import EditSalesperson from './EditSalesperson'
+import BASE_URL from '../../config'
 
 
 const SalespersonTable = () => {
@@ -28,7 +29,7 @@ const [searchTerm, setSearchTerm] = useState('')
 
   const fetchDetails = async () => {
     try {
-      const response = await fetch('http://localhost:5000/salesperson/all')
+      const response = await fetch(`${BASE_URL}/salesperson/all`)
       if (response.ok) {
         const data = await response.json()
         setSalesperson(Array.isArray(data) ? data.filter(pg => pg && pg._id) : [])
@@ -67,7 +68,7 @@ const [searchTerm, setSearchTerm] = useState('')
   const handleDelete = async () => {
     if (deleteData) {
       try {
-        const response = await fetch(`http://localhost:5000/salesperson/delete/${deleteData._id}`, {
+        const response = await fetch(`${BASE_URL}/salesperson/delete/${deleteData._id}`, {
           method: 'DELETE',
         })
         if (response.ok) {

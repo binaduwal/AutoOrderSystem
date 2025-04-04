@@ -1,60 +1,54 @@
 import React, { useEffect, useState } from 'react'
+import BASE_URL from '../config'
 
-const EditPermission = ( { DataId,permission, onClose, onPermissionUpdated}) => {
+const EditPermission = ({ DataId, onClose, onPermissionUpdated }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    display_name: "",
+    description: "",
+  })
 
-const [formData, setFormData] = useState({
-  name: "",
-  display_name: "",
-  description: "",
-})
-
-
-const handleDisplayNameChange = (e) => {
-  const updatedDisplayName = e.target.value
-  setFormData((prev) => ({
-    ...prev,
-    display_name: updatedDisplayName,
-    name: updatedDisplayName.replace(/\s+/g, '-').toLowerCase()
-  }))
-}
-
-useEffect(() => {
-  const fetchDetails = async () => {
-    if (!DataId)
-       return
-    try {
-      const response = await fetch(`http://localhost:5000/permission/${DataId}`)
-      if (!response.ok) {
-        throw new Error("Failed to fetch permission details")
-      }
-      const data = await response.json()
-      
-      if (data) {
-        setFormData({
-          name: data.name || "",
-          display_name: data.display_name || "",
-          description: data.description || "",
-        })
-      }
-    } catch (error) {
-      console.error("Error fetching permission details:", error)
-    }
+  const handleDisplayNameChange = (e) => {
+    const updatedDisplayName = e.target.value
+    setFormData((prev) => ({
+      ...prev,
+      display_name: updatedDisplayName,
+      name: updatedDisplayName.replace(/\s+/g, '-').toLowerCase(),
+    }))
   }
 
-  fetchDetails()
-}, [DataId])
-
-    const handleSubmit = async (e) => {
-      e.preventDefault()
-  
-      const updatedPermission = {
-        ...permission,
-        name:formData.name,
-        display_name: formData.display_name,
-        description:formData.description,
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (!DataId) return
+      try {
+        const response = await fetch(`${BASE_URL}/permission/${DataId}`)
+        if (!response.ok) {
+          throw new Error("Failed to fetch permission details")
+        }
+        const data = await response.json()
+        if (data) {
+          setFormData({
+            name: data.name || "",
+            display_name: data.display_name || "",
+            description: data.description || "",
+          })
+        }
+      } catch (error) {
+        console.error("Error fetching permission details:", error)
       }
+    }
+
+    fetchDetails()
+  }, [DataId])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    // Use formData directly as the updated permission payload.
+    const updatedPermission = { ...formData }
+
     try {
-      const response = await fetch(`http://localhost:5000/permission/edit/${permission._id}`, {
+      const response = await fetch(`${BASE_URL}/permission/edit/${DataId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,28 +58,33 @@ useEffect(() => {
 
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
+        console.log("Updated Permission:", data)
         onPermissionUpdated(data)
         onClose()
-      }
-       else {
+      } else {
         console.error('Failed to update permission')
       }
-    }
-     catch (error) {
+    } catch (error) {
       console.error('Error updating permission:', error)
     }
+  }
 
- }
-  
   return (
     <div className="w-[400px] mx-auto">
-      <h1 className="text-xl font-semibold text-center text-indigo-600 mb-6">Permission Management</h1>
-      <p className="text-center text-lg text-gray-600 mb-6">Edit the form with the required information to update the permission.</p>
-      <h2 className="text-xl font-medium text-left mb-6 text-indigo-700">Edit Permission</h2>
+      <h1 className="text-xl font-semibold text-center text-indigo-600 mb-6">
+        Permission Management
+      </h1>
+      <p className="text-center text-lg text-gray-600 mb-6">
+        Edit the form with the required information to update the permission.
+      </p>
+      <h2 className="text-xl font-medium text-left mb-6 text-indigo-700">
+        Edit Permission
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="block font-medium text-left text-gray-700">Name</label>
+          <label className="block font-medium text-left text-gray-700">
+            Name
+          </label>
           <input
             type="text"
             name="name"
@@ -96,7 +95,9 @@ useEffect(() => {
         </div>
 
         <div className="space-y-2">
-          <label className="block font-medium text-left text-gray-700">Display Name</label>
+          <label className="block font-medium text-left text-gray-700">
+            Display Name
+          </label>
           <input
             type="text"
             name="display_name"
@@ -107,11 +108,15 @@ useEffect(() => {
         </div>
 
         <div className="space-y-2">
-          <label className="block font-medium text-left text-gray-700">Description</label>
+          <label className="block font-medium text-left text-gray-700">
+            Description
+          </label>
           <textarea
             name="description"
             value={formData.description}
-            onChange={(e)=>setDescription(e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            }
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           ></textarea>
         </div>

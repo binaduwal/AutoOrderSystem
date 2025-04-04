@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BASE_URL from '../../config'
 
 const CityForm = ({onClose,onCreated}) => {
 const [cityName, setCityName] = useState('')
@@ -8,7 +9,7 @@ const [selectedProvince, setSelectedProvince] = useState('')
 useEffect(() => {
   const fetchProvinces = async () => {
     try {
-      const response = await fetch('http://localhost:5000/province/all')
+      const response = await fetch(`${BASE_URL}/province/all`)
       if (response.ok) {
         const data = await response.json()
         setProvinces(Array.isArray(data) ? data : data.provinces || [])
@@ -36,7 +37,7 @@ const handleSubmit = async (e) => {
 const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1)
 
   try {
-    const response = await fetch('http://localhost:5000/city/create', {
+    const response = await fetch(`${BASE_URL}/city/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

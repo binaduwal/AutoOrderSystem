@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { FaAngleRight } from "react-icons/fa6"
 import { RiDeleteBin6Line } from "react-icons/ri"
+import BASE_URL from '../../config'
 
 const EditOrder = () => {
   const { orderId } = useParams()
@@ -24,11 +25,11 @@ const EditOrder = () => {
     const fetchData = async () => {
       try {
         const [orderRes, partiesRes, salesmenRes, paymentRes, productsRes] = await Promise.all([
-          fetch(`http://localhost:5000/order/${orderId}`),
-          fetch('http://localhost:5000/party/all'),
-          fetch('http://localhost:5000/salesperson/all'),
-          fetch('http://localhost:5000/paymentmode/all'),
-          fetch('http://localhost:5000/product/all')
+          fetch(`${BASE_URL}/order/${orderId}`),
+          fetch(`${BASE_URL}/party/all`),
+          fetch(`${BASE_URL}/salesperson/all`),
+          fetch(`${BASE_URL}/paymentmode/all`),
+          fetch(`${BASE_URL}/product/all`)
         ])
   
         const orderData = await orderRes.json()
@@ -176,7 +177,7 @@ const transformedItems = orderData.orderItems?.map(item => ({
     }
   
     try {
-      const response = await fetch(`http://localhost:5000/order/edit/${orderId}`, {
+      const response = await fetch(`${BASE_URL}/order/edit/${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload)

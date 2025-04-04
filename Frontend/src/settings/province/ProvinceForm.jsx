@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BASE_URL from '../../config'
 
 export default function ProvinceForm({ onClose, onCreated }) {
   const [province, setProvince] = useState("");
@@ -18,7 +19,7 @@ export default function ProvinceForm({ onClose, onCreated }) {
     }
 
     try {
-      const checkResponse = await fetch(`http://localhost:5000/province/${provinceName}`);
+      const checkResponse = await fetch(`${BASE_URL}/province/${provinceName}`);
       
       if (checkResponse.ok) {
         const data = await checkResponse.json();
@@ -28,7 +29,7 @@ export default function ProvinceForm({ onClose, onCreated }) {
         }
       }
 
-      const response = await fetch("http://localhost:5000/province/create", {
+      const response = await fetch(`${BASE_URL}/province/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: provinceName }),

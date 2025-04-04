@@ -7,6 +7,7 @@ import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
 import ActionButtons from '../../components/ActionButtons'
 import EditParty from './EditParty'
 import { IoMdCloseCircleOutline } from "react-icons/io"
+import BASE_URL from '../../config'
 
 
 const PartyTable = () => {
@@ -70,7 +71,7 @@ const PartyTable = () => {
 
   const fetchDetails = async () => {
     try {
-      const response = await fetch('http://localhost:5000/party/all')
+      const response = await fetch(`${BASE_URL}/party/all`)
       if (response.ok) {
         const { data } = await response.json()
         setParties(Array.isArray(data) ? data : [])
@@ -90,7 +91,7 @@ const PartyTable = () => {
   const handleDelete = async () => {
     if (deleteData) {
       try {
-        const response = await fetch(`http://localhost:5000/party/delete/${deleteData._id}`, {
+        const response = await fetch(`${BASE_URL}/party/delete/${deleteData._id}`, {
           method: 'DELETE',
         })
         if (response.ok) {

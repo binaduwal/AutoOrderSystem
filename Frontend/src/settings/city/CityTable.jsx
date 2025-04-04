@@ -7,6 +7,7 @@ import EditCity from './EditCity';
 import SearchBar from '../../components/SearchBar';
 import Pagination from '../../components/Pagination';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal'
+import BASE_URL from '../../config'
 
 const CityTable = () => {
   const [cities, setCity] = useState([]);
@@ -27,7 +28,7 @@ const CityTable = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await fetch("http://localhost:5000/city/all");
+        const response = await fetch(`${BASE_URL}/city/all`);
         if (response.ok) {
           const data = await response.json();
           setCity(data);
@@ -45,7 +46,7 @@ const CityTable = () => {
   const handleDelete = async () => {
     if (permissionToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/city/delete/${permissionToDelete._id}`, {
+        const response = await fetch(`${BASE_URL}/city/delete/${permissionToDelete._id}`, {
           method: 'DELETE',
         });
         if (response.ok) {
@@ -68,7 +69,7 @@ const CityTable = () => {
 
   const handleCreated = async () => {
     try {
-      const response = await fetch("http://localhost:5000/city/all");
+      const response = await fetch(`${BASE_URL}/city/all`);
       if (response.ok) {
         const data = await response.json();
         setCity(data);
@@ -83,7 +84,7 @@ const CityTable = () => {
 
   const handleUpdated = async () => {
     try {
-      const response = await fetch("http://localhost:5000/city/all");
+      const response = await fetch(`${BASE_URL}/city/all`);
       if (response.ok) {
         const data = await response.json();
         setCity(data);
@@ -103,7 +104,7 @@ const CityTable = () => {
 
   const normalizeString = (str = "") => str.toLowerCase().replace(/[-\s]/g, '');
   const filteredCities = cities.filter((city) =>
-    normalizeString(city.name || '').includes(normalizeString(searchTerm))
+    normalizeString(city.province?.name|| '').includes(normalizeString(searchTerm))
   );
 
   const indexOfLast = currentPage * itemsPerPage;
